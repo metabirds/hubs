@@ -362,6 +362,10 @@ AFRAME.registerComponent("media-loader", {
         src = this.data.src = `${window.location.origin}${window.location.pathname}${window.location.search}${src}`;
       }
 
+      //replace placeholders.
+      const roomId = window.location.pathname.split("/")[1] || "";
+      src = this.data.src = src.replace("__ROOM_ID__", roomId);
+
       let canonicalUrl = src;
       let canonicalAudioUrl = src;
       let accessibleUrl = src;
