@@ -226,7 +226,15 @@ const isTelemetryDisabled = qsTruthy("disable_telemetry");
 const isDebug = qsTruthy("debug");
 
 if (!isBotMode && !isTelemetryDisabled) {
-  registerTelemetry("/hub", "Room Landing Page");
+  const defaultRoomId = configs.feature("default_room_id");
+
+  const hubId =
+    qs.get("hub_id") ||
+    (document.location.pathname === "/" && defaultRoomId
+      ? defaultRoomId
+      : document.location.pathname.substring(1).split("/")[0]);
+
+  registerTelemetry(`/hub/${hubId}`, "Room Landing Page");
 }
 
 disableiOSZoom();
