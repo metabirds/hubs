@@ -41,6 +41,7 @@ const fetchContentType = url => {
 const forceMeshBatching = qsTruthy("batchMeshes");
 const forceImageBatching = qsTruthy("batchImages");
 const disableBatching = qsTruthy("disableBatching");
+const disableDynamicRoomPath = qsTruthy("disableDynamicRoomPath");
 
 AFRAME.registerComponent("media-loader", {
   schema: {
@@ -363,8 +364,10 @@ AFRAME.registerComponent("media-loader", {
       }
 
       //replace placeholders.
-      const roomId = window.location.pathname.split("/")[1] || "";
-      src = this.data.src = src.replace("__ROOM_ID__", roomId);
+      if (!disableDynamicRoomPath) {
+        const roomId = window.location.pathname.split("/")[1] || "";
+        src = this.data.src = src.replace("__ROOM_ID__", roomId);
+      }
 
       let canonicalUrl = src;
       let canonicalAudioUrl = src;
