@@ -373,7 +373,7 @@
   "tips.desktop.video_share_mode": "ストリーミング中です。もう一度選択すると、動画の共有が停止します。",
   "tips.desktop.pen_mode": "ESCを押すか、右クリックしてペンをドロップします。Ctrl-Zで元に戻します。",
   "tips.desktop.mute_mode": "ミュートされています。Mキーをクリックすると、ミュートが解除されます。",
-  "tips.desktop.look": "%app-name%へようこそ！簡単なツアーに参加しましょう。👋クリックしてドラッグすると、周りを見回すことができます。",
+  "tips.desktop.look": "ようこそ！簡単なツアーに参加しましょう。👋クリックしてドラッグすると、周りを見回すことができます。",
   "tips.desktop.locomotion": "W A S Dキーを使用して自由に移動します。Shiftキーを押しながらアイコンをクリックすると、お好きな場所にワープできます。",
   "tips.desktop.turning": "パーフェクト！QキーとEキーで回転します。",
   "tips.desktop.spawn_menu-pre": "オブジェクトを作成するには、",
