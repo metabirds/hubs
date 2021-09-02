@@ -9,14 +9,14 @@ export function ReadyPlayerMeAvatarSelector(props) {
     function handleEvent(event) {
       const { data } = event;
       // readyPlayerMeのメッセージは文字列だけで来る
-      if (typeof (data) === "string" || data instanceof String) {
+      if (typeof data === "string" || data instanceof String) {
         onSubmit(event.data);
         setOpen(false);
       }
     }
     window.addEventListener("message", handleEvent);
     return () => {
-      window.removeEventListener('message', handleEvent);
+      window.removeEventListener("message", handleEvent);
     };
   });
 
@@ -46,8 +46,8 @@ export function ReadyPlayerMeAvatarSelector(props) {
           style={{ margin: "0 auto" }}
         />
       </div>
-      {
-        open && <div>
+      {open && (
+        <div>
           <iframe
             title="readyplayerme"
             id="readyplayerme_iframe"
@@ -57,11 +57,13 @@ export function ReadyPlayerMeAvatarSelector(props) {
             style={iframeStyle}
           />
         </div>
-      }
+      )}
     </div>
   );
 }
 
 ReadyPlayerMeAvatarSelector.propTypes = {
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  height: PropTypes.number,
+  width: PropTypes.number
 };
