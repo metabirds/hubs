@@ -39,8 +39,8 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
     this.rightMock.appendChild(this.rightMockSmall);
     this.mockJoystickContainer.appendChild(this.rightMock);
 
-    this.enableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft;
-    this.enableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight;
+    this.enableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft == undefined;
+    this.enableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight == undefined;
     if (this.enableLeft || this.enableRight) {
       // Add the joystick container after the canvas element but before the rest of the UI.
       insertAfter(this.mockJoystickContainer, this.el.sceneEl.canvas);
@@ -73,8 +73,8 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
   },
 
   onPreferenceChange() {
-    const newEnableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft;
-    const newEnableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight;
+    const newEnableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft == undefined;
+    const newEnableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight == undefined;
     const isChanged = this.enableLeft !== newEnableLeft || this.enableRight !== newEnableRight;
     if (!isChanged) {
       return;
@@ -126,6 +126,9 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
     this.rightTouchZone.classList.add(styles.touchZone, styles.right);
     insertAfter(this.rightTouchZone, this.mockJoystickContainer);
     this.rightStick = nipplejs.create({
+      size: 80,
+      mode: 'static',
+      position: {right: '50%', top: '50%'},
       zone: this.rightTouchZone,
       color: "white",
       fadeTime: 0
@@ -140,6 +143,9 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
     this.leftTouchZone.classList.add(styles.touchZone, styles.left);
     insertAfter(this.leftTouchZone, this.mockJoystickContainer);
     this.leftStick = nipplejs.create({
+      size: 80,
+      mode: 'static',
+      position: {left: '50%', top: '50%'},
       zone: this.leftTouchZone,
       color: "white",
       fadeTime: 0
@@ -174,7 +180,7 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
     // Set pitch and yaw angles on right stick move
     const angle = joystick.angle.radian;
     const force = joystick.force < 1 ? joystick.force : 1;
-    const turnStrength = 0.05;
+    const turnStrength = 0.05 / 2.5;
     this.rotating = true;
     this.lookDy = -Math.cos(angle) * force * turnStrength;
     this.lookDx = Math.sin(angle) * force * turnStrength;
