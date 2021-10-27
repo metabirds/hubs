@@ -1,0 +1,10 @@
+@use "../styles/theme";
+:local(.numeric-input) input {
+  padding-right: 4px;
+}
+
+:local(.numeric-input) input:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+/*# sourceMappingURL=NumericInput.css.map */

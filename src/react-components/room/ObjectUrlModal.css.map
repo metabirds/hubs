@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAO,CAAA,OAAO,EAAE;EACd,OAAO,EAAE,CAAC;EACV,KAAK,EAAE,CAAC;EACR,MAAM,EAAE,CAAC;CACV",
+    "sources": [
+        "ObjectUrlModal.scss"
+    ],
+    "names": [],
+    "file": "ObjectUrlModal.css"
+}

@@ -93,6 +93,7 @@ import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
+import { ToggleTpsContainer } from "./room/ToggleTpsContainer";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -180,6 +181,7 @@ class UIRoot extends Component {
     showPrefs: false,
     watching: false,
     isStreaming: false,
+    isTPS: false,
 
     waitingOnAudio: false,
     audioTrackClone: null,
@@ -458,6 +460,10 @@ class UIRoot extends Component {
     this.props.scene.emit("action_mute");
   };
 
+  toggleTPS= () =>{
+    this.props.scene.systems["hubs-systems"].cameraSystem.toggleTPS() === 1 ? this.setState({isTPS: false}) : this.setState({ isTPS: true});
+  };
+
   shareVideo = mediaSource => {
     this.props.scene.emit(`action_share_${mediaSource}`);
   };
@@ -573,7 +579,7 @@ class UIRoot extends Component {
 
   beginOrSkipAudioSetup = () => {
     console.log(this.props.forcedVREntryType);
-    const skipAudioSetup = this.props.forcedVREntryType && this.props.forcedVREntryType.endsWith("_now");
+    const skipAudioSetup = true;
 
     if (skipAudioSetup) {
       this.onAudioReadyButton();
@@ -1531,11 +1537,16 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <>
-                        <VoiceButtonContainer
+                        {/* <VoiceButtonContainer
                           scene={this.props.scene}
                           microphoneEnabled={this.mediaDevicesManager.isMicShared}
                         />
-                        <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
+                        <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} /> */}
+                        <ToggleTpsContainer
+                          scene={this.props.scene}
+                          isTPS={this.state.isTPS}
+                          toggleTPS={this.toggleTPS}
+                        />
                         <PlacePopoverContainer
                           scene={this.props.scene}
                           hubChannel={this.props.hubChannel}

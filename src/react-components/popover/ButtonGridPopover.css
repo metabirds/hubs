@@ -1,0 +1,15 @@
+@use "../styles/theme.scss";
+:local(.button-grid-popover) {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(48px, 1fr))[auto-fit];
+      grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+:local(.button-grid-popover):not(:local(.fullscreen)) {
+  max-width: 224px;
+  padding-top: 0;
+}
+/*# sourceMappingURL=ButtonGridPopover.css.map */

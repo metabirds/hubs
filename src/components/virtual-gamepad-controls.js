@@ -39,8 +39,8 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
     this.rightMock.appendChild(this.rightMockSmall);
     this.mockJoystickContainer.appendChild(this.rightMock);
 
-    this.enableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft == undefined;
-    this.enableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight == undefined;
+    this.enableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft || window.APP.store.state.preferences.enableOnScreenJoystickLeft === undefined;
+    this.enableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight || window.APP.store.state.preferences.enableOnScreenJoystickRight === undefined;
     if (this.enableLeft || this.enableRight) {
       // Add the joystick container after the canvas element but before the rest of the UI.
       insertAfter(this.mockJoystickContainer, this.el.sceneEl.canvas);
@@ -73,8 +73,8 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
   },
 
   onPreferenceChange() {
-    const newEnableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft == undefined;
-    const newEnableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight == undefined;
+    const newEnableLeft = window.APP.store.state.preferences.enableOnScreenJoystickLeft || window.APP.store.state.preferences.enableOnScreenJoystickLeft === undefined;
+    const newEnableRight = window.APP.store.state.preferences.enableOnScreenJoystickRight || window.APP.store.state.preferences.enableOnScreenJoystickRight === undefined;
     const isChanged = this.enableLeft !== newEnableLeft || this.enableRight !== newEnableRight;
     if (!isChanged) {
       return;

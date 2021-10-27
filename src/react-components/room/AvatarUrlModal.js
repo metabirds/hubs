@@ -8,16 +8,16 @@ import { ApplyButton } from "../input/Button";
 import { FormattedMessage } from "react-intl";
 import { Column } from "../layout/Column";
 
-import { ReadyPlayerMeAvatarSelector } from "./ReadyPlayerMeAvatarSelector";
+import { AvatarMakerSelector } from "./AvatarMakerSelector";
 
 export function AvatarUrlModal({ onSubmit, onClose }) {
   const { handleSubmit, register, setValue } = useForm({
     defaultValues: {
-      url: ""
+      url: window.localStorage.getItem("avatarUrl") ? window.localStorage.getItem("avatarUrl") : ""
     }
   });
 
-  const handleReadyPlayerMeUrlSubmit = url => {
+  const handleAvatarMakerUrlSubmit = url => {
     url += "?t=" + Math.floor(Date.now() / 1000);
     setValue("url", url);
   };
@@ -33,16 +33,8 @@ export function AvatarUrlModal({ onSubmit, onClose }) {
           type="url"
           required
           ref={register}
-          description={
-            <a href="https://hubs.mozilla.com/docs/intro-avatars.html" target="_blank" rel="noopener noreferrer">
-              <FormattedMessage
-                id="avatar-url-modal.custom-avatar-docs-link"
-                defaultMessage="Learn more about custom avatars"
-              />
-            </a>
-          }
         />
-        <ReadyPlayerMeAvatarSelector onSubmit={handleReadyPlayerMeUrlSubmit} />
+        <AvatarMakerSelector onSubmit={handleAvatarMakerUrlSubmit} />
         <ApplyButton type="submit" />
       </Column>
     </Modal>

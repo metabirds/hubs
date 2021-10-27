@@ -1,0 +1,6 @@
+@use "../styles/theme.scss";
+:local(.copy-button) {
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+}
+/*# sourceMappingURL=CopyableTextInputField.css.map */

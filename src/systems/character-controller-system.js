@@ -71,8 +71,9 @@ export class CharacterControllerSystem {
     this.waypoints.push({ transform: getPooledMatrix4().copy(inTransform), isInstant, waypointComponentData }); //TODO: don't create new object
   }
   enqueueRelativeMotion(motion) {
-    motion.z *= -1;
-    this.relativeMotion.add(motion);
+    let tempMotion  = new THREE.Vector3().copy(motion);
+    tempMotion.z *= -1;
+    this.relativeMotion.add(tempMotion);
   }
   enqueueInPlaceRotationAroundWorldUp(dXZ) {
     this.dXZ += dXZ;

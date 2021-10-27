@@ -488,7 +488,7 @@ class MediaBrowserContainer extends Component {
             {urlSource === "avatars" && (
               <CreateTile
                 type="avatar"
-                onClick={this.onCreateAvatar}
+                onClick={() => handleCustomClicked(urlSource)}
                 label={<FormattedMessage id="media-browser.create-avatar" defaultMessage="Create Avatar" />}
               />
             )}

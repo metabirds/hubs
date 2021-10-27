@@ -38,6 +38,7 @@ import { ReactComponent as StarIcon } from "./Star.svg";
 import { ReactComponent as TextIcon } from "./Text.svg";
 import { ReactComponent as UploadIcon } from "./Upload.svg";
 import { ReactComponent as VideoIcon } from "./Video.svg";
+import { ReactComponent as CarIcon } from "./Car.svg";
 import { ReactComponent as VolumeHighIcon } from "./VolumeHigh.svg";
 import { ReactComponent as VolumeMutedIcon } from "./VolumeMuted.svg";
 import { ReactComponent as VolumeOffIcon } from "./VolumeOff.svg";
@@ -92,6 +93,7 @@ export const AllIcons = args => (
     <TextIcon {...args} />
     <UploadIcon {...args} />
     <VideoIcon {...args} />
+    <CarIcon {...args} />
     <VolumeHighIcon {...args} />
     <VolumeMutedIcon {...args} />
     <VolumeOffIcon {...args} />
