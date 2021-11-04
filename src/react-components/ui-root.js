@@ -93,6 +93,7 @@ import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
+import { ToggleTpsContainer } from "./room/ToggleTpsContainer";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -180,6 +181,7 @@ class UIRoot extends Component {
     showPrefs: false,
     watching: false,
     isStreaming: false,
+    isTPS: false,
 
     waitingOnAudio: false,
     audioTrackClone: null,
@@ -458,6 +460,9 @@ class UIRoot extends Component {
     this.props.scene.emit("action_mute");
   };
 
+  toggleTPS= () =>{
+    this.props.scene.systems["hubs-systems"].cameraSystem.toggleTPS() === 1 ? this.setState({isTPS: false}) : this.setState({ isTPS: true});
+  };
   shareVideo = mediaSource => {
     this.props.scene.emit(`action_share_${mediaSource}`);
   };
@@ -1534,6 +1539,11 @@ class UIRoot extends Component {
                         <VoiceButtonContainer
                           scene={this.props.scene}
                           microphoneEnabled={this.mediaDevicesManager.isMicShared}
+                        />
+                        <ToggleTpsContainer
+                          scene={this.props.scene}
+                          isTPS={this.state.isTPS}
+                          toggleTPS={this.toggleTPS}
                         />
                         <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
                         <PlacePopoverContainer
