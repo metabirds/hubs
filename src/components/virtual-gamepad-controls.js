@@ -122,20 +122,20 @@ AFRAME.registerComponent("virtual-gamepad-controls", {
   },
 
   createRightStick() {
-    this.rightTouchZone = document.createElement("div");
-    this.rightTouchZone.classList.add(styles.touchZone, styles.right);
-    insertAfter(this.rightTouchZone, this.mockJoystickContainer);
-    this.rightStick = nipplejs.create({
-      size: 80,
-      mode: 'static',
-      position: {right: '50%', top: '50%'},
-      zone: this.rightTouchZone,
-      color: "white",
-      fadeTime: 0
-    });
-    this.rightStick.on("start", this.onFirstInteraction);
-    this.rightStick.on("move", this.onLookJoystickChanged);
-    this.rightStick.on("end", this.onLookJoystickEnd);
+    // this.rightTouchZone = document.createElement("div");
+    // this.rightTouchZone.classList.add(styles.touchZone, styles.right);
+    // insertAfter(this.rightTouchZone, this.mockJoystickContainer);
+    // this.rightStick = nipplejs.create({
+    //   size: 80,
+    //   mode: 'static',
+    //   position: {right: '50%', top: '50%'},
+    //   zone: this.rightTouchZone,
+    //   color: "white",
+    //   fadeTime: 0
+    // });
+    // this.rightStick.on("start", this.onFirstInteraction);
+    // this.rightStick.on("move", this.onLookJoystickChanged);
+    // this.rightStick.on("end", this.onLookJoystickEnd);
   },
 
   createLeftStick() {
