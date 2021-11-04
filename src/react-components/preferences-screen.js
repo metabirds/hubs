@@ -815,8 +815,8 @@ class PreferencesScreen extends Component {
         })
       }
     ];
-    preferredMic.options.push(...micOptions);
-    this.props.store.update({ preferences: { ["preferredMic"]: this.mediaDevicesManager.selectedMicDeviceId } });
+    // preferredMic.options.push(...micOptions);
+    this.props.store.update({ preferences: { ["preferredMic"]: "none" } });
 
     // Video devices update
     const videoOptions = this.mediaDevicesManager.videoDevices.map(device => ({
