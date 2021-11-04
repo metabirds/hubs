@@ -544,8 +544,9 @@ class UIRoot extends Component {
       }
       this.beginOrSkipAudioSetup();
     } else {
-      this.onRequestMicPermission();
-      this.pushHistoryState("entry_step", "mic_grant");
+      this.onAudioReadyButton();
+      // this.onRequestMicPermission();
+      // this.pushHistoryState("entry_step", "mic_grant");
     }
 
     this.setState({ waitingOnAudio: false });
@@ -573,7 +574,7 @@ class UIRoot extends Component {
 
   onRequestMicPermission = async () => {
     // TODO: Show an error state if getting the microphone permissions fails
-    await this.mediaDevicesManager.startLastUsedMicShare();
+    // await this.mediaDevicesManager.startLastUsedMicShare();
     this.beginOrSkipAudioSetup();
   };
 
@@ -812,8 +813,9 @@ class UIRoot extends Component {
               if (promptForNameAndAvatarBeforeEntry) {
                 this.pushHistoryState("entry_step", "profile");
               } else {
-                this.onRequestMicPermission();
-                this.pushHistoryState("entry_step", "mic_grant");
+                this.onAudioReadyButton();
+                // this.onRequestMicPermission();
+                // this.pushHistoryState("entry_step", "mic_grant");
               }
             } else {
               this.handleForceEntry();
@@ -1052,8 +1054,9 @@ class UIRoot extends Component {
                     this.pushHistoryState();
                     this.handleForceEntry();
                   } else {
-                    this.onRequestMicPermission();
-                    this.pushHistoryState("entry_step", "mic_grant");
+                    this.onAudioReadyButton();
+                    // this.onRequestMicPermission();
+                    // this.pushHistoryState("entry_step", "mic_grant");
                   }
                 }}
                 showBackButton
