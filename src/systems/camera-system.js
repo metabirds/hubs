@@ -362,10 +362,11 @@ export class CameraSystem {
       } else if (
         (this.mode === CAMERA_MODE_FIRST_PERSON ||
           this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
-          this.mode === CAMERA_MODE_THIRD_PERSON_FAR) &&
-        scene.audioListener.parent !== this.viewingCamera.object3DMap.camera
+          this.mode === CAMERA_MODE_THIRD_PERSON_FAR)
+          // && scene.audioListener.parent !== this.viewingCamera.object3DMap.camera
       ) {
-        this.viewingCamera.object3DMap.camera.add(scene.audioListener);
+        // this.viewingCamera.object3DMap.camera.add(scene.audioListener);
+        this.avatarPOV.object3D.add(scene.audioListener);
       }
     }
   }
