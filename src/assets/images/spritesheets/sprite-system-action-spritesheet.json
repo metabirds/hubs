@@ -428,6 +428,14 @@
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
 			"sourceSize": {"w":64,"h":64}
+		},
+		"open-link.png":
+		{
+			"frame": {"x":152,"y":825,"w":227,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":227,"h":64},
+			"sourceSize": {"w":227,"h":64}
 		}
 	}
 }
