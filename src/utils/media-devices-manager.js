@@ -1,6 +1,7 @@
 const isMobile = AFRAME.utils.device.isMobile();
 const isMobileVR = AFRAME.utils.device.isMobileVR();
 const isFirefoxReality = isMobileVR && navigator.userAgent.match(/Firefox/);
+const isIOS = AFRAME.utils.device.isIOS();
 
 // This is a list of regexes that match the microphone labels of HMDs.
 //
@@ -137,7 +138,7 @@ export default class MediaDevicesManager {
   }
 
   async startLastUsedMicShare() {
-    return await this.startMicShare(this.lastUsedMicDeviceId);
+    return await this.stopMicShare();
   }
 
   async _startMicShare(constraints = { audio: {} }) {
@@ -166,35 +167,45 @@ export default class MediaDevicesManager {
       });
     }
 
-    try {
-      console.log("Adding microphone media stream");
-      const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-      this.audioSystem.addStreamToOutboundAudio("microphone", newStream);
-      this.audioTrack = newStream.getAudioTracks()[0];
-      this.audioTrack.addEventListener("ended", () => {
-        this._scene.emit("action_end_mic_sharing");
+    if (isIOS) {
+      // echoCancellation seems to cause crackle noise on iOS so force to disable it
+      // Refer to https://github.com/mozilla/hubs/issues/4411#issuecomment-924490968 for the details
+      constraints.audio.echoCancellation = false;
+      this._store.update({
+        preferences: {
+          disableEchoCancellation: !constraints.audio.echoCancellation
+        }
       });
+    }
 
-      if (/Oculus/.test(navigator.userAgent)) {
-        // HACK Oculus Browser 6 seems to randomly end the microphone audio stream. This re-creates it.
-        // Note the ended event will only fire if some external event ends the stream, not if we call stop().
-        const recreateAudioStream = async () => {
-          console.warn(
-            "Oculus Browser 6 bug hit: Audio stream track ended without calling stop. Recreating audio stream."
-          );
+    try {
+      // const newStream = await navigator.mediaDevices.getUserMedia(constraints);
+      // this.audioSystem.addStreamToOutboundAudio("microphone", newStream);
+      // this.audioTrack = newStream.getAudioTracks()[0];
+      // this.audioTrack.addEventListener("ended", () => {
+      //   this._scene.emit("action_end_mic_sharing");
+      // });
 
-          const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-          this.audioTrack = newStream.getAudioTracks()[0];
+      // if (/Oculus/.test(navigator.userAgent)) {
+      //   // HACK Oculus Browser 6 seems to randomly end the microphone audio stream. This re-creates it.
+      //   // Note the ended event will only fire if some external event ends the stream, not if we call stop().
+      //   const recreateAudioStream = async () => {
+      //     console.warn(
+      //       "Oculus Browser 6 bug hit: Audio stream track ended without calling stop. Recreating audio stream."
+      //     );
 
-          this.audioSystem.addStreamToOutboundAudio("microphone", newStream);
+      //     const newStream = await navigator.mediaDevices.getUserMedia(constraints);
+      //     this.audioTrack = newStream.getAudioTracks()[0];
 
-          this._scene.emit("local-media-stream-created");
+      //     this.audioSystem.addStreamToOutboundAudio("microphone", newStream);
 
-          this.audioTrack.addEventListener("ended", recreateAudioStream, { once: true });
-        };
+      //     this._scene.emit("local-media-stream-created");
 
-        this.audioTrack.addEventListener("ended", recreateAudioStream, { once: true });
-      }
+      //     this.audioTrack.addEventListener("ended", recreateAudioStream, { once: true });
+      //   };
+
+      //   this.audioTrack.addEventListener("ended", recreateAudioStream, { once: true });
+      // }
 
       return true;
     } catch (e) {
@@ -223,7 +234,7 @@ export default class MediaDevicesManager {
       if (isDisplayMedia) {
         newStream = await navigator.mediaDevices.getDisplayMedia(constraints);
       } else {
-        newStream = await navigator.mediaDevices.getUserMedia(constraints);
+        // newStream = await navigator.mediaDevices.getUserMedia(constraints);
       }
 
       const videoTracks = newStream ? newStream.getVideoTracks() : [];

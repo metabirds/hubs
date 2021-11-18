@@ -821,7 +821,7 @@ class PreferencesScreen extends Component {
     if (deviceId === "none") {
       this.mediaDevicesManager.stopMicShare().then(this.updateMediaDevices);
     } else {
-      this.mediaDevicesManager.startMicShare(deviceId).then(this.updateMediaDevices);
+      this.mediaDevicesManager.stopMicShare().then(this.updateMediaDevices);
     }
   };
 

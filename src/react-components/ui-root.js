@@ -595,7 +595,7 @@ class UIRoot extends Component {
   };
 
   micDeviceChanged = async deviceId => {
-    this.mediaDevicesManager.startMicShare(deviceId);
+    this.mediaDevicesManager.stopMicShare();
   };
 
   onRequestMicPermission = async () => {
