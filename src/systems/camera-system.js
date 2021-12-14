@@ -362,10 +362,11 @@ export class CameraSystem {
       } else if (
         (this.mode === CAMERA_MODE_FIRST_PERSON ||
           this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
-          this.mode === CAMERA_MODE_THIRD_PERSON_FAR) &&
-        scene.audioListener.parent !== this.viewingCamera.object3DMap.camera
+          this.mode === CAMERA_MODE_THIRD_PERSON_FAR)
+          // && scene.audioListener.parent !== this.viewingCamera.object3DMap.camera
       ) {
-        this.viewingCamera.object3DMap.camera.add(scene.audioListener);
+        // this.viewingCamera.object3DMap.camera.add(scene.audioListener);
+        this.avatarPOV.object3D.add(scene.audioListener);
       }
     }
   }
@@ -493,7 +494,7 @@ export class CameraSystem {
         }
       } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR || this.mode === CAMERA_MODE_THIRD_PERSON_FAR) {
         if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
-          translation.makeTranslation(0, 1.6, 0);
+          translation.makeTranslation(0, 1.8, 0);
         } else {
           translation.makeTranslation(0, 2, 8);
         }
@@ -502,7 +503,7 @@ export class CameraSystem {
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
         // this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.object3DMap.camera.quaternion);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
-        this.viewingCamera.object3DMap.camera.position.copy(new THREE.Vector3(0,0,1.6));  
+        this.viewingCamera.object3DMap.camera.position.copy(new THREE.Vector3(0, 0 ,1.2));  
         this.viewingCamera.object3DMap.camera.lookAt(this.viewingRig.object3D.position);
       } else if (this.mode === CAMERA_MODE_INSPECT) {
         this.avatarPOVRotator.on = false;
