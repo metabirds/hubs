@@ -188,6 +188,7 @@ if (isEmbed && !qs.get("embed_token")) {
   // Should be covered by X-Frame-Options, but just in case.
   throw new Error("no embed token");
 }
+const locationHash = document.location.hash;
 
 THREE.Object3D.DefaultMatrixAutoUpdate = false;
 
@@ -322,6 +323,7 @@ function mountUI(props = {}) {
                     forcedVREntryType,
                     store,
                     mediaSearchStore,
+                    locationHash,
                     ...props,
                     ...routeProps
                   }}
