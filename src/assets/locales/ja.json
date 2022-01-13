@@ -120,7 +120,7 @@
   "exited-room-screen.closed-room-tos": "A room may be closed by the room owner, or if we receive reports that it violates our <toslink>Terms of Use</toslink>.",
   "exited-room-screen.connect-tcp": "You can try <a>connecting via TCP</a>, which may work better on some networks.",
   "exited-room-screen.contact-us": "If you have questions, contact us at {contactEmail}.",
-  "exited-room-screen.create-room": "You can also <a>create a new room</a>.",
+  "exited-room-screen.create-room": "アカウントをお持ちの方は<a>サインイン</a>してください。",
   "exited-room-screen.home-button": "Back to Home",
   "exited-room-screen.no-longer-availible": "Sorry, this room is no longer available.",
   "exited-room-screen.reason.closed": "この部屋は利用できません。",
