@@ -1546,26 +1546,26 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <>
-                        <VoiceButtonContainer
+                        {/* <VoiceButtonContainer
                           scene={this.props.scene}
                           microphoneEnabled={this.mediaDevicesManager.isMicShared}
-                        />
+                        /> */}
                         <ToggleTpsContainer
                           scene={this.props.scene}
                           isTPS={this.state.isTPS}
                           toggleTPS={this.toggleTPS}
                         />
-                        <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                        <PlacePopoverContainer
+                        {/* <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} /> */}
+                        {/* <PlacePopoverContainer
                           scene={this.props.scene}
                           hubChannel={this.props.hubChannel}
                           mediaSearchStore={this.props.mediaSearchStore}
                           showNonHistoriedDialog={this.showNonHistoriedDialog}
-                        />
-                        {this.props.hubChannel.can("spawn_emoji") && <ReactionPopoverContainer />}
+                        /> */}
+                        {/* {this.props.hubChannel.can("spawn_emoji") && <ReactionPopoverContainer />} */}
                       </>
                     )}
-                    <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
+                    {/* <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} /> */}
                     {entered &&
                       isMobileVR && (
                         <ToolbarButton
@@ -1589,7 +1589,7 @@ class UIRoot extends Component {
                           onClick={() => exit2DInterstitialAndEnterVR(true)}
                         />
                       )}
-                    {entered && (
+                    {/* {entered && (
                       <ToolbarButton
                         icon={<LeaveIcon />}
                         label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
@@ -1601,7 +1601,7 @@ class UIRoot extends Component {
                           });
                         }}
                       />
-                    )}
+                    )} */}
                     <MoreMenuPopoverButton menu={moreMenu} />
                   </>
                 }
