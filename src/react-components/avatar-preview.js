@@ -54,7 +54,7 @@ const DEFAULT_MARGIN = 1;
 function fitBoxInFrustum(camera, box, center, margin = DEFAULT_MARGIN) {
   const halfYExtents = Math.max(box.max.y - center.y, center.y - box.min.y);
   const halfVertFOV = THREE.Math.degToRad(camera.fov / 2);
-  camera.position.set(0, 0, (halfYExtents / Math.tan(halfVertFOV) + box.max.z) * margin);
+  camera.position.set(0.2, -0.58, (halfYExtents / Math.tan(halfVertFOV) + box.max.z) * margin);
   camera.position.applyEuler(ORBIT_ANGLE);
   camera.position.add(center);
   camera.lookAt(center);
