@@ -17,6 +17,7 @@ import {
 import { addAnimationComponents } from "../utils/animation";
 import qsTruthy from "../utils/qs_truthy";
 
+import configs from "../utils/configs";
 import loadingObjectSrc from "../assets/models/LoadingObject_Atom.glb";
 import { SOUND_MEDIA_LOADING, SOUND_MEDIA_LOADED } from "../systems/sound-effects-system";
 import { loadModel } from "./gltf-model-plus";
@@ -365,7 +366,7 @@ AFRAME.registerComponent("media-loader", {
 
       //replace placeholders.
       if (!disableDynamicRoomPath) {
-        const roomId = window.location.pathname.split("/")[1] || "";
+        const roomId = window.location.pathname.split("/")[1] || configs.feature("default_room_id");
         src = this.data.src = src.replace("__ROOM_ID__", roomId);
       }
 
