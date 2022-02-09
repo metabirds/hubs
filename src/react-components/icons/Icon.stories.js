@@ -44,6 +44,7 @@ import { ReactComponent as VolumeMutedIcon } from "./VolumeMuted.svg";
 import { ReactComponent as VolumeOffIcon } from "./VolumeOff.svg";
 import { ReactComponent as VRIcon } from "./VR.svg";
 import { ReactComponent as WandIcon } from "./Wand.svg";
+import { ReactComponent as HmcLogo } from "./HmcLogo.svg";
 
 export default {
   title: "Icon",
@@ -71,6 +72,7 @@ export const AllIcons = args => (
     <GoToIcon {...args} />
     <HelpIcon {...args} />
     <HideIcon {...args} />
+    <HmcLogo {...args} />
     <ImageIcon {...args} />
     <InviteIcon {...args} />
     <LeaveIcon {...args} />

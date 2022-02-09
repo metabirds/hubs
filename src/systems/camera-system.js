@@ -7,6 +7,7 @@ import { isTagged } from "../components/tags";
 import { qsGet } from "../utils/qs_truthy";
 const customFOV = qsGet("fov");
 const enableThirdPersonMode = qsTruthy("thirdPerson");
+import { Layers } from "../components/layers";
 
 function getInspectableInHierarchy(el) {
   let inspectable = el;
@@ -64,7 +65,7 @@ const orbit = (function() {
     if (!target.parent) {
       // add dummy object to the scene, if this is the first time we call this function
       AFRAME.scenes[0].object3D.add(target);
-      target.applyMatrix(IDENTITY); // make sure target gets updated at least once for our matrix optimizations
+      target.applyMatrix4(IDENTITY); // make sure target gets updated at least once for our matrix optimizations
     }
     pivot.updateMatrices();
     decompose(pivot.matrixWorld, owp, owq);
@@ -107,7 +108,7 @@ const moveRigSoCameraLooksAtPivot = (function() {
     if (!target.parent) {
       // add dummy object to the scene, if this is the first time we call this function
       AFRAME.scenes[0].object3D.add(target);
-      target.applyMatrix(IDENTITY); // make sure target gets updated at least once for our matrix optimizations
+      target.applyMatrix4(IDENTITY); // make sure target gets updated at least once for our matrix optimizations
     }
 
     pivot.updateMatrices();
@@ -157,34 +158,32 @@ const NEXT_MODES = {
   [CAMERA_MODE_THIRD_PERSON_FAR]: CAMERA_MODE_FIRST_PERSON
 };
 
-const CAMERA_LAYER_INSPECT = 4;
-// This layer is never actually rendered by a camera but lets the batching system know it should be rendered if inspecting
-export const CAMERA_LAYER_BATCH_INSPECT = 5;
-
+// cyzyspace
 const isHeadSet = AFRAME.utils.device.checkHeadsetConnected();
+
 const ensureLightsAreSeenByCamera = function(o) {
   if (o.isLight) {
-    o.layers.enable(CAMERA_LAYER_INSPECT);
+    o.layers.enable(Layers.CAMERA_LAYER_INSPECT);
   }
 };
 const enableInspectLayer = function(o) {
   const batchManagerSystem = AFRAME.scenes[0].systems["hubs-systems"].batchManagerSystem;
   const batch = batchManagerSystem.batchingEnabled && batchManagerSystem.batchManager.batchForMesh.get(o);
   if (batch) {
-    batch.layers.enable(CAMERA_LAYER_INSPECT);
-    o.layers.enable(CAMERA_LAYER_BATCH_INSPECT);
+    batch.layers.enable(Layers.CAMERA_LAYER_INSPECT);
+    o.layers.enable(Layers.CAMERA_LAYER_BATCH_INSPECT);
   } else {
-    o.layers.enable(CAMERA_LAYER_INSPECT);
+    o.layers.enable(Layers.CAMERA_LAYER_INSPECT);
   }
 };
 const disableInspectLayer = function(o) {
   const batchManagerSystem = AFRAME.scenes[0].systems["hubs-systems"].batchManagerSystem;
   const batch = batchManagerSystem.batchingEnabled && batchManagerSystem.batchManager.batchForMesh.get(o);
   if (batch) {
-    batch.layers.disable(CAMERA_LAYER_INSPECT);
-    o.layers.disable(CAMERA_LAYER_BATCH_INSPECT);
+    batch.layers.disable(Layers.CAMERA_LAYER_INSPECT);
+    o.layers.disable(Layers.CAMERA_LAYER_BATCH_INSPECT);
   } else {
-    o.layers.disable(CAMERA_LAYER_INSPECT);
+    o.layers.disable(Layers.CAMERA_LAYER_INSPECT);
   }
 };
 
@@ -208,7 +207,10 @@ export class CameraSystem {
     this.mode = CAMERA_MODE_SCENE_PREVIEW;
     this.snapshot = { audioTransform: new THREE.Matrix4(), matrixWorld: new THREE.Matrix4() };
     this.audioSourceTargetTransform = new THREE.Matrix4();
-    this.isTPS = false;
+    this.isTPS = false; // cyzyspace
+    scene.addEventListener("cameraready", ({ detail: { cameraEl } }) => {
+      cameraEl.getObject3D("camera").layers.enable(Layers.CAMERA_LAYER_VIDEO_TEXTURE_TARGET);
+    });
     waitForDOMContentLoaded().then(() => {
       this.avatarPOV = document.getElementById("avatar-pov-node");
       this.avatarRig = document.getElementById("avatar-rig");
@@ -219,7 +221,7 @@ export class CameraSystem {
         new THREE.BoxGeometry(100, 100, 100),
         new THREE.MeshBasicMaterial({ color: 0x020202, side: THREE.BackSide })
       );
-      bg.layers.set(CAMERA_LAYER_INSPECT);
+      bg.layers.set(Layers.CAMERA_LAYER_INSPECT);
       this.viewingRig.object3D.add(bg);
       if (customFOV) {
         if (this.viewingCamera.components.camera) {
@@ -237,6 +239,7 @@ export class CameraSystem {
       this.updatePlayerHead();
     });
   }
+  // cyzyspace
   toggleTPS() {
     this.isTPS = true;
     return this.mode;
@@ -276,7 +279,7 @@ export class CameraSystem {
     this.pivot = pivot;
 
     const vrMode = scene.is("vr-mode");
-    const camera = vrMode ? scene.renderer.vr.getCamera(scene.camera) : scene.camera;
+    const camera = vrMode ? scene.renderer.xr.getCamera() : scene.camera;
     this.snapshot.mask = camera.layers.mask;
     if (vrMode) {
       this.snapshot.mask0 = camera.cameras[0].layers.mask;
@@ -360,10 +363,11 @@ export class CameraSystem {
       if (this.mode === CAMERA_MODE_INSPECT && scene.audioListener.parent !== this.avatarPOV.object3D) {
         this.avatarPOV.object3D.add(scene.audioListener);
       } else if (
-        (this.mode === CAMERA_MODE_FIRST_PERSON ||
-          this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
-          this.mode === CAMERA_MODE_THIRD_PERSON_FAR)
-          // && scene.audioListener.parent !== this.viewingCamera.object3DMap.camera
+        this.mode === CAMERA_MODE_FIRST_PERSON ||
+        this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
+        this.mode === CAMERA_MODE_THIRD_PERSON_FAR
+        // cyzyspace
+        // && scene.audioListener.parent !== this.viewingCamera.object3DMap.camera
       ) {
         // this.viewingCamera.object3DMap.camera.add(scene.audioListener);
         this.avatarPOV.object3D.add(scene.audioListener);
@@ -377,11 +381,11 @@ export class CameraSystem {
 
     const scene = AFRAME.scenes[0];
     const vrMode = scene.is("vr-mode");
-    const camera = vrMode ? scene.renderer.vr.getCamera(scene.camera) : scene.camera;
-    camera.layers.set(CAMERA_LAYER_INSPECT);
+    const camera = vrMode ? scene.renderer.xr.getCamera() : scene.camera;
+    camera.layers.set(Layers.CAMERA_LAYER_INSPECT);
     if (vrMode) {
-      camera.cameras[0].layers.set(CAMERA_LAYER_INSPECT);
-      camera.cameras[1].layers.set(CAMERA_LAYER_INSPECT);
+      camera.cameras[0].layers.set(Layers.CAMERA_LAYER_INSPECT);
+      camera.cameras[1].layers.set(Layers.CAMERA_LAYER_INSPECT);
     }
   }
 
@@ -392,7 +396,7 @@ export class CameraSystem {
     }
     const scene = AFRAME.scenes[0];
     const vrMode = scene.is("vr-mode");
-    const camera = vrMode ? scene.renderer.vr.getCamera(scene.camera) : scene.camera;
+    const camera = vrMode ? scene.renderer.xr.getCamera() : scene.camera;
     camera.layers.mask = this.snapshot.mask;
     if (vrMode) {
       camera.cameras[0].layers.mask = this.snapshot.mask0;
@@ -459,17 +463,15 @@ export class CameraSystem {
         this.nextMode();
       }
 
-      if(!isHeadSet && this.isTPS){
-
-        if(this.mode === CAMERA_MODE_FIRST_PERSON){
+      if (!isHeadSet && this.isTPS) {
+        if (this.mode === CAMERA_MODE_FIRST_PERSON) {
           this.mode = CAMERA_MODE_THIRD_PERSON_NEAR;
-        }
-        else if(this.mode === CAMERA_MODE_THIRD_PERSON_NEAR){
+        } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
           this.mode = CAMERA_MODE_FIRST_PERSON;
         }
         this.isTPS = false;
       }
-      
+
       const headShouldBeVisible = this.mode !== CAMERA_MODE_FIRST_PERSON;
       this.playerHead = document.getElementById("avatar-head");
       if (this.playerHead && headShouldBeVisible !== this.playerHead.object3D.visible) {
