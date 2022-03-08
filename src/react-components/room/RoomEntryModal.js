@@ -48,22 +48,6 @@ export function RoomEntryModal({
           <p>{roomName}</p>
         </div>
         <Column center className={styles.buttons}>
-          {showJoinRoom && (
-            <Button preset="accent4" onClick={onJoinRoom}>
-              <EnterIcon />
-              <span>
-                <FormattedMessage id="room-entry-modal.join-room-button" defaultMessage="Join Room" />
-              </span>
-            </Button>
-          )}
-          {showEnterOnDevice && (
-            <Button preset="accent5" onClick={onEnterOnDevice}>
-              <VRIcon />
-              <span>
-                <FormattedMessage id="room-entry-modal.enter-on-device-button" defaultMessage="Enter On Device" />
-              </span>
-            </Button>
-          )}
           {showSpectate && (
             <Button preset="accent2" onClick={onSpectate}>
               <ShowIcon />
@@ -72,6 +56,22 @@ export function RoomEntryModal({
               </span>
             </Button>
           )}
+          {showJoinRoom && (
+            <Button preset="accent4" onClick={onJoinRoom}>
+              <EnterIcon />
+              <span>
+                <FormattedMessage id="room-entry-modal.join-room-button" defaultMessage="Join Room" />
+              </span>
+            </Button>
+          )}
+          {/* {showEnterOnDevice && (
+            <Button preset="accent5" onClick={onEnterOnDevice}>
+              <VRIcon />
+              <span>
+                <FormattedMessage id="room-entry-modal.enter-on-device-button" defaultMessage="Enter On Device" />
+              </span>
+            </Button>
+          )} */}
           {showOptions &&
             breakpoint !== "sm" && (
               <>
