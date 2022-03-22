@@ -1558,7 +1558,7 @@ class UIRoot extends Component {
                           preset="accept"
                           onClick={() => this.setState({ watching: false })}
                         />
-                        {enableSpectateVRButton && (
+                        {/* {enableSpectateVRButton && (
                           <ToolbarButton
                             icon={<VRIcon />}
                             preset="accent5"
@@ -1567,7 +1567,7 @@ class UIRoot extends Component {
                             }
                             onClick={() => this.props.scene.enterVR()}
                           />
-                        )}
+                        )} */}
                       </>
                     )}
                     {entered && (
