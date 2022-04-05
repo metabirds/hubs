@@ -252,6 +252,18 @@ module.exports = async (env, argv) => {
     ]
   };
 
+  const devServerHeaders = {
+    "Access-Control-Allow-Origin": "*"
+  };
+
+  // Behind and environment var for now pending further testing
+  if (process.env.DEV_CSP_SOURCE) {
+    const CSPResp = await fetch(`https://${process.env.DEV_CSP_SOURCE}/`);
+    const remoteCSP = CSPResp.headers.get("content-security-policy");
+    devServerHeaders["content-security-policy"] = remoteCSP;
+    // .replaceAll("connect-src", "connect-src https://example.com");
+  }
+
   return {
     node: {
       // need to specify this manually because some random lodash code will try to access
@@ -285,9 +297,7 @@ module.exports = async (env, argv) => {
       public: `${host}:8080`,
       useLocalIp: true,
       allowedHosts: [host, "hubs.local"],
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      },
+      headers: devServerHeaders,
       hot: liveReload,
       inline: liveReload,
       historyApiFallback: {
@@ -322,7 +332,7 @@ module.exports = async (env, argv) => {
           if (req.method === "OPTIONS") {
             res.send();
           } else {
-            const url = req.path.replace("/cors-proxy/", "");
+            const url = req.originalUrl.replace("/cors-proxy/", "");
             request({ url, method: req.method }, error => {
               if (error) {
                 console.error(`cors-proxy: error fetching "${url}"\n`, error);
@@ -382,7 +392,29 @@ module.exports = async (env, argv) => {
         // Some JS assets are loaded at runtime and should be coppied unmodified and loaded using file-loader
         {
           test: [
-            path.resolve(__dirname, "node_modules", "three", "examples", "js", "libs", "basis", "basis_transcoder.js")
+            path.resolve(__dirname, "node_modules", "three", "examples", "js", "libs", "basis", "basis_transcoder.js"),
+            path.resolve(
+              __dirname,
+              "node_modules",
+              "three",
+              "examples",
+              "js",
+              "libs",
+              "draco",
+              "gltf",
+              "draco_decoder.js"
+            ),
+            path.resolve(
+              __dirname,
+              "node_modules",
+              "three",
+              "examples",
+              "js",
+              "libs",
+              "draco",
+              "gltf",
+              "draco_wasm_wrapper.js"
+            )
           ],
           loader: "file-loader",
           options: {
@@ -645,6 +677,7 @@ module.exports = async (env, argv) => {
           GA_TRACKING_ID: process.env.GA_TRACKING_ID,
           POSTGREST_SERVER: process.env.POSTGREST_SERVER,
           UPLOADS_HOST: process.env.UPLOADS_HOST,
+          BASE_ASSETS_PATH: process.env.BASE_ASSETS_PATH,
           APP_CONFIG: appConfig
         })
       })
