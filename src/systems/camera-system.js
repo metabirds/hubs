@@ -208,9 +208,6 @@ export class CameraSystem {
     this.snapshot = { audioTransform: new THREE.Matrix4(), matrixWorld: new THREE.Matrix4() };
     this.audioSourceTargetTransform = new THREE.Matrix4();
     this.isTPS = false; // cyzyspace
-    scene.addEventListener("cameraready", ({ detail: { cameraEl } }) => {
-      cameraEl.getObject3D("camera").layers.enable(Layers.CAMERA_LAYER_VIDEO_TEXTURE_TARGET);
-    });
     waitForDOMContentLoaded().then(() => {
       this.avatarPOV = document.getElementById("avatar-pov-node");
       this.avatarRig = document.getElementById("avatar-rig");
@@ -223,15 +220,22 @@ export class CameraSystem {
       );
       bg.layers.set(Layers.CAMERA_LAYER_INSPECT);
       this.viewingRig.object3D.add(bg);
-      if (customFOV) {
-        if (this.viewingCamera.components.camera) {
-          this.viewingCamera.setAttribute("camera", { fov: customFOV });
-        } else {
-          scene.addEventListener("camera-set-active", () => {
-            this.viewingCamera.setAttribute("camera", { fov: customFOV });
-          });
+
+      // TODO get rid of built in aframe camera system, we just keep having to fight it
+      const setupCamera = ({ detail: { cameraEl } }) => {
+        if (customFOV) {
+          cameraEl.setAttribute("camera", { fov: customFOV });
         }
+        const cameras = scene.is("vr-mode") ? scene.renderer.xr.getCamera().cameras : [cameraEl.getObject3D("camera")];
+        cameras.forEach(cam => cam.layers.enable(Layers.CAMERA_LAYER_VIDEO_TEXTURE_TARGET));
+      };
+
+      if (this.viewingCamera.components.camera) {
+        setupCamera({ detail: { cameraEl: this.viewingCamera } });
+      } else {
+        scene.addEventListener("camera-set-active", setupCamera);
       }
+
       // TODO this bookkeeping also exists elsewhere in the code, it would be nice to put these references in one place
       const playerModelEl = document.querySelector("#avatar-rig .model");
       playerModelEl.addEventListener("model-loading", () => (this.playerHead = null));
@@ -505,7 +509,7 @@ export class CameraSystem {
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
         // this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.object3DMap.camera.quaternion);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
-        this.viewingCamera.object3DMap.camera.position.copy(new THREE.Vector3(0, 0 ,1.2));  
+        this.viewingCamera.object3DMap.camera.position.copy(new THREE.Vector3(0, 0, 1.2));
         this.viewingCamera.object3DMap.camera.lookAt(this.viewingRig.object3D.position);
       } else if (this.mode === CAMERA_MODE_INSPECT) {
         this.avatarPOVRotator.on = false;

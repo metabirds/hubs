@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import { ReactComponent as EyeIcon } from "../icons/Eye.svg";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { FormattedMessage } from "react-intl";
 
-export function ToggleTpsContainer({ scene, isTPS, toggleTPS }) {
+export function ToggleTpsContainer({ toggleTPS }) {
   const buttonRef = useRef();
 
   return (

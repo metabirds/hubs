@@ -137,7 +137,6 @@ import "./components/track-pose";
 import "./components/replay";
 import "./components/visibility-by-path";
 import "./components/tags";
-import "./components/hubs-text";
 import "./components/periodic-full-syncs";
 import "./components/inspect-button";
 import "./components/inspect-pivot-child-selector";
@@ -233,8 +232,6 @@ import "./components/set-yxz-order";
 
 import "./components/cursor-controller";
 
-import "./components/nav-mesh-helper";
-
 import "./components/tools/pen";
 import "./components/tools/pen-laser";
 import "./components/tools/networked-drawing";
@@ -265,10 +262,14 @@ let isOAuthModal = false;
 
 // OAuth popup handler
 // TODO: Replace with a new oauth callback route that has this postMessage script.
-if (window.opener && window.opener.doingTwitterOAuth) {
-  window.opener.postMessage("oauth-successful");
-  isOAuthModal = true;
-  window.close();
+try {
+  if (window.opener && window.opener.doingTwitterOAuth) {
+    window.opener.postMessage("oauth-successful");
+    isOAuthModal = true;
+    window.close();
+  }
+} catch (e) {
+  console.error("Exception in oauth processing code", e);
 }
 
 const isBotMode = qsTruthy("bot");
@@ -394,7 +395,10 @@ export async function getSceneUrlForHub(hub) {
     isLegacyBundle = !(glbAsset || hasExtension);
   }
 
-  if (isLegacyBundle) {
+  if (qsTruthy("debugLocalScene") && sceneUrl?.startsWith("blob:")) {
+    // we skip doing this if you haven't entered because refreshing the page will invalidate blob urls and break loading
+    sceneUrl = document.querySelector("a-scene").is("entered") ? sceneUrl : loadingEnvironment;
+  } else if (isLegacyBundle) {
     // Deprecated
     const res = await fetch(sceneUrl);
     const data = await res.json();
@@ -433,7 +437,7 @@ export async function updateEnvironmentForHub(hub, entryManager) {
       () => {
         environmentEl.removeEventListener("model-error", sceneErrorHandler);
 
-        console.log(`Scene file inital load took ${Math.round(performance.now() - loadStart)}ms`);
+        console.log(`Scene file initial load took ${Math.round(performance.now() - loadStart)}ms`);
 
         // Show the canvas once the model has loaded
         document.querySelector(".a-canvas").classList.remove("a-hidden");
@@ -1404,7 +1408,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   hubPhxChannel.on("mute", ({ session_id }) => {
     if (session_id === NAF.clientId) {
-      APP.dialog.enableMicrophone(false);
+      APP.mediaDevicesManager.micEnabled = false;
     }
   });
 
