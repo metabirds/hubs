@@ -223,5 +223,10 @@
   },
   "optionalDependencies": {
     "fsevents": "^2.2.1"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "maintained node versions"
+  ]
 }
