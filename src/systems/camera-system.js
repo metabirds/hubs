@@ -166,7 +166,13 @@ const ensureLightsAreSeenByCamera = function(o) {
     o.layers.enable(Layers.CAMERA_LAYER_INSPECT);
   }
 };
+
+const firstPersonOnlyLayer = new THREE.Layers();
+firstPersonOnlyLayer.set(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
 const enableInspectLayer = function(o) {
+  // Ignore first person only meshes
+  if (o.layers.test(firstPersonOnlyLayer)) return;
+
   const batchManagerSystem = AFRAME.scenes[0].systems["hubs-systems"].batchManagerSystem;
   const batch = batchManagerSystem.batchingEnabled && batchManagerSystem.batchManager.batchForMesh.get(o);
   if (batch) {
@@ -177,6 +183,9 @@ const enableInspectLayer = function(o) {
   }
 };
 const disableInspectLayer = function(o) {
+  // Ignore first person only meshes
+  if (o.layers.test(firstPersonOnlyLayer)) return;
+
   const batchManagerSystem = AFRAME.scenes[0].systems["hubs-systems"].batchManagerSystem;
   const batch = batchManagerSystem.batchingEnabled && batchManagerSystem.batchManager.batchForMesh.get(o);
   if (batch) {
@@ -226,8 +235,9 @@ export class CameraSystem {
         if (customFOV) {
           cameraEl.setAttribute("camera", { fov: customFOV });
         }
-        const cameras = scene.is("vr-mode") ? scene.renderer.xr.getCamera().cameras : [cameraEl.getObject3D("camera")];
-        cameras.forEach(cam => cam.layers.enable(Layers.CAMERA_LAYER_VIDEO_TEXTURE_TARGET));
+        const camera = cameraEl.getObject3D("camera");
+        camera.layers.enable(Layers.CAMERA_LAYER_VIDEO_TEXTURE_TARGET);
+        camera.layers.enable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
       };
 
       if (this.viewingCamera.components.camera) {
@@ -236,14 +246,25 @@ export class CameraSystem {
         scene.addEventListener("camera-set-active", setupCamera);
       }
 
-      // TODO this bookkeeping also exists elsewhere in the code, it would be nice to put these references in one place
-      const playerModelEl = document.querySelector("#avatar-rig .model");
-      playerModelEl.addEventListener("model-loading", () => (this.playerHead = null));
-      playerModelEl.addEventListener("model-loaded", this.updatePlayerHead.bind(this));
-      this.updatePlayerHead();
+      // xr.updateCamera gets called every render to copy the active cameras properties to the XR cameras. We also want to copy layers.
+      // TODO this logic should either be moved into THREE or removed when we ditch aframe camera system
+      const xrManager = scene.renderer.xr;
+      const updateXRCamera = xrManager.updateCamera;
+      xrManager.updateCamera = function(camera) {
+        updateXRCamera(camera);
+        const xrCamera = xrManager.getCamera();
+        xrCamera.layers.mask = camera.layers.mask;
+        if (xrCamera.cameras.length) {
+          xrCamera.cameras[0].layers.set(Layers.CAMERA_LAYER_XR_LEFT_EYE);
+          xrCamera.cameras[0].layers.mask |= camera.layers.mask;
+          xrCamera.cameras[1].layers.set(Layers.CAMERA_LAYER_XR_RIGHT_EYE);
+          xrCamera.cameras[1].layers.mask |= camera.layers.mask;
+        }
+      };
     });
   }
-  // cyzyspace
+
+  // cyzyspace >>
   toggleTPS() {
     this.isTPS = true;
     return this.mode;
@@ -251,6 +272,7 @@ export class CameraSystem {
   updatePlayerHead() {
     this.playerHead = document.getElementById("avatar-head");
   }
+  // << cyzyspace
 
   nextMode() {
     if (this.mode === CAMERA_MODE_INSPECT) {
@@ -282,15 +304,13 @@ export class CameraSystem {
     this.inspectable = inspectable;
     this.pivot = pivot;
 
-    const vrMode = scene.is("vr-mode");
-    const camera = vrMode ? scene.renderer.xr.getCamera() : scene.camera;
+    const camera = scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
     this.snapshot.mask = camera.layers.mask;
-    if (vrMode) {
-      this.snapshot.mask0 = camera.cameras[0].layers.mask;
-      this.snapshot.mask1 = camera.cameras[1].layers.mask;
-    }
     if (!this.lightsEnabled) {
       this.hideEverythingButThisObject(inspectable);
+    } else {
+      camera.layers.disable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
+      camera.layers.enable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
     }
 
     this.viewingCamera.object3DMap.camera.updateMatrices();
@@ -354,6 +374,10 @@ export class CameraSystem {
     if (this.mode === CAMERA_MODE_INSPECT && this.inspectable) {
       if (this.lightsEnabled) {
         this.showEverythingAsNormal();
+        const scene = AFRAME.scenes[0];
+        const camera = scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
+        camera.layers.disable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
+        camera.layers.enable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
       } else {
         this.hideEverythingButThisObject(this.inspectable);
       }
@@ -384,13 +408,8 @@ export class CameraSystem {
     o.traverse(enableInspectLayer);
 
     const scene = AFRAME.scenes[0];
-    const vrMode = scene.is("vr-mode");
-    const camera = vrMode ? scene.renderer.xr.getCamera() : scene.camera;
+    const camera = scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
     camera.layers.set(Layers.CAMERA_LAYER_INSPECT);
-    if (vrMode) {
-      camera.cameras[0].layers.set(Layers.CAMERA_LAYER_INSPECT);
-      camera.cameras[1].layers.set(Layers.CAMERA_LAYER_INSPECT);
-    }
   }
 
   showEverythingAsNormal() {
@@ -399,13 +418,8 @@ export class CameraSystem {
       this.notHiddenObject = null;
     }
     const scene = AFRAME.scenes[0];
-    const vrMode = scene.is("vr-mode");
-    const camera = vrMode ? scene.renderer.xr.getCamera() : scene.camera;
+    const camera = scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
     camera.layers.mask = this.snapshot.mask;
-    if (vrMode) {
-      camera.cameras[0].layers.mask = this.snapshot.mask0;
-      camera.cameras[1].layers.mask = this.snapshot.mask1;
-    }
   }
 
   tick = (function() {
@@ -467,6 +481,7 @@ export class CameraSystem {
         this.nextMode();
       }
 
+      // cyzyspace >>
       if (!isHeadSet && this.isTPS) {
         if (this.mode === CAMERA_MODE_FIRST_PERSON) {
           this.mode = CAMERA_MODE_THIRD_PERSON_NEAR;
@@ -484,6 +499,7 @@ export class CameraSystem {
         // Skip a frame so we don't see our own avatar, etc.
         return;
       }
+      // << cyzyspace
 
       this.ensureListenerIsParentedCorrectly(scene);
 
