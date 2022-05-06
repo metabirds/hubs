@@ -482,15 +482,8 @@ class UIRoot extends Component {
   };
 
   // cyzyspace
-  toggleMute = () => {
-    APP.dialog.toggleMicrophone();
-  };
-
-  // cyzyspace
   toggleTPS = () => {
-    this.props.scene.systems["hubs-systems"].cameraSystem.toggleTPS() === 1
-      ? this.setState({ isTPS: false })
-      : this.setState({ isTPS: true });
+    this.setState({ isTPS: this.props.scene.systems["hubs-systems"].cameraSystem.toggleTPS() !== 1 });
   };
 
   shareVideo = mediaSource => {
@@ -629,16 +622,14 @@ class UIRoot extends Component {
     // Push the new history state before going into VR, otherwise menu button will take us back
     clearHistoryState(this.props.history);
 
-    // cyzyspace >>
+    // cyzyspace
     //restore hash
     if (this.props.locationHash) {
       console.log("restore stored hash", this.props.locationHash);
       window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
     }
 
-    const muteOnEntry = this.props.store.state.preferences["muteMicOnEntry"] || false;
-    // << cyzyspace
-
+    const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
 
     this.setState({ entered: true, entering: false, showShareDialog: false });

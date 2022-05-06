@@ -264,15 +264,11 @@ export class CameraSystem {
     });
   }
 
-  // cyzyspace >>
+  // cyzyspace
   toggleTPS() {
     this.isTPS = true;
     return this.mode;
   }
-  updatePlayerHead() {
-    this.playerHead = document.getElementById("avatar-head");
-  }
-  // << cyzyspace
 
   nextMode() {
     if (this.mode === CAMERA_MODE_INSPECT) {
@@ -481,7 +477,7 @@ export class CameraSystem {
         this.nextMode();
       }
 
-      // cyzyspace >>
+      // cyzyspace
       if (!isHeadSet && this.isTPS) {
         if (this.mode === CAMERA_MODE_FIRST_PERSON) {
           this.mode = CAMERA_MODE_THIRD_PERSON_NEAR;
@@ -490,16 +486,6 @@ export class CameraSystem {
         }
         this.isTPS = false;
       }
-
-      const headShouldBeVisible = this.mode !== CAMERA_MODE_FIRST_PERSON;
-      this.playerHead = document.getElementById("avatar-head");
-      if (this.playerHead && headShouldBeVisible !== this.playerHead.object3D.visible) {
-        this.playerHead.object3D.visible = headShouldBeVisible;
-
-        // Skip a frame so we don't see our own avatar, etc.
-        return;
-      }
-      // << cyzyspace
 
       this.ensureListenerIsParentedCorrectly(scene);
 

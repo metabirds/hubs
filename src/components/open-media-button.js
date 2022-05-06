@@ -68,12 +68,12 @@ AFRAME.registerComponent("open-media-button", {
           location.href = this.src;
         }
       } else {
-        if(this.src.slice( 0, 1 ) === '#') {
+        // cyzyspace
+        if (this.src.slice(0, 1) === "#") {
           window.location = this.src;
         } else {
           await exitImmersive();
           window.open(this.src);
-
         }
       }
     };

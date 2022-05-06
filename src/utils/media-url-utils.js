@@ -171,8 +171,10 @@ async function isHubsServer(url) {
     url = "https://" + url;
   }
 
-  if(!url.startsWith("#")) {
-    const { origin } = new URL(url);
+  let origin;
+  if (!url.startsWith("#")) {
+    const result = new URL(url);
+    origin = result.origin;
   }
 
   if (originIsHubsServer.has(origin)) {
