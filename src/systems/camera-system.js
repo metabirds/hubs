@@ -479,9 +479,14 @@ export class CameraSystem {
 
       // cyzyspace
       if (!isHeadSet && this.isTPS) {
+        const camera = scene.camera;
         if (this.mode === CAMERA_MODE_FIRST_PERSON) {
+          camera.layers.disable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
+          camera.layers.enable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
           this.mode = CAMERA_MODE_THIRD_PERSON_NEAR;
         } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
+          camera.layers.enable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
+          camera.layers.disable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
           this.mode = CAMERA_MODE_FIRST_PERSON;
         }
         this.isTPS = false;
