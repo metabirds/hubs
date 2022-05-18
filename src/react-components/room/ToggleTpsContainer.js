@@ -14,6 +14,7 @@ export function ToggleTpsContainer({ toggleTPS }) {
       label={<FormattedMessage id="third-person-button-container.label" defaultMessage="Third Person" />}
       preset="basic"
       onClick={toggleTPS}
+      className="toggleTPSButton"
     />
   );
 }
