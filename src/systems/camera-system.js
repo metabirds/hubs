@@ -378,10 +378,10 @@ export class CameraSystem {
       if (this.mode === CAMERA_MODE_INSPECT && scene.audioListener.parent !== this.avatarPOV.object3D) {
         this.avatarPOV.object3D.add(scene.audioListener);
       } else if (
-        (this.mode === CAMERA_MODE_FIRST_PERSON ||
-          this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
-          this.mode === CAMERA_MODE_THIRD_PERSON_FAR) &&
-        scene.audioListener.parent !== this.viewingCamera
+        this.mode === CAMERA_MODE_FIRST_PERSON ||
+        this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
+        this.mode === CAMERA_MODE_THIRD_PERSON_FAR // &&
+        // scene.audioListener.parent !== this.viewingCamera  // cyzyspace
       ) {
         this.viewingCamera.add(scene.audioListener);
       }
@@ -503,10 +503,10 @@ export class CameraSystem {
         this.avatarRig.object3D.updateMatrices();
         this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld).multiply(translation);
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
-        this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.quaternion);
+//        this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.quaternion);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
-        this.viewingCamera.object3DMap.camera.position.copy(new THREE.Vector3(0, 0, 1.2));
-        this.viewingCamera.object3DMap.camera.lookAt(this.viewingRig.object3D.position);
+        this.viewingCamera.position.copy(new THREE.Vector3(0, 0, 1.2));
+        this.viewingCamera.lookAt(this.viewingRig.object3D.position);
       } else if (this.mode === CAMERA_MODE_INSPECT) {
         this.avatarPOVRotator.on = false;
         this.viewingCameraRotator.on = false;
