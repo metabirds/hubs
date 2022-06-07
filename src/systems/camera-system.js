@@ -503,7 +503,7 @@ export class CameraSystem {
         this.avatarRig.object3D.updateMatrices();
         this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld).multiply(translation);
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
-//        this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.quaternion);
+        // this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.quaternion);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
         this.viewingCamera.position.copy(new THREE.Vector3(0, 0, 1.2));
         this.viewingCamera.lookAt(this.viewingRig.object3D.position);
