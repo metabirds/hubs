@@ -378,12 +378,15 @@ export class CameraSystem {
       if (this.mode === CAMERA_MODE_INSPECT && scene.audioListener.parent !== this.avatarPOV.object3D) {
         this.avatarPOV.object3D.add(scene.audioListener);
       } else if (
-        this.mode === CAMERA_MODE_FIRST_PERSON ||
-        this.mode === CAMERA_MODE_THIRD_PERSON_NEAR ||
-        this.mode === CAMERA_MODE_THIRD_PERSON_FAR // &&
-        // scene.audioListener.parent !== this.viewingCamera  // cyzyspace
+        this.mode === CAMERA_MODE_FIRST_PERSON &&
+        scene.audioListener.parent !== this.viewingCamera // cyzyspace
       ) {
         this.viewingCamera.add(scene.audioListener);
+      } else if (
+        (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR || this.mode === CAMERA_MODE_THIRD_PERSON_FAR) &&
+        scene.audioListener.parent !== this.avatarPOV.object3D // cyzyspace
+      ) {
+        this.avatarPOV.object3D.add(scene.audioListener);
       }
     }
   }
