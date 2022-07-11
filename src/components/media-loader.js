@@ -484,7 +484,32 @@ AFRAME.registerComponent("media-loader", {
                 isFlat: true
               });
             } else if (this.data.mediaOptions.href) {
-              this.el.setAttribute("hover-menu__link", { template: "#link-hover-menu", isFlat: true });
+              // cyzyspace
+              const href = this.data.mediaOptions.href;
+              if (href.match("__ROOM_ID__")) {
+                const roomId = window.location.pathname.split("/")[1] || configs.feature("default_room_id");
+                const replacedHref = href.replace("__ROOM_ID__", roomId);
+
+                const validationUrl = new URL(replacedHref);
+                const searchParams = validationUrl.searchParams;
+                searchParams.append("validate", "1");
+                validationUrl.search = searchParams.toString();
+
+                fetch(validationUrl.toString(), { method: "GET" })
+                  .then(v => {
+                    if (v.status === 200) {
+                      this.el.setAttribute("hover-menu__link", { template: "#link-hover-menu", isFlat: true });
+                    } else {
+                      console.log("head response - error:", v.status);
+                    }
+                  })
+                  .catch(() => {
+                    console.log("head request - failed:", replacedHref);
+                  });
+                this.data.mediaOptions.href = replacedHref;
+              } else {
+                this.el.setAttribute("hover-menu__link", { template: "#link-hover-menu", isFlat: true });
+              }
             }
           },
           { once: true }
