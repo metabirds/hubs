@@ -562,7 +562,8 @@ class UIRoot extends Component {
 
     const hasGrantedMic = (await grantedMicLabels()).length > 0;
 
-    if (hasGrantedMic) {
+    if (hasGrantedMic || window.disableAudio) {
+      // cyzyspace
       if (!this.mediaDevicesManager.isMicShared) {
         await this.mediaDevicesManager.startMicShare({});
       }
@@ -599,7 +600,8 @@ class UIRoot extends Component {
   };
 
   beginOrSkipAudioSetup = () => {
-    const skipAudioSetup = this.props.forcedVREntryType && this.props.forcedVREntryType.endsWith("_now");
+    const skipAudioSetup =
+      (this.props.forcedVREntryType && this.props.forcedVREntryType.endsWith("_now")) || window.disableAudio; //cyzyspace
     if (skipAudioSetup) {
       console.log(`Skipping audio setup (forcedVREntryType = ${this.props.forcedVREntryType})`);
       this.onAudioReadyButton();
@@ -786,6 +788,7 @@ class UIRoot extends Component {
   }
 
   onFocusChat = e => {
+    if (window.disableChat) return;
     this.setSidebar("chat", {
       chatInputEffect: input => {
         input.focus();
@@ -1570,8 +1573,10 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <>
-                        <AudioPopoverContainer scene={this.props.scene} />
                         {/* cyzyspace */}
+                        {!window.disableAudio && (
+                          <AudioPopoverContainer scene={this.props.scene} className={"toggleAudioButton"} />
+                        )}
                         <ToggleTpsContainer
                           scene={this.props.scene}
                           isTPS={this.state.isTPS}
@@ -1592,7 +1597,10 @@ class UIRoot extends Component {
                         )}
                       </>
                     )}
-                    <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
+                    <ChatToolbarButtonContainer
+                      onClick={() => this.toggleSidebar("chat")}
+                      className="toggleChatButton"
+                    />
                     {entered &&
                       isMobileVR && (
                         <ToolbarButton

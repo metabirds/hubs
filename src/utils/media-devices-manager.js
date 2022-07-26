@@ -214,6 +214,7 @@ export default class MediaDevicesManager extends EventEmitter {
   }
 
   async startMicShare({ deviceId, unmute, updatePrefs = true }) {
+    if (window.disableAudio) return; // cyzyspace
     if (this.isMicShared && this.selectedMicDeviceId === deviceId) return;
     console.log("Starting microphone sharing");
 
