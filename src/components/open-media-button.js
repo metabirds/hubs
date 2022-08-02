@@ -73,7 +73,7 @@ AFRAME.registerComponent("open-media-button", {
           window.location = this.src;
         } else {
           await exitImmersive();
-          window.open(this.src);
+          location.href = this.src;
         }
       }
     };
