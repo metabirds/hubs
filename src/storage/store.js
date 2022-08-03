@@ -3,6 +3,7 @@ import merge from "deepmerge";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import { qsGet } from "../utils/qs_truthy.js";
+import detectMobile from "../utils/is-mobile";
 
 const LOCAL_STORE_KEY = "___hubs_store";
 const STORE_STATE_CACHE_KEY = Symbol();
@@ -104,8 +105,8 @@ export const SCHEMA = {
         disableLeftRightPanning: { type: "bool", default: false },
         audioNormalization: { type: "bool", default: 0.0 },
         invertTouchscreenCameraMove: { type: "bool", default: true },
-        enableOnScreenJoystickLeft: { type: "bool", default: false },
-        enableOnScreenJoystickRight: { type: "bool", default: false },
+        enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
+        enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
         enableGyro: { type: "bool", default: true },
         animateWaypointTransitions: { type: "bool", default: true },
         showFPSCounter: { type: "bool", default: false },
@@ -138,7 +139,8 @@ export const SCHEMA = {
         showAudioDebugPanel: { type: "bool", default: false },
         enableAudioClipping: { type: "bool", default: false },
         audioClippingThreshold: { type: "number", default: 0.015 },
-        theme: { type: "string", default: "Browser Default" },
+        audioPanningQuality: { type: "string", default: "High" },
+        theme: { type: "string", default: undefined },
         cursorSize: { type: "number", default: 1 },
         nametagVisibility: { type: "string", default: "showAll" },
         nametagVisibilityDistance: { type: "number", default: 5 },
