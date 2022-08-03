@@ -15,7 +15,6 @@ import {
   isLocalHubsAvatarUrl
 } from "../utils/media-url-utils";
 import { addAnimationComponents } from "../utils/animation";
-import qsTruthy from "../utils/qs_truthy";
 
 import configs from "../utils/configs";
 import loadingObjectSrc from "../assets/models/LoadingObject_Atom.glb";
@@ -25,6 +24,7 @@ import { cloneObject3D, setMatrixWorld } from "../utils/three-utils";
 import { waitForDOMContentLoaded } from "../utils/async-utils";
 
 import { SHAPE } from "three-ammo/constants";
+import qsTruthy from "../utils/qs_truthy";
 
 let loadingObject;
 
@@ -38,10 +38,7 @@ const fetchContentType = url => {
   return fetch(url, { method: "HEAD" }).then(r => r.headers.get("content-type"));
 };
 
-const forceMeshBatching = qsTruthy("batchMeshes");
-const forceImageBatching = qsTruthy("batchImages");
-const disableBatching = qsTruthy("disableBatching");
-const disableDynamicRoomPath = qsTruthy("disableDynamicRoomPath");
+const disableDynamicRoomPath = qsTruthy("disableDynamicRoomPath"); // cyzyspace
 
 AFRAME.registerComponent("media-loader", {
   schema: {
@@ -515,17 +512,12 @@ AFRAME.registerComponent("media-loader", {
           { once: true }
         );
         this.el.setAttribute("floaty-object", { reduceAngularFloat: true, releaseGravity: -1 });
-        let batch = !disableBatching && forceImageBatching;
-        if (this.data.mediaOptions.hasOwnProperty("batch") && !this.data.mediaOptions.batch) {
-          batch = false;
-        }
         this.el.setAttribute(
           "media-image",
           Object.assign({}, this.data.mediaOptions, {
             src: accessibleUrl,
             version,
-            contentType,
-            batch
+            contentType
           })
         );
 
@@ -544,8 +536,7 @@ AFRAME.registerComponent("media-loader", {
           "media-pdf",
           Object.assign({}, this.data.mediaOptions, {
             src: accessibleUrl,
-            contentType,
-            batch: false // Batching disabled until atlas is updated properly
+            contentType
           })
         );
         this.el.setAttribute("media-pager", {});
@@ -584,10 +575,6 @@ AFRAME.registerComponent("media-loader", {
           { once: true }
         );
         this.el.addEventListener("model-error", this.onError, { once: true });
-        let batch = !disableBatching && forceMeshBatching;
-        if (this.data.mediaOptions.hasOwnProperty("batch") && !this.data.mediaOptions.batch) {
-          batch = false;
-        }
         if (this.data.mediaOptions.hasOwnProperty("applyGravity")) {
           this.el.setAttribute("floaty-object", {
             modifyGravityOnRelease: !this.data.mediaOptions.applyGravity
@@ -599,7 +586,6 @@ AFRAME.registerComponent("media-loader", {
             src: accessibleUrl,
             contentType: contentType,
             inflate: true,
-            batch,
             modelToWorldScale: this.data.fitToBox ? 0.0001 : 1.0
           })
         );
@@ -632,17 +618,12 @@ AFRAME.registerComponent("media-loader", {
           { once: true }
         );
         this.el.setAttribute("floaty-object", { reduceAngularFloat: true, releaseGravity: -1 });
-        let batch = !disableBatching && forceImageBatching;
-        if (this.data.mediaOptions.hasOwnProperty("batch") && !this.data.mediaOptions.batch) {
-          batch = false;
-        }
         this.el.setAttribute(
           "media-image",
           Object.assign({}, this.data.mediaOptions, {
             src: thumbnail,
             version,
-            contentType: guessContentType(thumbnail) || "image/png",
-            batch
+            contentType: guessContentType(thumbnail) || "image/png"
           })
         );
         if (this.el.components["position-at-border__freeze"]) {
@@ -708,9 +689,7 @@ AFRAME.registerComponent("media-pager", {
       })
       .catch(() => {}); //ignore exception, entity might not be networked
 
-    this.el.addEventListener("pdf-loaded", async () => {
-      this.update();
-    });
+    this.el.addEventListener("pdf-loaded", this.update);
   },
 
   async update(oldData) {
@@ -756,6 +735,12 @@ AFRAME.registerComponent("media-pager", {
       this.networkedEl.removeEventListener("unpinned", this.update);
     }
 
+    this.nextButton.object3D.removeEventListener("interact", this.onNext);
+    this.prevButton.object3D.removeEventListener("interact", this.onPrev);
+    this.snapButton.object3D.removeEventListener("interact", this.onSnap);
+
     window.APP.hubChannel.removeEventListener("permissions_updated", this.update);
+
+    this.el.removeEventListener("pdf-loaded", this.update);
   }
 });

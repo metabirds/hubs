@@ -4,11 +4,10 @@ import { LoadingScreenLayout } from "../layout/LoadingScreenLayout";
 import { Spinner } from "../misc/Spinner";
 import { useRandomMessageTransition } from "./useRandomMessageTransition";
 import cyzyHowToControlImg from "../../assets/images/cyzy-how-to-control.png";
-export function LoadingScreen({ logoSrc, message, infoMessages }) {
+export function LoadingScreen({ message, infoMessages }) {
   const infoMessage = useRandomMessageTransition(infoMessages);
   return (
     <LoadingScreenLayout
-      logoSrc={logoSrc}
       center={
         <>
           <div className="cyzy-loading-message-wrap">
@@ -33,7 +32,6 @@ export function LoadingScreen({ logoSrc, message, infoMessages }) {
 }
 
 LoadingScreen.propTypes = {
-  logoSrc: PropTypes.string,
   message: PropTypes.node,
   infoMessages: PropTypes.arrayOf(
     PropTypes.shape({
