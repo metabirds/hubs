@@ -98,6 +98,7 @@ const orbit = (function() {
       targetScale
     );
 
+    console.log(targetMatrix);
     childMatch(rig, camera, targetMatrix);
   };
 })();
@@ -114,6 +115,7 @@ const moveRigSoCameraLooksAtPivot = (function() {
   return function moveRigSoCameraLooksAtPivot(rig, camera, inspectable, pivot, distanceMod) {
     if (!target.parent) {
       // add dummy object to the scene, if this is the first time we call this function
+      console.log("no parent");
       AFRAME.scenes[0].object3D.add(target);
       target.applyMatrix4(IDENTITY); // make sure target gets updated at least once for our matrix optimizations
     }
@@ -489,18 +491,26 @@ export class CameraSystem {
           setMatrixWorld(this.viewingCamera, this.avatarPOV.object3D.matrixWorld);
         }
       } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR || this.mode === CAMERA_MODE_THIRD_PERSON_FAR) {
+        // cyzy space
+        this.viewingCameraRotator.on = false;
         if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
-          translation.makeTranslation(0, 1.8, 0);
+          translation.makeTranslation(0, 0.2, 1.2);
         } else {
           translation.makeTranslation(0, 2, 8);
         }
         this.avatarRig.object3D.updateMatrices();
-        this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld).multiply(translation);
+        setMatrixWorld(this.viewingRig.object3D, this.avatarRig.object3D.matrixWorld);
+        if (scene.is("vr-mode")) {
+          this.viewingCamera.updateMatrices();
+          setMatrixWorld(this.avatarPOV.object3D, this.viewingCamera.matrixWorld);
+        } else {
+          this.avatarPOV.object3D.updateMatrices();
+          setMatrixWorld(this.viewingCamera, this.avatarPOV.object3D.matrixWorld.multiply(translation));
+        }
+        this.avatarRig.object3D.updateMatrices();
+        this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld);
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
-        // this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.quaternion);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
-        this.viewingCamera.position.copy(new THREE.Vector3(0, 0, 1.2));
-        this.viewingCamera.lookAt(this.viewingRig.object3D.position);
       } else if (this.mode === CAMERA_MODE_INSPECT) {
         this.avatarPOVRotator.on = false;
         this.viewingCameraRotator.on = false;
