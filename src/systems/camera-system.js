@@ -98,7 +98,6 @@ const orbit = (function() {
       targetScale
     );
 
-    console.log(targetMatrix);
     childMatch(rig, camera, targetMatrix);
   };
 })();
@@ -115,7 +114,6 @@ const moveRigSoCameraLooksAtPivot = (function() {
   return function moveRigSoCameraLooksAtPivot(rig, camera, inspectable, pivot, distanceMod) {
     if (!target.parent) {
       // add dummy object to the scene, if this is the first time we call this function
-      console.log("no parent");
       AFRAME.scenes[0].object3D.add(target);
       target.applyMatrix4(IDENTITY); // make sure target gets updated at least once for our matrix optimizations
     }
