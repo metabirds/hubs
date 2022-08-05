@@ -438,7 +438,7 @@ export class CameraSystem {
             scale
           )
         );
-        scene.systems["hubs-systems"].characterController.fly = true;
+        scene.systems["hubs-systems"].characterController.fly = false; //cyzy space
         this.avatarPOV.object3D.updateMatrices();
         setMatrixWorld(this.avatarPOV.object3D, this.viewingCamera.matrixWorld);
       }
