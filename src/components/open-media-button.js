@@ -48,7 +48,15 @@ AFRAME.registerComponent("open-media-button", {
       let hubId;
       if (this.data.onlyOpenLink) {
         await exitImmersive();
-        window.open(this.src);
+        //cyzy space
+        const href = this.src;
+        if (href.match("__ROOM_ID__")) {
+          const roomId = window.location.pathname.split("/")[1];
+          const replacedHref = href.replace("__ROOM_ID__", roomId);
+          window.open(replacedHref);
+        } else {
+          window.open(this.src);
+        }
       } else if (await isLocalHubsAvatarUrl(this.src)) {
         const avatarId = new URL(this.src).pathname.split("/").pop();
         window.APP.store.update({ profile: { avatarId } });
