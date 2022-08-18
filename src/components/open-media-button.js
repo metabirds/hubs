@@ -73,7 +73,7 @@ AFRAME.registerComponent("open-media-button", {
       let hubId;
       if (this.data.onlyOpenLink) {
         await exitImmersive();
-        //cyzy space
+        // cyzyspace
         const href = this.src;
         if (href.match("__ROOM_ID__")) {
           const roomId = window.location.pathname.split("/")[1];

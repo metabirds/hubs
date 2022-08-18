@@ -489,7 +489,7 @@ export class CameraSystem {
           setMatrixWorld(this.viewingCamera, this.avatarPOV.object3D.matrixWorld);
         }
       } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR || this.mode === CAMERA_MODE_THIRD_PERSON_FAR) {
-        // cyzy space
+        // cyzyspace
         this.viewingCameraRotator.on = false;
         if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
           translation.makeTranslation(0, 0.2, 1.2);
