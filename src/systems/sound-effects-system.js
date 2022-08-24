@@ -16,6 +16,7 @@ import URL_MEDIA_LOADED from "../assets/sfx/A_bendUp.mp3";
 import URL_MEDIA_LOADING from "../assets/sfx/suspense.mp3";
 import URL_SPAWN_EMOJI from "../assets/sfx/emoji.mp3";
 import URL_SPEAKER_TONE from "../assets/sfx/tone.mp3";
+import URL_ENTERING_OTHERS from "../assets/sfx/enteringSound.mp3";
 import { setMatrixWorld } from "../utils/three-utils";
 import { SourceType } from "../components/audio-params";
 import { getOverriddenPanningModelType } from "../update-audio-settings";
@@ -47,6 +48,7 @@ export const SOUND_CAMERA_TOOL_COUNTDOWN = soundEnum++;
 export const SOUND_PREFERENCE_MENU_HOVER = soundEnum++;
 export const SOUND_SPAWN_EMOJI = soundEnum++;
 export const SOUND_SPEAKER_TONE = soundEnum++;
+export const SOUND_ENTERING_OTHERS = soundEnum++;
 
 // Safari doesn't support the promise form of decodeAudioData, so we polyfill it.
 function decodeAudioData(audioContext, arrayBuffer) {
@@ -91,7 +93,8 @@ export class SoundEffectsSystem {
       [SOUND_MEDIA_LOADED, URL_MEDIA_LOADED],
       [SOUND_PREFERENCE_MENU_HOVER, URL_FREEZE],
       [SOUND_SPAWN_EMOJI, URL_SPAWN_EMOJI],
-      [SOUND_SPEAKER_TONE, URL_SPEAKER_TONE]
+      [SOUND_SPEAKER_TONE, URL_SPEAKER_TONE],
+      [SOUND_ENTERING_OTHERS, URL_ENTERING_OTHERS]
     ];
     const loading = new Map();
     const load = url => {

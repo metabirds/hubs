@@ -2,7 +2,12 @@ import "./utils/configs";
 import { getAbsoluteHref } from "./utils/media-url-utils";
 import { isValidSceneUrl } from "./utils/scene-url-utils";
 import { spawnChatMessage } from "./react-components/chat-message";
-import { SOUND_CHAT_MESSAGE, SOUND_QUACK, SOUND_SPECIAL_QUACK } from "./systems/sound-effects-system";
+import {
+  SOUND_CHAT_MESSAGE,
+  SOUND_ENTERING_OTHERS,
+  SOUND_QUACK,
+  SOUND_SPECIAL_QUACK
+} from "./systems/sound-effects-system";
 import ducky from "./assets/models/DuckyMesh.glb";
 import { EventTarget } from "event-target-shim";
 import { ExitReason } from "./react-components/room/ExitedRoomScreen";
@@ -28,6 +33,9 @@ export default class MessageDispatch extends EventTarget {
     this.remountUI({ presenceLogEntries: this.presenceLogEntries });
     if (entry.type === "chat" && this.scene.is("loaded")) {
       this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_CHAT_MESSAGE);
+    }
+    if (entry.type === "entered" && this.scene.is("loaded")) {
+      this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_ENTERING_OTHERS);
     }
 
     // Fade out and then remove
