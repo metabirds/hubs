@@ -27,6 +27,7 @@ export function RoomEntryModal({
   onOptions,
   ...rest
 }) {
+  const signedIn = window.APP.hubChannel._signedIn; // cyzyspace
   const breakpoint = useCssBreakpoints();
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
@@ -60,14 +61,15 @@ export function RoomEntryModal({
               </span>
             </Button>
           )}
-          {showSpectate && (
-            <Button preset="accent2" onClick={onSpectate}>
-              <ShowIcon />
-              <span>
-                <FormattedMessage id="room-entry-modal.spectate-button" defaultMessage="Spectate" />
-              </span>
-            </Button>
-          )}
+          {showSpectate &&
+          signedIn && ( // cyzyspace
+              <Button preset="accent2" onClick={onSpectate}>
+                <ShowIcon />
+                <span>
+                  <FormattedMessage id="room-entry-modal.spectate-button" defaultMessage="Spectate" />
+                </span>
+              </Button>
+            )}
           {showOptions &&
             breakpoint !== "sm" && (
               <>
