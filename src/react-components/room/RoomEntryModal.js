@@ -45,6 +45,12 @@ export function RoomEntryModal({
           <p>{roomName}</p>
         </div>
         <Column center className={styles.buttons}>
+          {!showJoinRoom && (
+            <>
+              <h6>ただいま満員です</h6>
+              <p>恐れ入りますが、時間をあけてアクセスしてください</p>
+            </>
+          )}
           {showJoinRoom && (
             <Button preset="accent4" onClick={onJoinRoom}>
               <EnterIcon />
