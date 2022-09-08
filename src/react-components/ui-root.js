@@ -95,6 +95,7 @@ import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
 import { ToggleTpsContainer } from "./room/ToggleTpsContainer"; // cyzyspace
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
+import { TERMS, PRIVACY } from "../constants";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -144,9 +145,8 @@ class UIRoot extends Component {
     subscriptions: PropTypes.object,
     initialIsFavorited: PropTypes.bool,
     showSignInDialog: PropTypes.bool,
-    signInMessage: PropTypes.string,
+    signInMessage: PropTypes.object,
     onContinueAfterSignIn: PropTypes.func,
-    onSignInDialogVisibilityChanged: PropTypes.func,
     showSafariMicDialog: PropTypes.bool,
     onMediaSearchResultEntrySelected: PropTypes.func,
     onAvatarSaved: PropTypes.func,
@@ -403,11 +403,7 @@ class UIRoot extends Component {
   };
 
   showContextualSignInDialog = () => {
-    const { signInMessage, authChannel } = this.props;
-    const onCallback = () => {
-      const { onContinueAfterSignIn } = this.props;
-      (onContinueAfterSignIn && onContinueAfterSignIn()) || this.closeDialog();
-    };
+    const { signInMessage, authChannel, onContinueAfterSignIn } = this.props;
     this.showNonHistoriedDialog(RoomSignInModalContainer, {
       step: SignInStep.submit,
       message: signInMessage,
@@ -416,7 +412,7 @@ class UIRoot extends Component {
 
         this.showNonHistoriedDialog(RoomSignInModalContainer, {
           step: SignInStep.waitForVerification,
-          onClose: onCallback
+          onClose: onContinueAfterSignIn || this.closeDialog
         });
 
         await authComplete;
@@ -424,11 +420,11 @@ class UIRoot extends Component {
         this.setState({ signedIn: true });
         this.showNonHistoriedDialog(RoomSignInModalContainer, {
           step: SignInStep.complete,
-          onClose: onCallback,
-          onContinue: onCallback
+          onClose: onContinueAfterSignIn || this.closeDialog,
+          onContinue: onContinueAfterSignIn || this.closeDialog
         });
       },
-      onClose: onCallback
+      onClose: onContinueAfterSignIn || this.closeDialog
     });
   };
 
@@ -663,9 +659,6 @@ class UIRoot extends Component {
       this.setState({ dialog: null });
     }
 
-    const { onSignInDialogVisibilityChanged } = this.props;
-    onSignInDialogVisibilityChanged && onSignInDialogVisibilityChanged(false);
-
     if (isIn2DInterstitial()) {
       exit2DInterstitialAndEnterVR();
     } else {
@@ -674,8 +667,6 @@ class UIRoot extends Component {
   };
 
   showNonHistoriedDialog = (DialogClass, props = {}) => {
-    const { onSignInDialogVisibilityChanged } = this.props;
-    onSignInDialogVisibilityChanged && onSignInDialogVisibilityChanged(true);
     this.setState({
       dialog: <DialogClass {...{ onClose: this.closeDialog, ...props }} />
     });
@@ -1291,13 +1282,13 @@ class UIRoot extends Component {
             id: "tos",
             label: <FormattedMessage id="more-menu.tos" defaultMessage="Terms of Service" />,
             icon: TextDocumentIcon,
-            href: configs.link("terms_of_use", "https://github.com/mozilla/hubs/blob/master/TERMS.md")
+            href: configs.link("terms_of_use", TERMS)
           },
           configs.feature("show_privacy") && {
             id: "privacy",
             label: <FormattedMessage id="more-menu.privacy" defaultMessage="Privacy Notice" />,
             icon: ShieldIcon,
-            href: configs.link("privacy_notice", "https://github.com/mozilla/hubs/blob/master/PRIVACY.md")
+            href: configs.link("privacy_notice", PRIVACY)
           }
         ].filter(item => item)
       }
