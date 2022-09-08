@@ -10,6 +10,7 @@ import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { BasisTextureLoader } from "three/examples/jsm/loaders/BasisTextureLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
@@ -53,7 +54,7 @@ class GLTFCache {
     }
   }
 }
-const gltfCache = new GLTFCache();
+export const gltfCache = new GLTFCache();
 const inflightGltfs = new Map();
 
 const extractZipFile = promisifyWorker(new SketchfabZipWorker());
@@ -145,7 +146,7 @@ function getHubsComponentsFromMaterial(node) {
 /// or templates associated with any of their nodes.)
 ///
 /// Returns the A-Frame entity associated with the given node, if one was constructed.
-const inflateEntities = function(indexToEntityMap, node, templates, isRoot, modelToWorldScale = 1) {
+const inflateEntities = function (indexToEntityMap, node, templates, isRoot, modelToWorldScale = 1) {
   // TODO: Remove this once we update the legacy avatars to the new node names
   if (node.name === "Chest") {
     node.name = "Spine";
@@ -648,7 +649,7 @@ export async function loadGLTF(src, contentType, onProgress, jsonPreprocessor) {
 
   const loadingManager = new THREE.LoadingManager();
   loadingManager.setURLModifier(getCustomGLTFParserURLResolver(gltfUrl));
-  const gltfLoader = new THREE.GLTFLoader(loadingManager);
+  const gltfLoader = new GLTFLoader(loadingManager);
   gltfLoader
     .register(parser => new GLTFHubsComponentsExtension(parser))
     .register(parser => new GLTFHubsPlugin(parser, jsonPreprocessor))
