@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { Button } from "../input/Button";
 
 export function ReadyPlayerMeAvatarSelector(props) {
   const { onSubmit, height, width } = props;
@@ -38,13 +39,9 @@ export function ReadyPlayerMeAvatarSelector(props) {
   return (
     <div>
       <div>
-        <input
-          className="Button__button__2C3ps TextInput__button__1ue_9 Button__primary__emMw- Button__lg__-zn8l"
-          type="button"
-          value="ReadyPlayerMeのURLを取得"
-          onClick={handleOpen}
-          style={{ margin: "0 auto" }}
-        />
+        <Button onClick={handleOpen} preset="accent4">
+          <span>{"ReadyPlayerMeのURLを取得"}</span>
+        </Button>
       </div>
       {open && (
         <div>
