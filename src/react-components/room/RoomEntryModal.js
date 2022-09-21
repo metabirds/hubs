@@ -32,12 +32,11 @@ export function RoomEntryModal({
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
       <Column center className={styles.content}>
-        {breakpoint !== "sm" &&
-          breakpoint !== "md" && (
-            <div className={styles.logoContainer}>
-              <AppLogo />
-            </div>
-          )}
+        {breakpoint !== "sm" && breakpoint !== "md" && (
+          <div className={styles.logoContainer}>
+            <AppLogo />
+          </div>
+        )}
         <div className={styles.roomName}>
           <h5>
             <FormattedMessage id="room-entry-modal.room-name-label" defaultMessage="Room Name" />
@@ -47,8 +46,8 @@ export function RoomEntryModal({
         <Column center className={styles.buttons}>
           {!showJoinRoom && (
             <>
-              <h6>ただいま満員です</h6>
-              <p>恐れ入りますが、時間をあけてアクセスしてください</p>
+              <h6>只今満室でございます。</h6>
+              <p>後ほどもう一度お試しいただけますと幸いです。</p>
             </>
           )}
           {showJoinRoom && (
@@ -68,7 +67,7 @@ export function RoomEntryModal({
             </Button>
           )}
           {showSpectate &&
-          signedIn && ( // cyzyspace
+            signedIn && ( // cyzyspace
               <Button preset="accent2" onClick={onSpectate}>
                 <ShowIcon />
                 <span>
@@ -76,18 +75,17 @@ export function RoomEntryModal({
                 </span>
               </Button>
             )}
-          {showOptions &&
-            breakpoint !== "sm" && (
-              <>
-                <hr className={styleUtils.showLg} />
-                <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
-                  <SettingsIcon />
-                  <span>
-                    <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
-                  </span>
-                </Button>
-              </>
-            )}
+          {showOptions && breakpoint !== "sm" && (
+            <>
+              <hr className={styleUtils.showLg} />
+              <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
+                <SettingsIcon />
+                <span>
+                  <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
+                </span>
+              </Button>
+            </>
+          )}
         </Column>
       </Column>
     </Modal>
