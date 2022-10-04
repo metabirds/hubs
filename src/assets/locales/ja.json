@@ -94,7 +94,7 @@
   "close-room-modal.title": "Close Room",
   "close-room-modal.type-to-confirm": "Type room name to confirm: {roomName}",
   "content-menu.objects-menu-button": "オブジェクト",
-  "content-menu.people-menu-button": "参加者",
+  "content-menu.people-menu-button": "参加者 ({presenceCount})",
   "copyable-text-input-field.copied-label": "Copied",
   "copyable-text-input-field.copy-label": "Copy",
   "create-room-button": "部屋を作成する",
