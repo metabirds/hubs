@@ -50,7 +50,7 @@ import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
 import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
-import { ContentMenu, PeopleMenuButton, ObjectsMenuButton } from "./room/ContentMenu";
+import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ECSDebugMenuButton } from "./room/ContentMenu";
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
@@ -96,6 +96,7 @@ import { SignInMessages } from "./auth/SignInModal";
 import { ToggleTpsContainer } from "./room/ToggleTpsContainer"; // cyzyspace
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { TERMS, PRIVACY } from "../constants";
+import { ECSDebugSidebarContainer } from "./debug-panel/ECSSidebar";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -159,7 +160,6 @@ class UIRoot extends Component {
     showPreload: PropTypes.bool,
     onPreloadLoadClicked: PropTypes.func,
     embed: PropTypes.bool,
-    embedToken: PropTypes.string,
     onLoaded: PropTypes.func,
     activeObject: PropTypes.object,
     selectedObject: PropTypes.object,
@@ -1089,6 +1089,7 @@ class UIRoot extends Component {
     const streaming = this.state.isStreaming;
 
     const showObjectList = enteredOrWatching;
+    const showECSObjectsMenuButton = qsTruthy("ecsDebug");
 
     const streamer = getCurrentStreamer();
     const streamerName = streamer && streamer.displayName;
@@ -1382,6 +1383,12 @@ class UIRoot extends Component {
                           onClick={() => this.toggleSidebar("people")}
                           presencecount={this.state.presenceCount}
                         />
+                        {showECSObjectsMenuButton && (
+                          <ECSDebugMenuButton
+                            active={this.state.sidebarId === "ecs-debug"}
+                            onClick={() => this.toggleSidebar("ecs-debug")}
+                          />
+                        )}
                       </ContentMenu>
                     )}
                     {!entered && !streaming && !isMobile && streamerName && <SpectatingLabel name={streamerName} />}
@@ -1520,6 +1527,9 @@ class UIRoot extends Component {
                           onChangeScene={this.onChangeScene}
                         />
                       )}
+                      {this.state.sidebarId === "ecs-debug" && (
+                        <ECSDebugSidebarContainer onClose={() => this.setSidebar(null)} />
+                      )}
                     </>
                   ) : undefined
                 }
@@ -1529,6 +1539,7 @@ class UIRoot extends Component {
                     hub={this.props.hub}
                     hubChannel={this.props.hubChannel}
                     scene={this.props.scene}
+                    store={this.props.store}
                   />
                 }
                 toolbarCenter={
