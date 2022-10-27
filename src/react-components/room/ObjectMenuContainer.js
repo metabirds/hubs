@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { ObjectMenu, ObjectMenuButton } from "./ObjectMenu";
 import { useObjectList } from "./useObjectList";
@@ -62,7 +62,35 @@ function ObjectMenuItems({ hubChannel, scene, activeObject, deselectObject, onGo
   const { canPin, isPinned, togglePinned } = usePinObject(hubChannel, scene, activeObject);
   const { canRemoveObject, removeObject } = useRemoveObject(hubChannel, scene, activeObject);
   const { canGoTo, goToSelectedObject } = useGoToSelectedObject(scene, activeObject);
-  const url = getObjectUrl(activeObject);
+  // cyzyspace
+  const [url, setUrl] = useState(getObjectUrl(activeObject));
+  // let url = getObjectUrl(activeObject);
+  const mediaLoader = activeObject.el.components["media-loader"];
+
+  if (url.match("__ROOM_ID__") || url.match("linkhref-")) {
+    // cyzyspace
+    const roomId = window.location.pathname.split("/")[1];
+    const replacedHref = url.match("__ROOM_ID__") ? url.replace("__ROOM_ID__", roomId) : url;
+
+    const validationUrl = new URL(replacedHref);
+    const searchParams = validationUrl.searchParams;
+    searchParams.append("validate", "1");
+    validationUrl.search = searchParams.toString();
+
+    fetch(validationUrl.toString(), { method: "GET" })
+      .then(v => {
+        if (v.status === 200) {
+          setUrl(replacedHref);
+        } else {
+          console.log("head response - error:", v.status);
+          setUrl(mediaLoader.data.src);
+        }
+      })
+      .catch(() => {
+        console.log("head request - failed:", replacedHref);
+        setUrl(mediaLoader.data.src);
+      });
+  }
 
   return (
     <>
@@ -122,15 +150,8 @@ ObjectMenuItems.propTypes = {
 };
 
 export function ObjectMenuContainer({ hubChannel, scene, onOpenProfile, onGoToObject }) {
-  const {
-    objects,
-    activeObject,
-    deselectObject,
-    selectNextObject,
-    selectPrevObject,
-    toggleLights,
-    lightsEnabled
-  } = useObjectList();
+  const { objects, activeObject, deselectObject, selectNextObject, selectPrevObject, toggleLights, lightsEnabled } =
+    useObjectList();
 
   let menuItems;
 
