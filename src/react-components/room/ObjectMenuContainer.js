@@ -64,11 +64,9 @@ function ObjectMenuItems({ hubChannel, scene, activeObject, deselectObject, onGo
   const { canGoTo, goToSelectedObject } = useGoToSelectedObject(scene, activeObject);
   // cyzyspace
   const [url, setUrl] = useState(getObjectUrl(activeObject));
-  // let url = getObjectUrl(activeObject);
   const mediaLoader = activeObject.el.components["media-loader"];
 
-  if (url.match("__ROOM_ID__") || url.match("linkhref-")) {
-    // cyzyspace
+  if (url && (url.match("__ROOM_ID__") || url.match("linkhref-"))) {
     const roomId = window.location.pathname.split("/")[1];
     const replacedHref = url.match("__ROOM_ID__") ? url.replace("__ROOM_ID__", roomId) : url;
 
