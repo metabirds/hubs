@@ -561,7 +561,7 @@ class UIRoot extends Component {
     if (hasGrantedMic || window.disableAudio) {
       // cyzyspace
       if (!this.mediaDevicesManager.isMicShared) {
-        await this.mediaDevicesManager.startMicShare({});
+        await this.mediaDevicesManager.startMicShare({ unmute: false });
       }
       this.beginOrSkipAudioSetup();
     } else {
@@ -592,7 +592,7 @@ class UIRoot extends Component {
   };
 
   onRequestMicPermission = async () => {
-    await this.mediaDevicesManager.startMicShare({});
+    await this.mediaDevicesManager.startMicShare({ unmute: false });
   };
 
   beginOrSkipAudioSetup = () => {
@@ -627,7 +627,7 @@ class UIRoot extends Component {
       window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
     }
 
-    const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
+    const muteOnEntry = !!window.disableAudio || this.props.store.state.preferences.muteMicOnEntry;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
 
     this.setState({ entered: true, entering: false, showShareDialog: false });
