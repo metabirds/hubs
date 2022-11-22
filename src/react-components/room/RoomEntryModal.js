@@ -24,7 +24,8 @@ export function RoomEntryModal({
   showSpectate,
   onSpectate,
   showOptions,
-  state,
+  hub,
+  hubChannel,
   onOptions,
   ...rest
 }) {
@@ -45,7 +46,7 @@ export function RoomEntryModal({
           <p>{roomName}</p>
         </div>
         <Column center className={styles.buttons}>
-          {!showJoinRoom && !state.entering && (
+          {!hubChannel.canEnterRoom(hub) && (
             <>
               <h6>只今満室でございます。</h6>
               <p>後ほどもう一度お試しいただけますと幸いです。</p>
@@ -104,7 +105,8 @@ RoomEntryModal.propTypes = {
   onSpectate: PropTypes.func,
   showOptions: PropTypes.bool,
   onOptions: PropTypes.func,
-  state: PropTypes.object
+  hubChannel: PropTypes.object,
+  hub: PropTypes.object
 };
 
 RoomEntryModal.defaultProps = {

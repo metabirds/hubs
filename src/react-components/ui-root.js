@@ -836,7 +836,8 @@ class UIRoot extends Component {
               this.handleForceEntry();
             }
           }}
-          state={this.state} //cyzyspace
+          hub={this.props.hub} //cyzyspace
+          hubChannel={this.props.hubChannel}
           showEnterOnDevice={!this.state.waitingOnAudio && !this.props.entryDisallowed && !isMobileVR}
           onEnterOnDevice={() => this.attemptLink()}
           showSpectate={!this.state.waitingOnAudio}
