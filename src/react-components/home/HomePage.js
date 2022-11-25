@@ -135,7 +135,7 @@ export function HomePage() {
           </Column>
         </Container>
       )}
-      {sortedPublicRooms.length > 0 && (
+      {/* {sortedPublicRooms.length > 0 && (
         <Container className={styles.roomsContainer}>
           <h3 className={styles.roomsHeading}>
             <FormattedMessage id="home-page.public--rooms" defaultMessage="Public Rooms" />
@@ -156,7 +156,7 @@ export function HomePage() {
             </MediaGrid>
           </Column>
         </Container>
-      )}
+      )} */}
       {sortedFavoriteRooms.length > 0 && (
         <Container className={styles.roomsContainer}>
           <h3 className={styles.roomsHeading}>

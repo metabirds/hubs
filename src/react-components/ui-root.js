@@ -47,7 +47,7 @@ import { ToolbarButton } from "./input/ToolbarButton";
 import { RoomEntryModal } from "./room/RoomEntryModal";
 import { EnterOnDeviceModal } from "./room/EnterOnDeviceModal";
 import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
-import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
+// import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
 import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ECSDebugMenuButton } from "./room/ContentMenu";
@@ -74,7 +74,7 @@ import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
 import { ObjectMenuContainer } from "./room/ObjectMenuContainer";
 import { useCssBreakpoints } from "react-use-css-breakpoints";
-import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
+// import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
 import { SharePopoverContainer } from "./room/SharePopoverContainer";
 import { AudioPopoverContainer } from "./room/AudioPopoverContainer";
 import { ReactionPopoverContainer } from "./room/ReactionPopoverContainer";
@@ -1087,7 +1087,7 @@ class UIRoot extends Component {
 
     const streaming = this.state.isStreaming;
 
-    const showObjectList = enteredOrWatching;
+    const showObjectList = false;
     const showECSObjectsMenuButton = qsTruthy("ecsDebug");
 
     const streamer = getCurrentStreamer();
@@ -1138,12 +1138,12 @@ class UIRoot extends Component {
                 reason: LeaveReason.createRoom
               })
           },
-          {
-            id: "user-profile",
-            label: <FormattedMessage id="more-menu.profile" defaultMessage="Change Name & Avatar" />,
-            icon: AvatarIcon,
-            onClick: () => this.setSidebar("profile")
-          },
+          // {
+          //   id: "user-profile",
+          //   label: <FormattedMessage id="more-menu.profile" defaultMessage="Change Name & Avatar" />,
+          //   icon: AvatarIcon,
+          //   onClick: () => this.setSidebar("profile")
+          // },
           {
             id: "favorite-rooms",
             label: <FormattedMessage id="more-menu.favorite-rooms" defaultMessage="Favorite Rooms" />,
@@ -1533,14 +1533,14 @@ class UIRoot extends Component {
                   ) : undefined
                 }
                 modal={this.state.dialog}
-                toolbarLeft={
-                  <InvitePopoverContainer
-                    hub={this.props.hub}
-                    hubChannel={this.props.hubChannel}
-                    scene={this.props.scene}
-                    store={this.props.store}
-                  />
-                }
+                // toolbarLeft={
+                //   <InvitePopoverContainer
+                //     hub={this.props.hub}
+                //     hubChannel={this.props.hubChannel}
+                //     scene={this.props.scene}
+                //     store={this.props.store}
+                //   />
+                // }
                 toolbarCenter={
                   <>
                     {watching && (
@@ -1573,12 +1573,12 @@ class UIRoot extends Component {
                           toggleTPS={this.toggleTPS}
                         />
                         <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                        <PlacePopoverContainer
+                        {/* <PlacePopoverContainer
                           scene={this.props.scene}
                           hubChannel={this.props.hubChannel}
                           mediaSearchStore={this.props.mediaSearchStore}
                           showNonHistoriedDialog={this.showNonHistoriedDialog}
-                        />
+                        /> */}
                         {this.props.hubChannel.can("spawn_emoji") && (
                           <ReactionPopoverContainer
                             scene={this.props.scene}
@@ -1588,6 +1588,14 @@ class UIRoot extends Component {
                       </>
                     )}
                     <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
+                    {entered && (
+                      <ToolbarButton
+                        icon={<AvatarIcon />}
+                        preset="accept"
+                        label={<FormattedMessage id="more-menu.profileShort" defaultMessage="Change Name & Avatar" />}
+                        onClick={() => this.toggleSidebar("profile")}
+                      />
+                    )}
                     {entered && isMobileVR && (
                       <ToolbarButton
                         className={styleUtils.hideLg}

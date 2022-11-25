@@ -15,7 +15,8 @@ export const LeaveReason = {
 const reasonMessages = defineMessages({
   [LeaveReason.leaveRoom]: {
     id: "leave-room-modal.leave-room.message",
-    defaultMessage: "Are you sure you want to leave the room?"
+    defaultMessage:
+      "このルームから退室してウィンドウを閉じます{linebreak}よろしければ退室ボタンをクリックしてください。"
   },
   [LeaveReason.joinRoom]: {
     id: "leave-room-modal.join-room.message",
@@ -42,6 +43,10 @@ const confirmationMessages = defineMessages({
   }
 });
 
+const closeWindow = function () {
+  window.close();
+};
+
 export function LeaveRoomModal({ reason, destinationUrl, onClose }) {
   const intl = useIntl();
 
@@ -51,10 +56,33 @@ export function LeaveRoomModal({ reason, destinationUrl, onClose }) {
       beforeTitle={<CloseButton onClick={onClose} />}
     >
       <Column padding center centerMd="both" grow>
-        <p>{intl.formatMessage(reasonMessages[reason])}</p>
-        <Button as="a" preset="cancel" href={destinationUrl} rel="noopener noreferrer">
-          {intl.formatMessage(confirmationMessages[reason])}
-        </Button>
+        {reason == "leaveRoom" ? (
+          <>
+            <h4>
+              <FormattedMessage
+                id="leave-room-modal.leave-room.message"
+                defaultMessage="このルームから退室してウィンドウを閉じます{linebreak}よろしければ退室ボタンをクリックしてください。"
+                values={{ linebreak: <br /> }}
+              />
+            </h4>
+            <p>
+              <FormattedMessage
+                id="leave-room-modal.leave-room.additional"
+                defaultMessage="※ウィンドウが閉じない場合はブラウザのタブを閉じる操作をお願い致します。"
+              />
+            </p>
+            <Button preset="cancel" onClick={closeWindow}>
+              {intl.formatMessage(confirmationMessages[reason])}
+            </Button>
+          </>
+        ) : (
+          <>
+            <p>{intl.formatMessage(reasonMessages[reason])}</p>
+            <Button as="a" preset="cancel" href={destinationUrl} rel="noopener noreferrer">
+              {intl.formatMessage(confirmationMessages[reason])}
+            </Button>
+          </>
+        )}
       </Column>
     </Modal>
   );
