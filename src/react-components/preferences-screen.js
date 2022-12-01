@@ -8,10 +8,22 @@ import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExcla
 import { FormattedMessage, injectIntl, useIntl, defineMessages } from "react-intl";
 import styles from "../assets/stylesheets/preferences-screen.scss";
 import { AVAILABLE_LOCALES } from "../assets/locales/locale_config";
-import { themes } from "./styles/theme";
+import { themes } from "../utils/theme";
 import MediaDevicesManager from "../utils/media-devices-manager";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { Slider } from "./input/Slider";
+import {
+  addOrientationChangeListener,
+  removeOrientationChangeListener,
+  getMaxResolutionWidth,
+  getMaxResolutionHeight,
+  getScreenResolutionWidth,
+  getScreenResolutionHeight,
+  setMaxResolution
+} from "../utils/screen-orientation-utils";
+
+import dropdownArrowUrl from "../assets/images/dropdown_arrow.png";
+import dropdownArrow2xUrl from "../assets/images/dropdown_arrow@2x.png";
 
 export const CLIPPING_THRESHOLD_MIN = 0.0;
 export const CLIPPING_THRESHOLD_MAX = 0.1;
@@ -216,11 +228,7 @@ class Select extends React.Component {
         <select value={this.props.value} tabIndex="0" onChange={this.props.onChange}>
           {this.props.children}
         </select>
-        <img
-          className={styles.dropdownArrow}
-          src="../assets/images/dropdown_arrow.png"
-          srcSet="../assets/images/dropdown_arrow@2x.png 2x"
-        />
+        <img className={styles.dropdownArrow} src={dropdownArrowUrl} srcSet={`${dropdownArrow2xUrl} 2x`} />
       </div>
     );
   }
@@ -271,54 +279,54 @@ export class MaxResolutionPreferenceItem extends Component {
   static propTypes = {
     store: PropTypes.object
   };
+
+  onOrientationChange = () => {
+    // Width and height should be swapped on screen orientation change
+    // then need to update.
+    this.forceUpdate();
+  };
+
+  componentDidMount() {
+    addOrientationChangeListener(this.onOrientationChange);
+  }
+
+  componentWillUnmount() {
+    removeOrientationChangeListener(this.onOrientationChange);
+  }
+
   render() {
-    const onChange = () => {
-      const numWidth = parseInt(document.getElementById("maxResolutionWidth").value);
-      const numHeight = parseInt(document.getElementById("maxResolutionHeight").value);
-      this.props.store.update({
-        preferences: {
-          maxResolutionWidth: numWidth ? numWidth : 0,
-          maxResolutionHeight: numHeight ? numHeight : 0
-        }
-      });
+    const onChange = multiplier => {
+      setMaxResolution(
+        this.props.store,
+        Math.floor(getScreenResolutionWidth() * multiplier),
+        Math.floor(getScreenResolutionHeight() * multiplier)
+      );
     };
     return (
       <div className={classNames(styles.maxResolutionPreferenceItem)}>
         <input
-          id="maxResolutionWidth"
           tabIndex="0"
           type="number"
           step="1"
           min="0"
-          value={
-            this.props.store.state.preferences.maxResolutionWidth === undefined
-              ? window.screen.width
-              : this.props.store.state.preferences.maxResolutionWidth
-          }
-          onClick={e => {
-            e.preventDefault();
-            e.target.focus();
-            e.target.select();
-          }}
-          onChange={onChange}
+          value={getMaxResolutionWidth(this.props.store)}
+          readOnly={true}
         />
         &nbsp;{"x"}&nbsp;
         <input
-          id="maxResolutionHeight"
           tabIndex="0"
           type="number"
           step="1"
           min="0"
-          value={
-            this.props.store.state.preferences.maxResolutionHeight === undefined
-              ? window.screen.height
-              : this.props.store.state.preferences.maxResolutionHeight
-          }
-          onClick={e => {
-            e.preventDefault();
-            e.target.focus();
-            e.target.select();
-          }}
+          value={getMaxResolutionHeight(this.props.store)}
+          readOnly={true}
+        />
+        &nbsp;
+        <Slider
+          step={0.1}
+          min={0.1}
+          max={1.0}
+          value={getMaxResolutionWidth(this.props.store) / getScreenResolutionWidth()}
           onChange={onChange}
         />
       </div>
@@ -466,6 +474,10 @@ const preferenceLabels = defineMessages({
   showAudioDebugPanel: {
     id: "preferences-screen.preference.show-audio-debug-panel",
     defaultMessage: "Show Audio Debug Panel"
+  },
+  audioPanningQuality: {
+    id: "preferences-screen.preference.audio-panning-quality",
+    defaultMessage: "Panning quality"
   },
   enableAudioClipping: {
     id: "preferences-screen.preference.enable-audio-clipping",
@@ -1061,6 +1073,26 @@ class PreferencesScreen extends Component {
           {
             key: "showAudioDebugPanel",
             prefType: PREFERENCE_LIST_ITEM_TYPE.CHECK_BOX
+          },
+          {
+            key: "audioPanningQuality",
+            prefType: PREFERENCE_LIST_ITEM_TYPE.SELECT,
+            options: [
+              {
+                value: "High",
+                text: intl.formatMessage({
+                  id: "preferences-screen.audio-panning-quality.high",
+                  defaultMessage: "High"
+                })
+              },
+              {
+                value: "Low",
+                text: intl.formatMessage({
+                  id: "preferences-screen.audio-panning-quality.low",
+                  defaultMessage: "Low"
+                })
+              }
+            ]
           }
         ]
       ],
@@ -1288,9 +1320,7 @@ class PreferencesScreen extends Component {
         </Nav>
         <div className={styles.contentContainer}>
           <div className={styles.scrollingContent}>
-            {this.createSections()
-              .get(this.state.category)
-              .map(Section)}
+            {this.createSections().get(this.state.category).map(Section)}
             {shouldPromptForRefresh && (
               <div
                 style={{

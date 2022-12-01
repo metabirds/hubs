@@ -3,6 +3,7 @@ import merge from "deepmerge";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import { qsGet } from "../utils/qs_truthy.js";
+import detectMobile, { isAndroid, isMobileVR } from "../utils/is-mobile";
 
 const LOCAL_STORE_KEY = "___hubs_store";
 const STORE_STATE_CACHE_KEY = Symbol();
@@ -11,8 +12,9 @@ const validator = new Validator();
 import { EventTarget } from "event-target-shim";
 import { fetchRandomDefaultAvatarId, generateRandomName } from "../utils/identity.js";
 import { NO_DEVICE_ID } from "../utils/media-devices-utils.js";
+import { getDefaultTheme } from "../utils/theme.js";
 
-const defaultMaterialQuality = (function() {
+const defaultMaterialQuality = (function () {
   const MATERIAL_QUALITY_OPTIONS = ["low", "medium", "high"];
 
   // HACK: AFRAME is not available on all pages, so we catch the ReferenceError.
@@ -35,6 +37,19 @@ const defaultMaterialQuality = (function() {
   return "high";
 })();
 
+// WebAudio on Android devices (only non-VR devices?) seems to have
+// a bug and audio can be broken if there are many people in a room.
+// We have reported the problem to the Android devs. We found that
+// using equal power panning mode can mitigate the problem so we
+// use low audio panning quality (= equal power mode) by default
+// on Android as workaround until the root issue is fixed on
+// Android end. See
+//   - https://github.com/mozilla/hubs/issues/5057
+//   - https://bugs.chromium.org/p/chromium/issues/detail?id=1308962
+const defaultAudioPanningQuality = () => {
+  return isAndroid() && !isMobileVR() ? "Low" : "High";
+};
+
 //workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1626081 : disable echoCancellation, noiseSuppression, autoGainControl
 const isFirefoxReality = window.AFRAME?.utils.device.isMobileVR() && navigator.userAgent.match(/Firefox/);
 
@@ -48,7 +63,10 @@ export const SCHEMA = {
       type: "object",
       additionalProperties: false,
       properties: {
-        displayName: { type: "string", pattern: "^[A-Za-z0-9_~ -]{3,32}$" },
+        displayName: {
+          type: "string",
+          pattern: "^[\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}　（）［］【】０-９A-Za-z0-9_~ -]{3,32}$"
+        },
         avatarId: { type: "string" },
         // personalAvatarId is obsolete, but we need it here for backwards compatibility.
         personalAvatarId: { type: "string" }
@@ -104,8 +122,8 @@ export const SCHEMA = {
         disableLeftRightPanning: { type: "bool", default: false },
         audioNormalization: { type: "bool", default: 0.0 },
         invertTouchscreenCameraMove: { type: "bool", default: true },
-        enableOnScreenJoystickLeft: { type: "bool", default: false },
-        enableOnScreenJoystickRight: { type: "bool", default: false },
+        enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
+        enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
         enableGyro: { type: "bool", default: true },
         animateWaypointTransitions: { type: "bool", default: true },
         showFPSCounter: { type: "bool", default: false },
@@ -138,7 +156,8 @@ export const SCHEMA = {
         showAudioDebugPanel: { type: "bool", default: false },
         enableAudioClipping: { type: "bool", default: false },
         audioClippingThreshold: { type: "number", default: 0.015 },
-        theme: { type: "string", default: "Browser Default" },
+        audioPanningQuality: { type: "string", default: defaultAudioPanningQuality() },
+        theme: { type: "string", default: getDefaultTheme()?.name },
         cursorSize: { type: "number", default: 1 },
         nametagVisibility: { type: "string", default: "showAll" },
         nametagVisibilityDistance: { type: "number", default: 5 },
@@ -388,6 +407,10 @@ export default class Store extends EventTarget {
     // Cleanup unsupported properties
     if (!valid) {
       errors.forEach(error => {
+        // Ignore jsonschema error for displayName, as jsonschema validator don't enable 'unicode'
+        // flag for RegExp constructor before 1.2.9.
+        if (error.property === "instance.profile.displayName") return;
+
         console.error(`Removing invalid preference from store: ${error.message}`);
         delete error.instance[error.argument];
       });
@@ -416,6 +439,15 @@ export default class Store extends EventTarget {
     this.dispatchEvent(new CustomEvent("statechanged"));
 
     return finalState;
+  }
+
+  getEmbedTokenForHub(hub) {
+    const embedTokenEntry = this.state.embedTokens.find(embedTokenEntry => embedTokenEntry.hubId === hub.hub_id);
+    if (embedTokenEntry) {
+      return embedTokenEntry.embedToken;
+    } else {
+      return null;
+    }
   }
 
   get schema() {
