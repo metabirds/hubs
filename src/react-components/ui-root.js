@@ -74,7 +74,7 @@ import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
 import { ObjectMenuContainer } from "./room/ObjectMenuContainer";
 import { useCssBreakpoints } from "react-use-css-breakpoints";
-// import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
+import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
 import { SharePopoverContainer } from "./room/SharePopoverContainer";
 import { AudioPopoverContainer } from "./room/AudioPopoverContainer";
 import { ReactionPopoverContainer } from "./room/ReactionPopoverContainer";
@@ -1573,12 +1573,12 @@ class UIRoot extends Component {
                           toggleTPS={this.toggleTPS}
                         />
                         <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                        {/* <PlacePopoverContainer
+                        <PlacePopoverContainer
                           scene={this.props.scene}
                           hubChannel={this.props.hubChannel}
                           mediaSearchStore={this.props.mediaSearchStore}
                           showNonHistoriedDialog={this.showNonHistoriedDialog}
-                        /> */}
+                        />
                         {this.props.hubChannel.can("spawn_emoji") && (
                           <ReactionPopoverContainer
                             scene={this.props.scene}
