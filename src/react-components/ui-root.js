@@ -51,13 +51,13 @@ import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
 import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ECSDebugMenuButton } from "./room/ContentMenu";
-import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
+// import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
-import { ReactComponent as DeleteIcon } from "./icons/Delete.svg";
+// import { ReactComponent as DeleteIcon } from "./icons/Delete.svg";
 import { ReactComponent as FavoritesIcon } from "./icons/Favorites.svg";
-import { ReactComponent as StarOutlineIcon } from "./icons/StarOutline.svg";
-import { ReactComponent as StarIcon } from "./icons/Star.svg";
+// import { ReactComponent as StarOutlineIcon } from "./icons/StarOutline.svg";
+// import { ReactComponent as StarIcon } from "./icons/Star.svg";
 import { ReactComponent as SettingsIcon } from "./icons/Settings.svg";
 import { ReactComponent as WarningCircleIcon } from "./icons/WarningCircle.svg";
 import { ReactComponent as HomeIcon } from "./icons/Home.svg";
@@ -74,8 +74,8 @@ import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
 import { ObjectMenuContainer } from "./room/ObjectMenuContainer";
 import { useCssBreakpoints } from "react-use-css-breakpoints";
-import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
-import { SharePopoverContainer } from "./room/SharePopoverContainer";
+// import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
+// import { SharePopoverContainer } from "./room/SharePopoverContainer";
 import { AudioPopoverContainer } from "./room/AudioPopoverContainer";
 import { ReactionPopoverContainer } from "./room/ReactionPopoverContainer";
 import { SafariMicModal } from "./room/SafariMicModal";
@@ -87,7 +87,7 @@ import { RoomSettingsSidebarContainer } from "./room/RoomSettingsSidebarContaine
 import { AutoExitWarningModal, AutoExitReason } from "./room/AutoExitWarningModal";
 import { ExitReason } from "./room/ExitedRoomScreen";
 import { UserProfileSidebarContainer } from "./room/UserProfileSidebarContainer";
-import { CloseRoomModal } from "./room/CloseRoomModal";
+// import { CloseRoomModal } from "./room/CloseRoomModal";
 import { WebVRUnsupportedModal } from "./room/WebVRUnsupportedModal";
 import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip } from "./room/TipContainer";
@@ -1087,7 +1087,7 @@ class UIRoot extends Component {
 
     const streaming = this.state.isStreaming;
 
-    const showObjectList = enteredOrWatching;
+    const showObjectList = false;
     const showECSObjectsMenuButton = qsTruthy("ecsDebug");
 
     const streamer = getCurrentStreamer();
@@ -1096,8 +1096,8 @@ class UIRoot extends Component {
     const renderEntryFlow = (!enteredOrWatching && this.props.hub) || this.isWaitingForAutoExit();
 
     const canCreateRoom = !configs.feature("disable_room_creation") || configs.isAdmin();
-    const canCloseRoom = this.props.hubChannel && !!this.props.hubChannel.canOrWillIfCreator("close_hub");
-    const isModerator = this.props.hubChannel && this.props.hubChannel.canOrWillIfCreator("kick_users") && !isMobileVR;
+    // const canCloseRoom = this.props.hubChannel && !!this.props.hubChannel.canOrWillIfCreator("close_hub");
+    // const isModerator = this.props.hubChannel && this.props.hubChannel.canOrWillIfCreator("kick_users") && !isMobileVR;
 
     const moreMenu = [
       {
@@ -1144,20 +1144,20 @@ class UIRoot extends Component {
             icon: AvatarIcon,
             onClick: () => this.setSidebar("profile")
           },
-          {
-            id: "favorite-rooms",
-            label: <FormattedMessage id="more-menu.favorite-rooms" defaultMessage="Favorite Rooms" />,
-            icon: FavoritesIcon,
-            onClick: () =>
-              this.props.performConditionalSignIn(
-                () => this.props.hubChannel.signedIn,
-                () => {
-                  showFullScreenIfAvailable();
-                  this.props.mediaSearchStore.sourceNavigateWithNoNav("favorites", "use");
-                },
-                SignInMessages.favoriteRooms
-              )
-          },
+          // {
+          //   id: "favorite-rooms",
+          //   label: <FormattedMessage id="more-menu.favorite-rooms" defaultMessage="Favorite Rooms" />,
+          //   icon: FavoritesIcon,
+          //   onClick: () =>
+          //     this.props.performConditionalSignIn(
+          //       () => this.props.hubChannel.signedIn,
+          //       () => {
+          //         showFullScreenIfAvailable();
+          //         this.props.mediaSearchStore.sourceNavigateWithNoNav("favorites", "use");
+          //       },
+          //       SignInMessages.favoriteRooms
+          //     )
+          // },
           {
             id: "preferences",
             label: <FormattedMessage id="more-menu.preferences" defaultMessage="Preferences" />,
@@ -1183,30 +1183,30 @@ class UIRoot extends Component {
               icon: InviteIcon,
               onClick: () => this.props.scene.emit("action_invite")
             },
-          this.isFavorited()
-            ? {
-                id: "unfavorite-room",
-                label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
-                icon: StarIcon,
-                onClick: () => this.toggleFavorited()
-              }
-            : {
-                id: "favorite-room",
-                label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
-                icon: StarOutlineIcon,
-                onClick: () => this.toggleFavorited()
-              },
-          isModerator &&
-            entered && {
-              id: "streamer-mode",
-              label: streaming ? (
-                <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
-              ) : (
-                <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
-              ),
-              icon: CameraIcon,
-              onClick: () => this.toggleStreamerMode()
-            },
+          // this.isFavorited()
+          //   ? {
+          //       id: "unfavorite-room",
+          //       label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
+          //       icon: StarIcon,
+          //       onClick: () => this.toggleFavorited()
+          //     }
+          //   : {
+          //       id: "favorite-room",
+          //       label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
+          //       icon: StarOutlineIcon,
+          //       onClick: () => this.toggleFavorited()
+          //     },
+          // isModerator &&
+          //   entered && {
+          //     id: "streamer-mode",
+          //     label: streaming ? (
+          //       <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
+          //     ) : (
+          //       <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
+          //     ),
+          //     icon: CameraIcon,
+          //     onClick: () => this.toggleStreamerMode()
+          //   },
           (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
             entered && {
               id: "leave-room",
@@ -1218,25 +1218,25 @@ class UIRoot extends Component {
                   reason: LeaveReason.leaveRoom
                 });
               }
-            },
-          canCloseRoom && {
-            id: "close-room",
-            label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
-            icon: DeleteIcon,
-            onClick: () =>
-              this.props.performConditionalSignIn(
-                () => this.props.hubChannel.can("update_hub"),
-                () => {
-                  this.showNonHistoriedDialog(CloseRoomModal, {
-                    roomName: this.props.hub.name,
-                    onConfirm: () => {
-                      this.props.hubChannel.closeHub();
-                    }
-                  });
-                },
-                SignInMessages.closeRoom
-              )
-          }
+            }
+          // canCloseRoom && {
+          //   id: "close-room",
+          //   label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
+          //   icon: DeleteIcon,
+          //   onClick: () =>
+          //     this.props.performConditionalSignIn(
+          //       () => this.props.hubChannel.can("update_hub"),
+          //       () => {
+          //         this.showNonHistoriedDialog(CloseRoomModal, {
+          //           roomName: this.props.hub.name,
+          //           onConfirm: () => {
+          //             this.props.hubChannel.closeHub();
+          //           }
+          //         });
+          //       },
+          //       SignInMessages.closeRoom
+          //     )
+          // }
         ].filter(item => item)
       },
       {
@@ -1572,13 +1572,13 @@ class UIRoot extends Component {
                           isTPS={this.state.isTPS}
                           toggleTPS={this.toggleTPS}
                         />
-                        <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                        <PlacePopoverContainer
+                        {/* <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} /> */}
+                        {/* <PlacePopoverContainer
                           scene={this.props.scene}
                           hubChannel={this.props.hubChannel}
                           mediaSearchStore={this.props.mediaSearchStore}
                           showNonHistoriedDialog={this.showNonHistoriedDialog}
-                        />
+                        /> */}
                         {this.props.hubChannel.can("spawn_emoji") && (
                           <ReactionPopoverContainer
                             scene={this.props.scene}
@@ -1588,13 +1588,27 @@ class UIRoot extends Component {
                       </>
                     )}
                     <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
-                    {entered && isMobileVR && (
+                    {/* {entered && isMobileVR && (
                       <ToolbarButton
                         className={styleUtils.hideLg}
                         icon={<VRIcon />}
                         preset="accept"
                         label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
                         onClick={() => exit2DInterstitialAndEnterVR(true)}
+                      />
+                    )} */}
+                    {entered && (
+                      <ToolbarButton
+                        icon={<LeaveIcon />}
+                        label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
+                        preset="cancel"
+                        className={styleUtils.hideLg}
+                        onClick={() => {
+                          this.showNonHistoriedDialog(LeaveRoomModal, {
+                            destinationUrl: "/",
+                            reason: LeaveReason.leaveRoom
+                          });
+                        }}
                       />
                     )}
                   </>

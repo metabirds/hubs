@@ -4,8 +4,8 @@ import classNames from "classnames";
 import { Modal } from "../modal/Modal";
 import { Button } from "../input/Button";
 import { ReactComponent as EnterIcon } from "../icons/Enter.svg";
-import { ReactComponent as VRIcon } from "../icons/VR.svg";
-import { ReactComponent as ShowIcon } from "../icons/Show.svg";
+// import { ReactComponent as VRIcon } from "../icons/VR.svg";
+// import { ReactComponent as ShowIcon } from "../icons/Show.svg";
 import { ReactComponent as SettingsIcon } from "../icons/Settings.svg";
 import styles from "./RoomEntryModal.scss";
 import styleUtils from "../styles/style-utils.scss";
@@ -19,10 +19,10 @@ export function RoomEntryModal({
   roomName,
   showJoinRoom,
   onJoinRoom,
-  showEnterOnDevice,
-  onEnterOnDevice,
-  showSpectate,
-  onSpectate,
+  // showEnterOnDevice,
+  // onEnterOnDevice,
+  // showSpectate,
+  // onSpectate,
   showOptions,
   onOptions,
   ...rest
@@ -31,12 +31,11 @@ export function RoomEntryModal({
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
       <Column center className={styles.content}>
-        {breakpoint !== "sm" &&
-          breakpoint !== "md" && (
-            <div className={styles.logoContainer}>
-              <AppLogo />
-            </div>
-          )}
+        {breakpoint !== "sm" && breakpoint !== "md" && (
+          <div className={styles.logoContainer}>
+            <AppLogo />
+          </div>
+        )}
         <div className={styles.roomName}>
           <h5>
             <FormattedMessage id="room-entry-modal.room-name-label" defaultMessage="Room Name" />
@@ -52,7 +51,7 @@ export function RoomEntryModal({
               </span>
             </Button>
           )}
-          {showEnterOnDevice && (
+          {/* {showEnterOnDevice && (
             <Button preset="accent5" onClick={onEnterOnDevice}>
               <VRIcon />
               <span>
@@ -67,19 +66,18 @@ export function RoomEntryModal({
                 <FormattedMessage id="room-entry-modal.spectate-button" defaultMessage="Spectate" />
               </span>
             </Button>
+          )} */}
+          {showOptions && breakpoint !== "sm" && (
+            <>
+              <hr className={styleUtils.showLg} />
+              <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
+                <SettingsIcon />
+                <span>
+                  <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
+                </span>
+              </Button>
+            </>
           )}
-          {showOptions &&
-            breakpoint !== "sm" && (
-              <>
-                <hr className={styleUtils.showLg} />
-                <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
-                  <SettingsIcon />
-                  <span>
-                    <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
-                  </span>
-                </Button>
-              </>
-            )}
         </Column>
       </Column>
     </Modal>

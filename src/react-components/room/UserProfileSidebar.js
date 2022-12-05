@@ -29,8 +29,8 @@ export function UserProfileSidebar({
   onPromote,
   canDemote,
   onDemote,
-  isHidden,
-  onToggleHidden,
+  // isHidden,
+  // onToggleHidden,
   canMute,
   isNetworkMuted,
   onMute,
@@ -122,13 +122,13 @@ export function UserProfileSidebar({
             <FormattedMessage id="user-profile-sidebar.demote-button" defaultMessage="Demote" />
           </Button>
         )}
-        <Button onClick={onToggleHidden}>
+        {/* <Button onClick={onToggleHidden}>
           {isHidden ? (
             <FormattedMessage id="user-profile-sidebar.unhide-button" defaultMessage="Unhide" />
           ) : (
             <FormattedMessage id="user-profile-sidebar.hide-button" defaultMessage="Hide" />
           )}
-        </Button>
+        </Button> */}
         {canMute && (
           <Button preset="cancel" onClick={onMute}>
             <FormattedMessage id="user-profile-sidebar.mute-button" defaultMessage="Mute" />
