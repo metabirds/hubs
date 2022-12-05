@@ -41,7 +41,7 @@
   "avatar-page.selected": "これはあなたの現在のアバターです",
   "avatar-preview.loading-failed": "読み込みに失敗しました{linebreak}別のアバターを選択してください",
   "avatar-settings-content.change-avatar-button": "Change Avatar",
-  "avatar-settings-content.display-name-description": "3文字以上,32文字以下",
+  "avatar-settings-content.display-name-description": "2文字以上,32文字以下",
   "avatar-settings-content.display-name-label": "Display Name",
   "avatar-settings-sidebar.title": "Avatar Settings",
   "avatar-setup-sidebar.title": "Avatar Setup",
