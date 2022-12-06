@@ -59,16 +59,17 @@ export function MicSetupModal({
                     <Spinner />
                   </div>
                 )}
-                {permissionStatus === PermissionStatus.GRANTED && isMicrophoneEnabled && !isMicrophoneMuted ? (
-                  <MicrophoneIcon className={iconStyle} />
-                ) : (
-                  <MicrophoneMutedIcon className={iconStyle} />
+                {permissionStatus === PermissionStatus.GRANTED && isMicrophoneEnabled && !isMicrophoneMuted && (
+                  <div className={styles.iconInner}>
+                    <MicrophoneMutedIcon className={iconStyle} />
+                    <p>音声通話はご利用いただけません</p>
+                  </div>
                 )}
               </div>
-              {permissionStatus === PermissionStatus.GRANTED && <> {micLevelBar}</>}
+              {permissionStatus === PermissionStatus.GRANTED && !window.disableAudio && <> {micLevelBar}</>}
             </div>
             <div className={styles.actionContainer}>
-              {permissionStatus === PermissionStatus.GRANTED ? (
+              {permissionStatus === PermissionStatus.GRANTED && !window.disableAudio ? (
                 <>
                   <ToggleInput
                     label={<FormattedMessage id="mic-setup-modal.mute-mic-toggle-v2" defaultMessage="Mute" />}
@@ -107,7 +108,7 @@ export function MicSetupModal({
                     />
                   </p>
                 )) ||
-                (permissionStatus === PermissionStatus.DENIED && (
+                (permissionStatus === PermissionStatus.DENIED && !window.disableAudio && (
                   <p>
                     <span className={styles.errorTitle}>
                       <FormattedMessage
@@ -124,20 +125,19 @@ export function MicSetupModal({
                 ))
               )}
             </div>
-            {permissionStatus === PermissionStatus.GRANTED &&
-              isAudioInputSelectAvailable && (
-                <div className={styles.selectionContainer}>
-                  <p style={{ alignSelf: "start" }}>
-                    <FormattedMessage id="mic-setup-modal.microphone-text" defaultMessage="Microphone" />
-                  </p>
-                  <SelectInputField
-                    className={styles.selectionInput}
-                    buttonClassName={styles.selectionInput}
-                    onChange={onChangeMicrophone}
-                    {...microphoneOptions}
-                  />
-                </div>
-              )}
+            {permissionStatus === PermissionStatus.GRANTED && isAudioInputSelectAvailable && !window.disableAudio && (
+              <div className={styles.selectionContainer}>
+                <p style={{ alignSelf: "start" }}>
+                  <FormattedMessage id="mic-setup-modal.microphone-text" defaultMessage="Microphone" />
+                </p>
+                <SelectInputField
+                  className={styles.selectionInput}
+                  buttonClassName={styles.selectionInput}
+                  onChange={onChangeMicrophone}
+                  {...microphoneOptions}
+                />
+              </div>
+            )}
           </div>
           <div className={styles.audioIoContainer}>
             <div className={styles.iconContainer}>
@@ -149,20 +149,19 @@ export function MicSetupModal({
                 <FormattedMessage id="mic-setup-modal.test-audio-button" defaultMessage="Test Audio" />
               </Button>
             </div>
-            {permissionStatus === PermissionStatus.GRANTED &&
-              isAudioOutputSelectAvailable && (
-                <div className={styles.selectionContainer}>
-                  <p style={{ alignSelf: "start" }}>
-                    <FormattedMessage id="mic-setup-modal.speakers-text" defaultMessage="Speakers" />
-                  </p>
-                  <SelectInputField
-                    onChange={onChangeSpeaker}
-                    className={styles.selectionInput}
-                    buttonClassName={styles.selectionInput}
-                    {...speakerOptions}
-                  />
-                </div>
-              )}
+            {permissionStatus === PermissionStatus.GRANTED && isAudioOutputSelectAvailable && !window.disableAudio && (
+              <div className={styles.selectionContainer}>
+                <p style={{ alignSelf: "start" }}>
+                  <FormattedMessage id="mic-setup-modal.speakers-text" defaultMessage="Speakers" />
+                </p>
+                <SelectInputField
+                  onChange={onChangeSpeaker}
+                  className={styles.selectionInput}
+                  buttonClassName={styles.selectionInput}
+                  {...speakerOptions}
+                />
+              </div>
+            )}
           </div>
         </div>
         <Button preset="primary" onClick={onEnterRoom}>

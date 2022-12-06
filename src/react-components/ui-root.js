@@ -560,7 +560,7 @@ class UIRoot extends Component {
 
     if (hasGrantedMic) {
       if (!this.mediaDevicesManager.isMicShared) {
-        await this.mediaDevicesManager.startMicShare({});
+        await this.mediaDevicesManager.startMicShare({ unmute: false });
       }
       this.beginOrSkipAudioSetup();
     } else {
@@ -591,7 +591,7 @@ class UIRoot extends Component {
   };
 
   onRequestMicPermission = async () => {
-    await this.mediaDevicesManager.startMicShare({});
+    await this.mediaDevicesManager.startMicShare({ unmute: false });
   };
 
   beginOrSkipAudioSetup = () => {
@@ -625,7 +625,7 @@ class UIRoot extends Component {
       window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
     }
 
-    const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
+    const muteOnEntry = !!window.disableAudio || this.props.store.state.preferences.muteMicOnEntry;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
 
     this.setState({ entered: true, entering: false, showShareDialog: false });
@@ -777,6 +777,7 @@ class UIRoot extends Component {
   }
 
   onFocusChat = e => {
+    if (window.disableChat) return;
     this.setSidebar("chat", {
       chatInputEffect: input => {
         input.focus();
@@ -837,7 +838,7 @@ class UIRoot extends Component {
           }}
           showEnterOnDevice={!this.state.waitingOnAudio && !this.props.entryDisallowed && !isMobileVR}
           onEnterOnDevice={() => this.attemptLink()}
-          showSpectate={!this.state.waitingOnAudio}
+          showSpectate={false}
           onSpectate={() => this.setState({ watching: true })}
           showOptions={this.props.hubChannel.canOrWillIfCreator("update_hub")}
           onOptions={() => {
@@ -1565,7 +1566,7 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <>
-                        <AudioPopoverContainer scene={this.props.scene} />
+                        {/* <AudioPopoverContainer scene={this.props.scene} /> */}
                         {/* cyzyspace */}
                         <ToggleTpsContainer
                           scene={this.props.scene}
@@ -1587,7 +1588,10 @@ class UIRoot extends Component {
                         )}
                       </>
                     )}
-                    <ChatToolbarButtonContainer onClick={() => this.toggleSidebar("chat")} />
+                    <ChatToolbarButtonContainer
+                      onClick={() => this.toggleSidebar("chat")}
+                      className="toggleChatButton"
+                    />
                     {entered && isMobileVR && (
                       <ToolbarButton
                         className={styleUtils.hideLg}

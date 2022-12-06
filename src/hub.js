@@ -208,6 +208,7 @@ if (isEmbed && !qs.get("embed_token")) {
   throw new Error("no embed token");
 }
 const locationHash = document.location.hash;
+window.disableAudio = true;
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -1372,7 +1373,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   hubPhxChannel.on("permissions_updated", () => hubChannel.fetchPermissions());
 
   hubPhxChannel.on("mute", ({ session_id }) => {
-    if (session_id === NAF.clientId) {
+    if (!window.disableAudio && session_id === NAF.clientId) {
+      //cyzyspace
       APP.mediaDevicesManager.micEnabled = false;
     }
   });
