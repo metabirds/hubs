@@ -1,6 +1,6 @@
 import { paths } from "./userinput/paths";
 const qs = new URLSearchParams(location.search);
-const IDLE_TIMEOUT_MS = (parseInt(qs.get("idle_timeout"), 10) || 2 * 60 * 60) * 1000;
+const IDLE_TIMEOUT_MS = (parseInt(qs.get("idle_timeout"), 10) || 20 * 60) * 1000;
 const INPUT_CHECK_INTERVAL_MS = 1000;
 
 const CHARACTER_ACCELERATION_PATH = paths.actions.characterAcceleration;
