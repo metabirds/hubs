@@ -108,6 +108,7 @@ $mobile-breakpoint-width: 450px;
 }
 
 :local(.spinner-container) {
+  display: none;
   position: absolute;
   margin-left: -11px;
   margin-top: -11px;
