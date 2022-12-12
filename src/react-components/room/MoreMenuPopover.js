@@ -23,7 +23,7 @@ function MoreMenuItem({ item, closePopover }) {
           <span>{item.label}</span>
         </a>
       ) : (
-        <button className={styles.moreMenuItemTarget} onClick={event => item.onClick(item, event)}>
+        <button className={`${styles.moreMenuItemTarget} ${item.id}`} onClick={event => item.onClick(item, event)}>
           <Icon />
           <span>{item.label}</span>
         </button>
@@ -48,7 +48,9 @@ function MoreMenuGroup({ group, closePopover }) {
     <li>
       <h1 className={styles.moreMenuGroupLabel}>{group.label}</h1>
       <ul className={styles.moreMenuItemList}>
-        {group.items.map(item => <MoreMenuItem key={item.id} item={item} closePopover={closePopover} />)}
+        {group.items.map(item => (
+          <MoreMenuItem key={item.id} item={item} closePopover={closePopover} />
+        ))}
       </ul>
     </li>
   );
@@ -62,7 +64,11 @@ MoreMenuGroup.propTypes = {
 function MoreMenuPopoverContent({ menu, closePopover }) {
   return (
     <div className={styles.moreMenuPopover}>
-      <ul>{menu.map(group => <MoreMenuGroup key={group.id} group={group} closePopover={closePopover} />)}</ul>
+      <ul>
+        {menu.map(group => (
+          <MoreMenuGroup key={group.id} group={group} closePopover={closePopover} />
+        ))}
+      </ul>
     </div>
   );
 }

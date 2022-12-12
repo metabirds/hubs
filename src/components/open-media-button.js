@@ -45,11 +45,11 @@ AFRAME.registerComponent("open-media-button", {
       }
 
       if (visible) {
-        let label = "open link";
+        let label = "リンクを開く";
         if (!this.data.onlyOpenLink) {
           let hubId;
           if (await isLocalHubsAvatarUrl(src)) {
-            label = "use avatar";
+            label = "アバターを使う";
           } else if ((await isLocalHubsSceneUrl(src)) && mayChangeScene) {
             label = "use scene";
           } else if ((hubId = await isHubsRoomUrl(src))) {
@@ -57,7 +57,7 @@ AFRAME.registerComponent("open-media-button", {
             if (url.hash && window.APP.hub.hub_id === hubId) {
               label = "go to";
             } else {
-              label = "visit room";
+              label = "訪問する";
             }
           }
         }

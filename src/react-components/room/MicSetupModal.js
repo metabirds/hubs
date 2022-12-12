@@ -100,10 +100,10 @@ export function MicSetupModal({
               ) : (
                 (permissionStatus === PermissionStatus.PROMPT && (
                   <p>
-                    <FormattedMessage
+                    {/* <FormattedMessage
                       id="mic-setup-modal.mic-permission-prompt"
                       defaultMessage="Requesting access to your microphone..."
-                    />
+                    /> */}
                   </p>
                 )) ||
                 (permissionStatus === PermissionStatus.DENIED && !window.disableAudio && (

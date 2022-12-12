@@ -23,14 +23,14 @@ function ReactionPopoverContent({ items, presence, onToggleHandRaised, ...rest }
       <Row noWrap>
         <ImageGridPopover items={items} {...rest} />
       </Row>
-      <Row>
+      {/* <Row>
         <label className={styles.label}>
           <FormattedMessage id="reaction-popover.action" defaultMessage="Actions" />
         </label>
       </Row>
       <Row nowrap>
         <HandRaisedButton active={presence.hand_raised} onClick={onToggleHandRaised} />
-      </Row>
+      </Row> */}
     </Column>
   );
 }
@@ -67,13 +67,10 @@ export function ReactionPopoverButton({ items, presence, onToggleHandRaised }) {
   const title = intl.formatMessage(reactionPopoverTitle);
   const popoverApiRef = useRef();
 
-  const onTooltipHandLowered = useCallback(
-    () => {
-      setIsTooltipVisible(false);
-      onToggleHandRaised();
-    },
-    [onToggleHandRaised]
-  );
+  const onTooltipHandLowered = useCallback(() => {
+    setIsTooltipVisible(false);
+    onToggleHandRaised();
+  }, [onToggleHandRaised]);
 
   return (
     <Popover

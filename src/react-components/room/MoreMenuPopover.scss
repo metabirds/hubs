@@ -10,6 +10,7 @@
 }
 
 :local(.more-menu-group-label) {
+  display: none;
   margin-left: 16px;
   font-size: theme.$font-size-xs;
   font-weight: theme.$font-weight-bold;
@@ -17,8 +18,8 @@
 }
 
 :local(.more-menu-item-list) {
-  padding-top: 4px;
-  padding-bottom: 16px;
+  // padding-top: 4px;
+  // padding-bottom: 16px;
 }
 
 :local(.more-menu-item-target) {
@@ -30,6 +31,10 @@
   color: theme.$text1-color;
   font-size: theme.$font-size-sm;
   font-weight: theme.$font-weight-medium;
+
+  &.sign-in,&.preferences {
+    display: none;
+  }
 
   & > * {
     margin-right: 16px;

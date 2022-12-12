@@ -42,7 +42,7 @@ export function getInspectableAndPivot(el) {
   return { inspectable, pivot };
 }
 
-const decompose = (function() {
+const decompose = (function () {
   const scale = new THREE.Vector3();
   return function decompose(m, p, q) {
     m.decompose(p, q, scale); //ignore scale, like we're dealing with a motor
@@ -50,7 +50,7 @@ const decompose = (function() {
 })();
 
 const IDENTITY = new THREE.Matrix4().identity();
-const orbit = (function() {
+const orbit = (function () {
   const owq = new THREE.Quaternion();
   const owp = new THREE.Vector3();
   const cwq = new THREE.Quaternion();
@@ -92,17 +92,13 @@ const orbit = (function() {
         .applyQuaternion(targetQuat)
     );
 
-    targetMatrix.compose(
-      targetPos,
-      targetQuat,
-      targetScale
-    );
+    targetMatrix.compose(targetPos, targetQuat, targetScale);
 
     childMatch(rig, camera, targetMatrix);
   };
 })();
 
-const moveRigSoCameraLooksAtPivot = (function() {
+const moveRigSoCameraLooksAtPivot = (function () {
   const owq = new THREE.Quaternion();
   const owp = new THREE.Vector3();
   const cwq = new THREE.Quaternion();
@@ -168,7 +164,7 @@ const NEXT_MODES = {
 // cyzyspace
 const isHeadSet = AFRAME.utils.device.checkHeadsetConnected();
 
-const ensureLightsAreSeenByCamera = function(o) {
+const ensureLightsAreSeenByCamera = function (o) {
   if (o.isLight) {
     o.layers.enable(Layers.CAMERA_LAYER_INSPECT);
   }
@@ -176,12 +172,12 @@ const ensureLightsAreSeenByCamera = function(o) {
 
 const firstPersonOnlyLayer = new THREE.Layers();
 firstPersonOnlyLayer.set(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
-const enableInspectLayer = function(o) {
+const enableInspectLayer = function (o) {
   // Ignore first person only meshes
   if (o.layers.test(firstPersonOnlyLayer)) return;
   o.layers.enable(Layers.CAMERA_LAYER_INSPECT);
 };
-const disableInspectLayer = function(o) {
+const disableInspectLayer = function (o) {
   // Ignore first person only meshes
   if (o.layers.test(firstPersonOnlyLayer)) return;
   o.layers.disable(Layers.CAMERA_LAYER_INSPECT);
@@ -221,7 +217,7 @@ export class CameraSystem {
     // TODO this logic should either be moved into THREE or removed when we ditch aframe camera system
     const xrManager = renderer.xr;
     const updateXRCamera = xrManager.updateCamera;
-    xrManager.updateCamera = function(camera) {
+    xrManager.updateCamera = function (camera) {
       updateXRCamera(camera);
       const xrCamera = xrManager.getCamera();
       xrCamera.layers.mask = camera.layers.mask;
@@ -402,7 +398,7 @@ export class CameraSystem {
     camera.layers.mask = this.snapshot.mask;
   }
 
-  tick = (function() {
+  tick = (function () {
     const translation = new THREE.Matrix4();
     let uiRoot;
     return function tick(scene, dt) {
@@ -422,14 +418,7 @@ export class CameraSystem {
         this.viewingRig.object3D.matrixWorld.decompose(position, quat, scale);
         position.setFromMatrixPosition(this.viewingCamera.matrixWorld);
         position.y = position.y - 1.6;
-        setMatrixWorld(
-          this.avatarRig.object3D,
-          new THREE.Matrix4().compose(
-            position,
-            quat,
-            scale
-          )
-        );
+        setMatrixWorld(this.avatarRig.object3D, new THREE.Matrix4().compose(position, quat, scale));
         scene.systems["hubs-systems"].characterController.fly = true;
         this.avatarPOV.object3D.updateMatrices();
         setMatrixWorld(this.avatarPOV.object3D, this.viewingCamera.matrixWorld);
@@ -437,6 +426,7 @@ export class CameraSystem {
       if (!this.enteredScene && entered) {
         this.enteredScene = true;
         this.mode = CAMERA_MODE_FIRST_PERSON;
+        this.toggleTPS();
       }
       this.avatarPOVRotator = this.avatarPOVRotator || this.avatarPOV.components["pitch-yaw-rotator"];
       this.viewingCameraRotator = this.viewingCameraRotator || this.viewingCamera.el.components["pitch-yaw-rotator"];

@@ -1,7 +1,10 @@
 @use "../styles/theme.scss";
 
 :local(.content) {
-  padding: 24px 8px;
+  padding: 12px 8px 24px;
+  @media(min-width: theme.$breakpoint-sm) {
+    padding: 24px 8px;
+  }
 
   button {
     width: 156px;

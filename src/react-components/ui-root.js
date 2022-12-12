@@ -55,7 +55,7 @@ import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ECSDebugMenuButton } 
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
 // import { ReactComponent as DeleteIcon } from "./icons/Delete.svg";
-import { ReactComponent as FavoritesIcon } from "./icons/Favorites.svg";
+// import { ReactComponent as FavoritesIcon } from "./icons/Favorites.svg";
 // import { ReactComponent as StarOutlineIcon } from "./icons/StarOutline.svg";
 // import { ReactComponent as StarIcon } from "./icons/Star.svg";
 import { ReactComponent as SettingsIcon } from "./icons/Settings.svg";
@@ -183,7 +183,7 @@ class UIRoot extends Component {
     showPrefs: false,
     watching: false,
     isStreaming: false,
-    isTPS: false,
+    isTPS: true,
 
     waitingOnAudio: false,
     audioTrackClone: null,
@@ -1103,13 +1103,15 @@ class UIRoot extends Component {
       {
         id: "user",
         label: !this.state.signedIn ? (
-          <FormattedMessage id="more-menu.not-signed-in" defaultMessage="You are not signed in" />
+          <p>{/* <FormattedMessage id="more-menu.not-signed-in" defaultMessage="You are not signed in" /> */}</p>
         ) : (
-          <FormattedMessage
-            id="more-menu.you-signed-in-as"
-            defaultMessage="Signed in as: {email}"
-            values={{ email: maskEmail(this.props.store.state.credentials.email) }}
-          />
+          <p>
+            {/* <FormattedMessage
+              id="more-menu.you-signed-in-as"
+              defaultMessage="Signed in as: {email}"
+              values={{ email: maskEmail(this.props.store.state.credentials.email) }}
+            /> */}
+          </p>
         ),
         items: [
           this.state.signedIn
@@ -1170,7 +1172,7 @@ class UIRoot extends Component {
         id: "room",
         label: <FormattedMessage id="more-menu.room" defaultMessage="Room" />,
         items: [
-          {
+          this.state.signedIn && {
             id: "room-info",
             label: <FormattedMessage id="more-menu.room-info" defaultMessage="Room Info and Settings" />,
             icon: HomeIcon,
@@ -1565,7 +1567,7 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <>
-                        <AudioPopoverContainer scene={this.props.scene} />
+                        {/* <AudioPopoverContainer scene={this.props.scene} /> */}
                         {/* cyzyspace */}
                         <ToggleTpsContainer
                           scene={this.props.scene}

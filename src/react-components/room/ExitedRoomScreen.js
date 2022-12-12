@@ -123,14 +123,14 @@ export function ExitedRoomScreen({ reason, showTerms, termsUrl, showSourceLink }
 
         {reason === ExitReason.connectError && (
           <p>
-            <FormattedMessage
+            {/* <FormattedMessage
               id="exited-room-screen.connect-tcp"
               defaultMessage="You can try <a>connecting via TCP</a>, which may work better on some networks."
               values={{
                 // eslint-disable-next-line react/display-name
                 a: chunks => <a href={tcpUrl.toString()}>{chunks}</a>
               }}
-            />
+            /> */}
           </p>
         )}
         {![ExitReason.left, ExitReason.disconnected, ExitReason.sceneError].includes(reason) && (
