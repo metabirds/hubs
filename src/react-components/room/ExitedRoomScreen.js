@@ -133,7 +133,7 @@ export function ExitedRoomScreen({ reason, showTerms, termsUrl, showSourceLink }
             /> */}
           </p>
         )}
-        {![ExitReason.left, ExitReason.disconnected, ExitReason.sceneError].includes(reason) && (
+        {/* {![ExitReason.left, ExitReason.disconnected, ExitReason.sceneError].includes(reason) && (
           <p>
             <FormattedMessage
               id="exited-room-screen.create-room"
@@ -144,7 +144,7 @@ export function ExitedRoomScreen({ reason, showTerms, termsUrl, showSourceLink }
               }}
             />
           </p>
-        )}
+        )} */}
 
         <Button as="a" preset="accept" href={window.location.href}>
           <FormattedMessage id="exited-room-screen.refresh-page-button" defaultMessage="Refresh Page" />

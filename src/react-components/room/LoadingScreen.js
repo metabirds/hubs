@@ -19,14 +19,7 @@ export function LoadingScreen({ message, infoMessages }) {
           <img src={cyzyHowToControlImg} className="cyzy-how-to-control" alt={"how to control"} />
         </>
       }
-      bottom={
-        <>
-          <div className="cyzy-loading-tips-wrap">
-            <h3>{infoMessage.heading}</h3>
-            <p>{infoMessage.message}</p>
-          </div>
-        </>
-      }
+      bottom={<></>}
     />
   );
 }

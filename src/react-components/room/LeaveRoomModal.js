@@ -13,10 +13,10 @@ export const LeaveReason = {
 };
 
 const reasonMessages = defineMessages({
-  [LeaveReason.leaveRoom]: {
-    id: "leave-room-modal.leave-room.message",
-    defaultMessage: "Are you sure you want to leave the room?"
-  },
+  // [LeaveReason.leaveRoom]: {
+  //   id: "leave-room-modal.leave-room.message",
+  //   defaultMessage: "Are you sure you want to leave the room?"
+  // },
   [LeaveReason.joinRoom]: {
     id: "leave-room-modal.join-room.message",
     defaultMessage: "Joining a new room will leave this one. Are you sure?"
@@ -51,7 +51,26 @@ export function LeaveRoomModal({ reason, destinationUrl, onClose }) {
       beforeTitle={<CloseButton onClick={onClose} />}
     >
       <Column padding center centerMd="both" grow>
-        <p>{intl.formatMessage(reasonMessages[reason])}</p>
+        {reason === "leaveRoom" ? (
+          <p>
+            <FormattedMessage
+              id="leave-room-modal.leave-room.message"
+              // eslint-disable-next-line react/display-name
+              defaultMessage="Are you sure you want to leave the room?"
+              values={{
+                // eslint-disable-next-line react/display-name
+                linebreak: <br />,
+                toslink: chunks => (
+                  <a target="_blank" rel="noreferrer noopener" href="https://questant.jp/q/RDN9M1Q3">
+                    {chunks}
+                  </a>
+                )
+              }}
+            />
+          </p>
+        ) : (
+          <p>{intl.formatMessage(reasonMessages[reason])}</p>
+        )}
         <Button as="a" preset="cancel" href={destinationUrl} rel="noopener noreferrer">
           {intl.formatMessage(confirmationMessages[reason])}
         </Button>

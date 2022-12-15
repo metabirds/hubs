@@ -1136,7 +1136,8 @@ class UIRoot extends Component {
             icon: AddIcon,
             onClick: () =>
               this.showNonHistoriedDialog(LeaveRoomModal, {
-                destinationUrl: "/",
+                destinationUrl:
+                  "https://qvc.jp/information/guide/qvcplanet.html?sc_initcmp=cnt_0657_top_meta_fleximagetext_02",
                 reason: LeaveReason.createRoom
               })
           },
@@ -1216,7 +1217,8 @@ class UIRoot extends Component {
               icon: LeaveIcon,
               onClick: () => {
                 this.showNonHistoriedDialog(LeaveRoomModal, {
-                  destinationUrl: "/",
+                  destinationUrl:
+                    "https://qvc.jp/information/guide/qvcplanet.html?sc_initcmp=cnt_0657_top_meta_fleximagetext_02",
                   reason: LeaveReason.leaveRoom
                 });
               }
@@ -1607,7 +1609,8 @@ class UIRoot extends Component {
                         className={styleUtils.hideLg}
                         onClick={() => {
                           this.showNonHistoriedDialog(LeaveRoomModal, {
-                            destinationUrl: "/",
+                            destinationUrl:
+                              "https://qvc.jp/information/guide/qvcplanet.html?sc_initcmp=cnt_0657_top_meta_fleximagetext_02",
                             reason: LeaveReason.leaveRoom
                           });
                         }}
@@ -1632,7 +1635,8 @@ class UIRoot extends Component {
                         preset="cancel"
                         onClick={() => {
                           this.showNonHistoriedDialog(LeaveRoomModal, {
-                            destinationUrl: "/",
+                            destinationUrl:
+                              "https://qvc.jp/information/guide/qvcplanet.html?sc_initcmp=cnt_0657_top_meta_fleximagetext_02",
                             reason: LeaveReason.leaveRoom
                           });
                         }}
