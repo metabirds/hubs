@@ -625,7 +625,7 @@ class UIRoot extends Component {
       window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
     }
 
-    const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
+    const muteOnEntry = true;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
 
     this.setState({ entered: true, entering: false, showShareDialog: false });

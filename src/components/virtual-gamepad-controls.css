@@ -10,10 +10,12 @@
 }
 
 :local(.touchZone.left) {
+  z-index: 9;
   left: 80px;
 }
 
 :local(.touchZone.right) {
+  z-index: 9;
   right: 80px;
 }
 
