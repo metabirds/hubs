@@ -1,6 +1,9 @@
+import { addComponent } from "bitecs";
+import { AudioSettingsChanged } from "./bit-components";
 import {
   AudioType,
   SourceType,
+  PanningModelType,
   MediaAudioDefaults,
   AvatarAudioDefaults,
   TargetAudioDefaults
@@ -14,17 +17,29 @@ const defaultSettingsForSourceType = Object.freeze(
   ])
 );
 
-function applySettings(audio, settings) {
+export function applySettings(audio, settings) {
   if (audio.panner) {
     audio.setDistanceModel(settings.distanceModel);
     audio.setRolloffFactor(settings.rolloffFactor);
     audio.setRefDistance(settings.refDistance);
     audio.setMaxDistance(settings.maxDistance);
+    audio.panner.panningModel = settings.panningModel;
     audio.panner.coneInnerAngle = settings.coneInnerAngle;
     audio.panner.coneOuterAngle = settings.coneOuterAngle;
     audio.panner.coneOuterGain = settings.coneOuterGain;
   }
   audio.gain.gain.setTargetAtTime(settings.gain, audio.context.currentTime, 0.1);
+}
+
+export function getOverriddenPanningModelType() {
+  switch (APP.store.state.preferences.audioPanningQuality) {
+    case "High":
+      return PanningModelType.HRTF;
+    case "Low":
+      return PanningModelType.EqualPower;
+    default:
+      return null;
+  }
 }
 
 export function getCurrentAudioSettings(el) {
@@ -34,9 +49,18 @@ export function getCurrentAudioSettings(el) {
   const audioOverrides = APP.audioOverrides.get(el);
   const audioDebugPanelOverrides = APP.audioDebugPanelOverrides.get(sourceType);
   const zoneSettings = APP.zoneOverrides.get(el);
-  const preferencesOverrides = APP.store.state.preferences.disableLeftRightPanning
-    ? { audioType: AudioType.Stereo }
-    : {};
+  const preferencesOverrides = {};
+
+  const overriddenPanningModelType = getOverriddenPanningModelType();
+
+  if (overriddenPanningModelType !== null) {
+    preferencesOverrides.panningModel = overriddenPanningModelType;
+  }
+
+  if (APP.store.state.preferences.disableLeftRightPanning) {
+    preferencesOverrides.audioType = AudioType.Stereo;
+  }
+
   const settings = Object.assign(
     {},
     defaults,
@@ -67,18 +91,24 @@ export function getCurrentAudioSettingsForSourceType(sourceType) {
   return Object.assign({}, defaults, sceneOverrides, audioDebugPanelOverrides);
 }
 
-export function updateAudioSettings(el, audio) {
-  // Follow these rules and you'll have a good time:
-  // - If a THREE.Audio or THREE.PositionalAudio is created, call this function.
-  // - If audio settings change, call this function.
-  const settings = getCurrentAudioSettings(el);
-  if (
-    (audio.panner === undefined && settings.audioType === AudioType.PannerNode) ||
-    (audio.panner !== undefined && settings.audioType === AudioType.Stereo)
-  ) {
-    el.emit("audio_type_changed");
+// Follow these rules and you'll have a good time:
+// - If a THREE.Audio or THREE.PositionalAudio is created, call this function.
+// - If audio settings change, call this function.
+export function updateAudioSettings(elOrEid, audio) {
+  if (!elOrEid.isEntity) {
+    const eid = elOrEid;
+    addComponent(APP.world, AudioSettingsChanged, eid);
+  } else {
+    const el = elOrEid;
+    const settings = getCurrentAudioSettings(el);
+    if (
+      (audio.panner === undefined && settings.audioType === AudioType.PannerNode) ||
+      (audio.panner !== undefined && settings.audioType === AudioType.Stereo)
+    ) {
+      el.emit("audio_type_changed");
+    }
+    applySettings(audio, settings);
   }
-  applySettings(audio, settings);
 }
 
 export function shouldAddSupplementaryAttenuation(el, audio) {

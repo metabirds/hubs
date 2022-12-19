@@ -13,11 +13,36 @@ AFRAME.registerComponent("open-media-button", {
     this.updateSrc = async () => {
       if (!this.targetEl.parentNode) return; // If removed
       const mediaLoader = this.targetEl.components["media-loader"].data;
-      const src = (this.src = (mediaLoader.mediaOptions && mediaLoader.mediaOptions.href) || mediaLoader.src);
+      let src = (this.src = (mediaLoader.mediaOptions && mediaLoader.mediaOptions.href) || mediaLoader.src); // cyzyspace
       const visible = src && guessContentType(src) !== "video/vnd.hubs-webrtc";
       const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator("update_hub");
 
       this.el.object3D.visible = !!visible;
+
+      // cyzyspace
+      if (src && src.match("__ROOM_ID__")) {
+        const roomId = window.location.pathname.split("/")[1];
+        const replacedHref = src.replace("__ROOM_ID__", roomId);
+
+        const validationUrl = new URL(replacedHref);
+        const searchParams = validationUrl.searchParams;
+        searchParams.append("validate", "1");
+        validationUrl.search = searchParams.toString();
+
+        fetch(validationUrl.toString(), { method: "GET" })
+          .then(v => {
+            if (v.status === 200) {
+              console.log("200");
+              src = this.src = replacedHref;
+            } else {
+              console.log("head response - error:", v.status);
+              src = this.src = mediaLoader.src;
+            }
+          })
+          .catch(() => {
+            console.log("head request - failed:", replacedHref);
+          });
+      }
 
       if (visible) {
         let label = "open link";
@@ -48,7 +73,15 @@ AFRAME.registerComponent("open-media-button", {
       let hubId;
       if (this.data.onlyOpenLink) {
         await exitImmersive();
-        window.open(this.src);
+        // cyzyspace
+        const href = this.src;
+        if (href.match("__ROOM_ID__")) {
+          const roomId = window.location.pathname.split("/")[1];
+          const replacedHref = href.replace("__ROOM_ID__", roomId);
+          window.open(replacedHref);
+        } else {
+          window.open(this.src);
+        }
       } else if (await isLocalHubsAvatarUrl(this.src)) {
         const avatarId = new URL(this.src).pathname.split("/").pop();
         window.APP.store.update({ profile: { avatarId } });

@@ -3,21 +3,28 @@
 // by @jamesckane at Paradowski Creative (paradowski.com)
 
 import { Text } from "troika-three-text";
+import NotoSansUrl from "../assets/fonts/NotoSansJP-Regular.otf";
 
 // Mark this type of object so we can filter in from our shader patching
 Text.prototype.isTroikaText = true;
 
+const THREE_SIDES = {
+  front: THREE.FrontSide,
+  back: THREE.BackSide,
+  double: THREE.DoubleSide
+};
+
 function numberOrPercent(defaultValue) {
   return {
     default: defaultValue,
-    parse: function(value) {
+    parse: function (value) {
       if (typeof value === "string" && value.indexOf("%") > 0) {
         return value;
       }
       value = +value;
       return isNaN(value) ? 0 : value;
     },
-    stringify: function(value) {
+    stringify: function (value) {
       return "" + value;
     }
   };
@@ -31,9 +38,9 @@ AFRAME.registerComponent("text", {
     clipRect: {
       type: "string",
       default: "",
-      parse: function(value) {
+      parse: function (value) {
         if (value) {
-          value = value.split(/[\s,]+/).reduce(function(out, val) {
+          value = value.split(/[\s,]+/).reduce(function (out, val) {
             val = +val;
             if (!isNaN(val)) {
               out.push(val);
@@ -43,7 +50,7 @@ AFRAME.registerComponent("text", {
         }
         return value && value.length === 4 ? value : null;
       },
-      stringify: function(value) {
+      stringify: function (value) {
         return value ? value.join(" ") : "";
       }
     },
@@ -52,7 +59,7 @@ AFRAME.registerComponent("text", {
     depthOffset: { type: "number", default: 0 },
     direction: { type: "string", default: "auto", oneOf: ["auto", "ltr", "rtl"] },
     fillOpacity: { type: "number", default: 1 },
-    // This is different from the Troika preoperty name, Using "fontUrl" to prevent conflict with previous "font" p=roperty and to allow us to make named fonts later
+    // This is different from the Troika preoperty name, Using "fontUrl" to prevent conflict with previous "font" property and to allow us to make named fonts later
     fontUrl: { type: "string" },
     // This default value differs from the Troika default of 0.1, it most closely matches the size of our previous text component.
     fontSize: { type: "number", default: 0.075 },
@@ -80,7 +87,7 @@ AFRAME.registerComponent("text", {
   /**
    * Called once when component is attached for initial setup.
    */
-  init: function() {
+  init: function () {
     this.troikaTextMesh = new Text();
     this.troikaTextMesh.material.toneMapped = false;
     this.el.setObject3D("text", this.troikaTextMesh);
@@ -90,7 +97,7 @@ AFRAME.registerComponent("text", {
    * Called when component is attached and when component data changes.
    * Generally modifies the entity based on the data.
    */
-  update: function() {
+  update: function () {
     const data = this.data;
     const mesh = this.troikaTextMesh;
 
@@ -100,13 +107,13 @@ AFRAME.registerComponent("text", {
     mesh.anchorX = data.anchorX;
     mesh.anchorY = data.anchorY;
     mesh.color = data.color;
-    mesh.material.side = data.side;
+    mesh.material.side = THREE_SIDES[data.side];
     mesh.material.opacity = data.opacity;
     mesh.curveRadius = data.curveRadius;
     mesh.depthOffset = data.depthOffset || 0;
     mesh.direction = data.direction;
     mesh.fillOpacity = data.fillOpacity;
-    mesh.font = data.fontUrl;
+    mesh.font = data.fontUrl || NotoSansUrl;
     mesh.fontSize = data.fontSize;
     mesh.letterSpacing = data.letterSpacing || 0;
     mesh.clipRect = data.clipRect;
@@ -133,14 +140,14 @@ AFRAME.registerComponent("text", {
    * Called when a component is removed (e.g., via removeAttribute).
    * Generally undoes all modifications to the entity.
    */
-  remove: function() {
+  remove: function () {
     // Free memory
     this.troikaTextMesh.dispose();
   },
 
-  getSize: (function() {
+  getSize: (function () {
     const size = new THREE.Vector3();
-    return function(outSize) {
+    return function (outSize) {
       this.troikaTextMesh.geometry.boundingBox.getSize(size);
       outSize.set(
         size.x * this.troikaTextMesh.scale.x,
