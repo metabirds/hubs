@@ -1592,7 +1592,13 @@ class UIRoot extends Component {
                       <ToolbarButton
                         icon={<AvatarIcon />}
                         preset="accept"
-                        label={<FormattedMessage id="more-menu.profileShort" defaultMessage="Change Name & Avatar" />}
+                        label={
+                          <FormattedMessage
+                            id="more-menu.profileShort"
+                            values={{ linebreak: <br /> }}
+                            defaultMessage="Change Name & Avatar"
+                          />
+                        }
                         onClick={() => this.toggleSidebar("profile")}
                       />
                     )}

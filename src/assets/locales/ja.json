@@ -270,7 +270,7 @@
   "more-menu.preferences": "設定",
   "more-menu.privacy": "プライバシーポリシー",
   "more-menu.profile": "ユーザー名とアバターを変更する",
-  "more-menu.profileShort": "名前/アバター変更",
+  "more-menu.profileShort": "アバター{linebreak}名前変更",
   "more-menu.report-issue": "Report Issue",
   "more-menu.room": "Room",
   "more-menu.room-info": "ルーム設定",

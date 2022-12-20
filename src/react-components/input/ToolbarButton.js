@@ -19,6 +19,8 @@ export const types = ["none", "left", "middle", "right"];
 
 export const statusColors = ["recording", "unread", "enabled", "disabled"];
 
+const isMobile = AFRAME.utils.device.isMobile();
+
 export const ToolbarButton = forwardRef(
   (
     { preset, className, iconContainerClassName, children, icon, label, selected, large, statusColor, type, ...rest },
@@ -31,12 +33,15 @@ export const ToolbarButton = forwardRef(
           styles.toolbarButton,
           styles[preset],
           styles[type],
-          { [styles.selected]: selected, [styles.large]: large },
+          { [styles.selected]: selected, [styles.large]: large, [styles.isMobile]: isMobile },
           className
         )}
         {...rest}
       >
-        <div className={classNames(styles.iconContainer, iconContainerClassName)} aria-hidden="true">
+        <div
+          className={classNames(styles.iconContainer, iconContainerClassName, { [styles.isMobile]: isMobile })}
+          aria-hidden="true"
+        >
           {icon}
           {statusColor && <div className={classNames(styles.statusIndicator, styles["status-" + statusColor])} />}
           {children}
