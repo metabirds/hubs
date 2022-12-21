@@ -69,6 +69,7 @@ import { ReactComponent as VRIcon } from "./icons/VR.svg";
 import { ReactComponent as LeaveIcon } from "./icons/Leave.svg";
 import { ReactComponent as EnterIcon } from "./icons/Enter.svg";
 import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
+import { ReactComponent as PenIcon } from "./icons/Pen.svg";
 import { PeopleSidebarContainer, userFromPresence } from "./room/PeopleSidebarContainer";
 import { ObjectListProvider } from "./room/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
@@ -184,6 +185,7 @@ class UIRoot extends Component {
     watching: false,
     isStreaming: false,
     isTPS: false,
+    hasPen: false,
 
     waitingOnAudio: false,
     audioTrackClone: null,
@@ -492,6 +494,7 @@ class UIRoot extends Component {
 
   spawnPen = () => {
     this.props.scene.emit("penButtonPressed");
+    this.setState({ hasPen: !this.props.scene.systems["pen-tools"].getMyPen() });
   };
 
   onSubscribeChanged = async () => {
@@ -1573,12 +1576,22 @@ class UIRoot extends Component {
                           toggleTPS={this.toggleTPS}
                         />
                         <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                        <PlacePopoverContainer
-                          scene={this.props.scene}
-                          hubChannel={this.props.hubChannel}
-                          mediaSearchStore={this.props.mediaSearchStore}
-                          showNonHistoriedDialog={this.showNonHistoriedDialog}
-                        />
+                        {isModerator ? (
+                          <PlacePopoverContainer
+                            scene={this.props.scene}
+                            hubChannel={this.props.hubChannel}
+                            mediaSearchStore={this.props.mediaSearchStore}
+                            showNonHistoriedDialog={this.showNonHistoriedDialog}
+                          />
+                        ) : (
+                          <ToolbarButton
+                            icon={<PenIcon />}
+                            preset="accent3"
+                            label={<FormattedMessage id="place-popover.item-type.pen" defaultMessage="Pen" />}
+                            onClick={this.spawnPen}
+                            selected={this.state.hasPen}
+                          />
+                        )}
                         {this.props.hubChannel.can("spawn_emoji") && (
                           <ReactionPopoverContainer
                             scene={this.props.scene}
