@@ -285,7 +285,9 @@ export default class MediaDevicesManager extends EventEmitter {
     try {
       console.log("Adding microphone media stream");
       const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-      this.audioSystem.addStreamToOutboundAudio("microphone", newStream);
+      if (!window.disableAudio) {
+        this.audioSystem.addStreamToOutboundAudio("microphone", newStream);
+      }
       this.audioTrack = newStream.getAudioTracks()[0];
       this.audioTrack.addEventListener("ended", async () => {
         this._scene.emit(MediaDevicesEvents.MIC_SHARE_ENDED);
