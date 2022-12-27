@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { LoadingScreenLayout } from "../layout/LoadingScreenLayout";
 import { Spinner } from "../misc/Spinner";
 import { useRandomMessageTransition } from "./useRandomMessageTransition";
-import cyzyHowToControlImg from "../../assets/images/cyzy-how-to-control.png";
+import cyzyHowToControlImg from "../../assets/images/cyzy-how-to-control.jpg";
 export function LoadingScreen({ message, infoMessages }) {
   const infoMessage = useRandomMessageTransition(infoMessages);
   return (
