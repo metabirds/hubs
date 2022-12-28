@@ -228,8 +228,5 @@
   },
   "optionalDependencies": {
     "fsevents": "^2.2.1"
-  },
-  "volta": {
-    "node": "16.16.0"
   }
 }
