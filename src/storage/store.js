@@ -65,7 +65,8 @@ export const SCHEMA = {
       properties: {
         displayName: {
           type: "string",
-          pattern: "^[\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}　（）［］【】０-９A-Za-z0-9_~ -]{3,32}$"
+          pattern:
+            "^[\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}ー～　（）［］【】０-９A-Za-z0-9_~ -]{3,32}$"
         },
         avatarId: { type: "string" },
         // personalAvatarId is obsolete, but we need it here for backwards compatibility.
