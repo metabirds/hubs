@@ -10,8 +10,8 @@ jobs:
     with:
       registry: mozillareality
       dockerfile: RetPageOriginDockerfile
-      # personal_k8s_deployment: hubs
-      # personal_k8s_deployment_container: hubs
+      personal_k8s_deployment: hubs
+      personal_k8s_deployment_container: hubs
       bio_script_path: scripts/hab-wrap-and-push.sh
     secrets:
       DOCKER_HUB_PWD: ${{ secrets.DOCKER_HUB_PWD }}
@@ -19,3 +19,4 @@ jobs:
       BLDR_HAB_TOKEN: ${{ secrets.BLDR_HAB_TOKEN }}
       BLDR_RET_TOKEN: ${{ secrets.BLDR_RET_TOKEN }}
       BLDR_RET_PUB_B64: ${{ secrets.BLDR_RET_PUB_B64 }}
+      BLDR_HAB_PVT_B64: ${{ secrets.BLDR_HAB_PVT_B64 }}
