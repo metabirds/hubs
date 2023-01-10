@@ -32,7 +32,8 @@ import { EnvironmentSystem } from "./environment-system";
 import { NameTagVisibilitySystem } from "./name-tag-visibility-system";
 
 // new world
-import { networkSendSystem, networkReceiveSystem } from "./netcode";
+import { networkReceiveSystem } from "../bit-systems/network-receive-system";
+import { networkSendSystem } from "../bit-systems/network-send-system";
 import { onOwnershipLost } from "./on-ownership-lost";
 import { interactionSystem } from "./bit-interaction-system";
 import { floatyObjectSystem } from "./floaty-object-system";
@@ -53,6 +54,8 @@ import { deleteEntitySystem } from "../bit-systems/delete-entity-system";
 import type { HubsSystems } from "aframe";
 import { Camera, Scene, WebGLRenderer } from "three";
 import { HubsWorld } from "../app";
+import { EffectComposer } from "postprocessing";
+import { sceneLoadingSystem } from "../bit-systems/scene-loading";
 
 declare global {
   interface Window {
@@ -158,6 +161,7 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
 
   networkReceiveSystem(world);
   onOwnershipLost(world);
+  sceneLoadingSystem(world, hubsSystems.environmentSystem);
   mediaLoadingSystem(world);
 
   physicsCompatSystem(world);
@@ -229,7 +233,15 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
 
   networkSendSystem(world);
 
-  renderer.render(scene, camera);
+  scene.updateMatrixWorld();
+
+  renderer.info.reset();
+  if (APP.fx.composer) {
+    APP.fx.composer.render();
+  } else {
+    renderer.render(scene, camera);
+  }
+
   // tock()s on components and system will fire here. (As well as any other time render() is called without unbinding onAfterRender)
   // TODO inline invoking tocks instead of using onAfterRender registered in a-scene
 }
