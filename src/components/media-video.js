@@ -1,4 +1,3 @@
-/* global performance THREE AFRAME NAF MediaStream setTimeout */
 import configs from "../utils/configs";
 import audioIcon from "../assets/images/audio.png";
 import { paths } from "../systems/userinput/paths";
@@ -21,7 +20,7 @@ import { errorTexture } from "../utils/error-texture";
 import { scaleToAspectRatio } from "../utils/scale-to-aspect-ratio";
 import { isSafari } from "../utils/detect-safari";
 import { isIOS as detectIOS } from "../utils/is-mobile";
-
+import { Layers } from "../camera-layers";
 import qsTruthy from "../utils/qs_truthy";
 
 const ONCE_TRUE = { once: true };
@@ -478,6 +477,7 @@ AFRAME.registerComponent("media-video", {
       }
 
       this.mesh = new THREE.Mesh(geometry, material);
+      this.mesh.layers.set(Layers.CAMERA_LAYER_FX_MASK);
       this.el.setObject3D("mesh", this.mesh);
     }
 
@@ -508,6 +508,7 @@ AFRAME.registerComponent("media-video", {
     const contentType = this.data.contentType;
     let pollTimeout;
 
+    /* eslint-disable-next-line no-async-promise-executor*/
     return new Promise(async (resolve, reject) => {
       if (this._audioSyncInterval) {
         clearInterval(this._audioSyncInterval);
