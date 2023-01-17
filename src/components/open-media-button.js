@@ -33,7 +33,6 @@ AFRAME.registerComponent("open-media-button", {
           .then(v => {
             if (v.status === 200) {
               console.log("200");
-              console.log(v);
               src = this.src = replacedHref;
             } else {
               console.log("head response - error:", v.status);
@@ -68,7 +67,6 @@ AFRAME.registerComponent("open-media-button", {
 
     this.onClick = async () => {
       const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator("update_hub");
-
       const exitImmersive = async () => await handleExitTo2DInterstitial(false, () => {}, true);
 
       let hubId;
