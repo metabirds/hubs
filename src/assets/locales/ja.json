@@ -607,7 +607,7 @@
   "tips.streaming": "ロビーにブロードキャストしています。クリックして終了します。",
   "tips.welcome": "<h2>{appName}へようこそ</h2><p>操作に慣れるために、</p><p2>簡単に見てみましょう</p2>",
   "tips.mobile.locomotion2": "<p>2本の指でつまむか、画面上にある</p><p2>左ジョイスティックで移動します</p2>",
-  "tips.mobile.turning": "<p>タップしてドラッグか、画面上にある</p><p2>右ジョイスティックで周りを見渡せます</p2>",
+  "tips.mobile.turning": "タップしてドラッグか、画面上にある右ジョイスティックで周りを見渡せます",
   "tips.desktop.locomotion2": "{wasd} or {arrows} <p>で移動できます。</p> ",
   "tips.desktop.turning2": "{left} or {right} <p>を使用するか、クリックしてドラッグすると周りを見回すことができます。</p> ",
   "tips.desktop.invite2": "<p>{invite}ボタンを使用して</p><p2>このルームをシェアします</p2>",
