@@ -1,5 +1,3 @@
-/* global AFRAME THREE */
-
 // See doc/spritesheet-generation.md for information about this spritesheet
 import spritesheetAction from "../assets/images/spritesheets/sprite-system-action-spritesheet.json";
 import spritesheetNotice from "../assets/images/spritesheets/sprite-system-notice-spritesheet.json";
@@ -12,7 +10,7 @@ import fragmentShader from "./sprites/sprite.frag";
 import { getThemeColorShifter } from "../utils/theme-sprites";
 import { onThemeChanged } from "../utils/theme";
 import { disposeTexture } from "../utils/material-utils";
-import { Layers } from "../components/layers";
+import { Layers } from "../camera-layers";
 
 const MAX_SPRITES = 1024;
 const SHEET_TYPES = ["action", "notice"];
@@ -54,7 +52,7 @@ AFRAME.registerComponent("sprite", {
   }
 });
 
-const normalizedFrame = (function() {
+const normalizedFrame = (function () {
   const memo = new Map();
   return function normalizedFrame(name, spritesheet) {
     let ret = memo.get(name);
@@ -80,7 +78,7 @@ const normalizedFrame = (function() {
   };
 })();
 
-const raycastOnSprite = (function() {
+const raycastOnSprite = (function () {
   const vA = new THREE.Vector3();
   const vB = new THREE.Vector3();
   const vC = new THREE.Vector3();
@@ -231,6 +229,7 @@ export class SpriteSystem {
           el.setObject3D("mesh", mesh);
           mesh.frustumCulled = false;
           mesh.layers.set(Layers.CAMERA_LAYER_UI);
+          mesh.layers.enable(Layers.CAMERA_LAYER_FX_MASK);
           mesh.renderOrder = window.APP.RENDER_ORDER.HUD_ICONS;
           mesh.raycast = this.raycast.bind(this);
         });
@@ -254,7 +253,7 @@ export class SpriteSystem {
           });
         }
       }
-    }
+    };
 
     onThemeChanged(updateSprites);
   }
