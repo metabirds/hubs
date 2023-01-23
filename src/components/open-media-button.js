@@ -67,7 +67,6 @@ AFRAME.registerComponent("open-media-button", {
 
     this.onClick = async () => {
       const mayChangeScene = this.el.sceneEl.systems.permissions.canOrWillIfCreator("update_hub");
-
       const exitImmersive = async () => await handleExitTo2DInterstitial(false, () => {}, true);
 
       let hubId;
@@ -78,9 +77,21 @@ AFRAME.registerComponent("open-media-button", {
         if (href.match("__ROOM_ID__")) {
           const roomId = window.location.pathname.split("/")[1];
           const replacedHref = href.replace("__ROOM_ID__", roomId);
-          window.open(replacedHref);
+          const srcUrl = new URL(replacedHref);
+          const qs = new URLSearchParams(srcUrl.search);
+          if (qs.has("popupView")) {
+            this.postMessage(replacedHref);
+          } else {
+            window.open(replacedHref);
+          }
         } else {
-          window.open(this.src);
+          const srcUrl = new URL(this.src);
+          const qs = new URLSearchParams(srcUrl.search);
+          if (qs.has("popupView")) {
+            this.postMessage(this.src);
+          } else {
+            window.open(this.src);
+          }
         }
       } else if (await isLocalHubsAvatarUrl(this.src)) {
         const avatarId = new URL(this.src).pathname.split("/").pop();
@@ -94,11 +105,18 @@ AFRAME.registerComponent("open-media-button", {
           // move to waypoint w/o writing to history
           window.history.replaceState(null, null, window.location.href.split("#")[0] + url.hash);
         } else if (APP.store.state.preferences.fastRoomSwitching && isLocalHubsUrl(this.src)) {
+          const waypoint = url.hash && url.hash.substring(1);
           // move to new room without page load or entry flow
-          changeHub(hubId);
+          changeHub(hubId, true, waypoint);
         } else {
           await exitImmersive();
-          location.href = this.src;
+          const srcUrl = new URL(this.src);
+          const qs = new URLSearchParams(srcUrl.search);
+          if (qs.has("popupView")) {
+            this.postMessage(this.src);
+          } else {
+            location.href = this.src;
+          }
         }
       } else {
         // cyzyspace
@@ -106,7 +124,37 @@ AFRAME.registerComponent("open-media-button", {
           window.location = this.src;
         } else {
           await exitImmersive();
-          window.open(this.src);
+          const urlStr = this.src;
+          if (urlStr.match("linkhref-")) {
+            const jsonUrl = new URL(this.src);
+            const searchParams = jsonUrl.searchParams;
+            searchParams.append("noredirect", "1");
+            jsonUrl.search = searchParams.toString();
+            fetch(jsonUrl.toString(), { method: "GET" })
+              .then(v => {
+                return v.json();
+              })
+              .then(v => {
+                const srcUrl = new URL(v.url);
+                const qs = new URLSearchParams(srcUrl.search);
+                if (qs.has("popupView")) {
+                  this.postMessage(this.src);
+                } else {
+                  window.open(this.src);
+                }
+              })
+              .catch(() => {
+                console.log("head request - failed:", jsonUrl);
+              });
+          } else {
+            const srcUrl = new URL(this.src);
+            const qs = new URLSearchParams(srcUrl.search);
+            if (qs.has("popupView")) {
+              this.postMessage(this.src);
+            } else {
+              window.open(this.src);
+            }
+          }
         }
       }
     };
@@ -124,5 +172,12 @@ AFRAME.registerComponent("open-media-button", {
 
   pause() {
     this.el.object3D.removeEventListener("interact", this.onClick);
+  },
+  postMessage(url) {
+    // cyzy space
+    window.postMessage({
+      eventType: "popupView",
+      params: { url: url }
+    });
   }
 });
