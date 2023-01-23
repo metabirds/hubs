@@ -146,6 +146,10 @@ export function cloneObject3D(source, preserveUUIDs) {
 
   parallelTraverse(source, clone, (sourceNode, clonedNode) => {
     cloneLookup.set(sourceNode, clonedNode);
+
+    if (sourceNode.userData.gltfExtensions?.MOZ_hubs_components) {
+      clonedNode.userData.gltfExtensions.MOZ_hubs_components = sourceNode.userData.gltfExtensions.MOZ_hubs_components;
+    }
   });
 
   source.traverse(sourceNode => {
@@ -164,6 +168,8 @@ export function cloneObject3D(source, preserveUUIDs) {
     if (!clonedNode) {
       return;
     }
+
+    clonedNode.onBeforeRender = sourceNode.onBeforeRender;
 
     if (sourceNode.animations) {
       clonedNode.animations = sourceNode.animations.map(animationClip =>
@@ -358,7 +364,7 @@ export function createPlaneBufferGeometry(width, height, widthSegments, heightSe
   return geometry;
 }
 
-import { Layers } from "../components/layers";
+import { Layers } from "../camera-layers";
 
 // This code is from three-vrm. We will likely be using that in the future and this inlined code can go away
 function excludeTriangles(triangles, bws, skinIndex, exclude) {

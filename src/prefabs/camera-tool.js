@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 /** @jsx createElementEntity */
 import cameraModelSrc from "../assets/camera_tool.glb";
 import buttonSrc from "../assets/hud/button.9.png";
 import { cloneModelFromCache, loadModel } from "../components/gltf-model-plus";
-import { Layers } from "../components/layers";
+import { Layers } from "../camera-layers";
 import { COLLISION_LAYERS } from "../constants";
 import { BUTTON_TYPES } from "../systems/single-action-button-system";
 import { createElementEntity, createRef } from "../utils/jsx-entity";
