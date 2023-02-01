@@ -891,9 +891,7 @@ export class DialogAdapter extends EventEmitter {
   }
 
   toggleMicrophone() {
-    if (window.disableAudio) {
-      this.enableMicrophone(false);
-    } else if (this.isMicEnabled) {
+    if (this.isMicEnabled) {
       this.enableMicrophone(false);
     } else {
       this.enableMicrophone(true);
@@ -906,10 +904,7 @@ export class DialogAdapter extends EventEmitter {
       return;
     }
 
-    if (window.disableAudio) {
-      this._micProducer.pause();
-      this._protoo.request("pauseProducer", { producerId: this._micProducer.id });
-    } else if (enabled && !this.isMicEnabled) {
+    if (enabled && !this.isMicEnabled) {
       this._micProducer.resume();
       this._protoo.request("resumeProducer", { producerId: this._micProducer.id });
     } else if (!enabled && this.isMicEnabled) {
@@ -921,7 +916,7 @@ export class DialogAdapter extends EventEmitter {
   }
 
   get isMicEnabled() {
-    return !window.disableAudio && this._micProducer && !this._micProducer.paused;
+    return this._micProducer && !this._micProducer.paused;
   }
 
   cleanUpLocalState() {
