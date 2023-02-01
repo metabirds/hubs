@@ -1380,8 +1380,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   hubPhxChannel.on("permissions_updated", () => hubChannel.fetchPermissions());
 
   hubPhxChannel.on("mute", ({ session_id }) => {
-    if (!window.disableAudio && session_id === NAF.clientId) {
-      //cyzyspace
+    if (session_id === NAF.clientId) {
       APP.mediaDevicesManager.micEnabled = false;
     }
   });

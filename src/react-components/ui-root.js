@@ -581,7 +581,7 @@ class UIRoot extends Component {
 
     if (hasGrantedMic) {
       if (!this.mediaDevicesManager.isMicShared) {
-        await this.mediaDevicesManager.startMicShare({ unmute: false });
+        await this.mediaDevicesManager.startMicShare({});
       }
       this.beginOrSkipAudioSetup();
     } else {
@@ -648,7 +648,7 @@ class UIRoot extends Component {
       window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
     }
 
-    const muteOnEntry = !!window.disableAudio || this.props.store.state.preferences.muteMicOnEntry;
+    const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
 
     this.setState({ entered: true, entering: false, showShareDialog: false });
@@ -800,7 +800,6 @@ class UIRoot extends Component {
   }
 
   onFocusChat = e => {
-    if (window.disableChat) return;
     this.setSidebar("chat", {
       chatPrefix: e.detail.prefix,
       chatAutofocus: true
