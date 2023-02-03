@@ -22,9 +22,17 @@
     }
   }
 
+  &:first-child:last-child {
+    margin: 0 auto;
+  }
+
   &:disabled,
   &[disabled] {
     cursor: default;
+  }
+
+  @media (max-width: theme.$breakpoint-sm) {
+    margin-right: 8px;
   }
 }
 

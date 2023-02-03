@@ -18,6 +18,9 @@
 
 :local(.buttons-container) {
   display: flex;
+  button:first-child {
+    margin-right: 0 !important;
+  }
 }
 
 :local(.icon-enabled) {

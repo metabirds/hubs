@@ -1,31 +1,40 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { ImageGridPopover } from "../popover/ImageGridPopover";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
-import { ReactComponent as ReactionIcon } from "../icons/Reaction.svg";
+import { ReactComponent as HandRaisedIcon } from "../icons/HandRaised.svg";
 import { defineMessage, FormattedMessage, useIntl } from "react-intl";
 import { Column } from "../layout/Column";
 import { Row } from "../layout/Row";
+import { HandRaisedButton } from "./ReactionButton";
 import styles from "./ReactionPopover.scss";
 import { Button } from "../input/Button";
 
-const reactionPopoverTitle = defineMessage({
-  id: "reaction-popover.title",
-  defaultMessage: "React"
+const RaiseHandPopoverTitle = defineMessage({
+  id: "raise-hand-popover.title",
+  defaultMessage: "HELP!"
 });
 
-function ReactionPopoverContent({ items, ...rest }) {
+function RaiseHandPopoverContent({ items, presence, onToggleHandRaised, ...rest }) {
   return (
     <Column padding="sm" grow gap="sm">
       <Row noWrap>
         <ImageGridPopover items={items} {...rest} />
       </Row>
+      <Row>
+        <label className={styles.label}>
+          <FormattedMessage id="reaction-popover.action" defaultMessage="Actions" />
+        </label>
+      </Row>
+      <Row nowrap>
+        <HandRaisedButton active={presence.hand_raised} onClick={onToggleHandRaised} />
+      </Row>
     </Column>
   );
 }
 
-ReactionPopoverContent.propTypes = {
+RaiseHandPopoverContent.propTypes = {
   items: PropTypes.array.isRequired,
   presence: PropTypes.object,
   onToggleHandRaised: PropTypes.func
@@ -50,48 +59,53 @@ TooltipPopoverContent.propTypes = {
   onToggleHandRaised: PropTypes.func
 };
 
-export function ReactionPopoverButton({ items }) {
-  const [isReactionsVisible, setIsReactionsVisible] = useState(false);
+export function RaiseHandPopoverButton({ presence, onToggleHandRaised }) {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const intl = useIntl();
-  const title = intl.formatMessage(reactionPopoverTitle);
+  const title = intl.formatMessage(RaiseHandPopoverTitle);
   const popoverApiRef = useRef();
+
+  const onTooltipHandLowered = useCallback(() => {
+    setIsTooltipVisible(false);
+    onToggleHandRaised();
+  }, [onToggleHandRaised]);
 
   return (
     <Popover
       title={title}
-      content={props => {
-        return <ReactionPopoverContent items={items} {...props} />;
+      content={() => {
+        return <TooltipPopoverContent onToggleHandRaised={onTooltipHandLowered} />;
       }}
       placement="top"
       offsetDistance={28}
       popoverApiRef={popoverApiRef}
-      showHeader={true}
-      isVisible={isReactionsVisible || isTooltipVisible}
-      onChangeVisible={visible => {
-        if (!visible) {
-          setIsReactionsVisible(false);
-          setIsTooltipVisible(false);
-        }
+      showHeader={false}
+      isVisible={presence.hand_raised}
+      onChangeVisible={() => {
+        setIsTooltipVisible(true);
       }}
-      disableFullscreen={isTooltipVisible}
+      disableFullscreen={true}
     >
-      {({ popoverVisible, triggerRef }) => (
+      {({ triggerRef }) => (
         <ToolbarButton
           ref={triggerRef}
-          icon={<ReactionIcon />}
-          selected={popoverVisible}
+          icon={<HandRaisedIcon width="32px" height="32px" style={{ marginLeft: "5px" }} />}
           onClick={() => {
-            setIsReactionsVisible(!isReactionsVisible);
+            onToggleHandRaised();
+            console.log("hand_raise:", presence.hand_raised);
+            if (presence.hand_raised) {
+              setIsTooltipVisible(true);
+            }
           }}
           label={title}
-          preset="accent2"
+          preset="basic"
         />
       )}
     </Popover>
   );
 }
 
-ReactionPopoverButton.propTypes = {
-  items: PropTypes.array.isRequired
+RaiseHandPopoverButton.propTypes = {
+  presence: PropTypes.object,
+  onToggleHandRaised: PropTypes.func
 };

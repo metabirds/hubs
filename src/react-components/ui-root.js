@@ -79,6 +79,7 @@ import { PlacePopoverContainer } from "./room/PlacePopoverContainer";
 import { SharePopoverContainer } from "./room/SharePopoverContainer";
 import { AudioPopoverContainer } from "./room/AudioPopoverContainer";
 import { ReactionPopoverContainer } from "./room/ReactionPopoverContainer";
+import { RaiseHandPopoverContainer } from "./room/RaiseHandPopoverContainer";
 import { SafariMicModal } from "./room/SafariMicModal";
 import { RoomSignInModalContainer } from "./auth/RoomSignInModalContainer";
 import { SignInStep } from "./auth/SignInModal";
@@ -1642,6 +1643,10 @@ class UIRoot extends Component {
                             initialPresence={getPresenceProfileForSession(this.props.presences, this.props.sessionId)}
                           />
                         )}
+                        <RaiseHandPopoverContainer
+                          scene={this.props.scene}
+                          initialPresence={getPresenceProfileForSession(this.props.presences, this.props.sessionId)}
+                        />
                       </>
                     )}
                     <ChatToolbarButtonContainer
