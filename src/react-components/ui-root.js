@@ -1434,7 +1434,7 @@ class UIRoot extends Component {
                     {this.state.sidebarId !== "chat" && this.props.hub && (
                       <PresenceLog
                         preset={"InRoom"}
-                        exclude={isSmallScreen ? [] : ["permission"]}
+                        exclude={isMobile ? [] : ["permission"]}
                         presences={this.props.presences}
                         entries={presenceLogEntries}
                         hubId={this.props.hub.hub_id}
@@ -1443,18 +1443,19 @@ class UIRoot extends Component {
                       />
                     )}
                     <NotificationsContainer>
-                      <TipContainer
-                        hide={!!this.state.hide || !!this.state.hideUITip || !!this.props.activeObject}
-                        inLobby={watching}
-                        inRoom={entered}
-                        isEmbedded={this.props.embed}
-                        isStreaming={streaming}
-                        hubId={this.props.hub.hub_id}
-                        presences={this.props.presences}
-                        scene={this.props.scene}
-                        store={this.props.store}
-                      />
-                      {!isSmallScreen && !this.state.hide && (
+                      {(this.state.hide || this.state.hideUITip || !this.props.activeObject) && (
+                        <TipContainer
+                          inLobby={watching}
+                          inRoom={entered}
+                          isEmbedded={this.props.embed}
+                          isStreaming={streaming}
+                          hubId={this.props.hub.hub_id}
+                          presences={this.props.presences}
+                          scene={this.props.scene}
+                          store={this.props.store}
+                        />
+                      )}
+                      {!isMobile && !this.state.hide && (
                         <PresenceLog
                           preset={"Notifications"}
                           include={["permission"]}
