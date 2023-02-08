@@ -5,7 +5,7 @@
     "name": "Hubs Default",
     "variables": {}
   },
-  {   
+  {
     "name": "Hubs Dark Mode",
     "id": "hubs-dark-mode",
     "darkModeDefault": true,

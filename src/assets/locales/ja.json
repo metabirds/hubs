@@ -60,7 +60,7 @@
   "avatar-preview.loading-failed": "読み込みに失敗しました{linebreak}別のアバターを選択してください",
   "avatar-settings-content.change-avatar-button": "アバター変更",
   "avatar-settings-content.display-name-description": "2文字以上,32文字以下",
-  "avatar-settings-content.display-name-label": "表示名",
+  "avatar-settings-content.display-name-label": "表示名: ご所属施設名＋⽒名で⼊⼒してください{linebreak}例)日本病院　山田太郎",
   "avatar-settings-sidebar.title": "アバター設定",
   "avatar-setup-sidebar.title": "アバターセットアップ",
   "avatar-url-modal.avatar-url-label": "アバターGLBファイルのURL",

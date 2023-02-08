@@ -44,6 +44,9 @@ function TooltipPopoverContent({ onToggleHandRaised }) {
   return (
     <Row nowrap className={styles.popover}>
       <Column padding="xs" grow gap="xs">
+        <HandRaisedIcon width="32px" height="32px" style={{ marginLeft: "5px" }} />
+      </Column>
+      <Column padding="xs" grow gap="xs">
         <FormattedMessage id="reaction-popover.hand-raised-warning" defaultMessage="Your hand is raised" />
       </Column>
       <Column padding="xs" grow gap="xs">
@@ -86,10 +89,11 @@ export function RaiseHandPopoverButton({ presence, onToggleHandRaised }) {
       }}
       disableFullscreen={true}
     >
-      {({ triggerRef }) => (
+      {({ popoverVisible, triggerRef }) => (
         <ToolbarButton
           ref={triggerRef}
           icon={<HandRaisedIcon width="32px" height="32px" style={{ marginLeft: "5px" }} />}
+          selected={popoverVisible}
           onClick={() => {
             onToggleHandRaised();
             console.log("hand_raise:", presence.hand_raised);
@@ -98,7 +102,8 @@ export function RaiseHandPopoverButton({ presence, onToggleHandRaised }) {
             }
           }}
           label={title}
-          preset="basic"
+          preset="accent1"
+          className="raiseHandButton"
         />
       )}
     </Popover>

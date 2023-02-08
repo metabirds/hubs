@@ -9,6 +9,7 @@ import { ReactComponent as ShowIcon } from "../icons/Show.svg";
 import { ReactComponent as SettingsIcon } from "../icons/Settings.svg";
 import styles from "./RoomEntryModal.scss";
 import styleUtils from "../styles/style-utils.scss";
+
 import { useCssBreakpoints } from "react-use-css-breakpoints";
 import { Column } from "../layout/Column";
 import { AppLogo } from "../misc/AppLogo";
@@ -52,31 +53,29 @@ export function RoomEntryModal({
             </Button>
           )}
           {showEnterOnDevice && (
-            <Button preset="accent5" onClick={onEnterOnDevice}>
+            <Button preset="transparent" onClick={onEnterOnDevice} className={styles.smallButton}>
               <VRIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.enter-on-device-button" defaultMessage="Enter On Device" />
               </span>
             </Button>
           )}
+          <hr className={styleUtils.showLg} />
+          {showOptions && breakpoint !== "sm" && (
+            <Button preset="transparent" onClick={onOptions} className={styles.smallButton}>
+              <SettingsIcon />
+              <span>
+                <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
+              </span>
+            </Button>
+          )}
           {showSpectate && (
-            <Button preset="accent2" onClick={onSpectate}>
+            <Button preset="transparent" onClick={onSpectate} className={styles.smallButton}>
               <ShowIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.spectate-button" defaultMessage="Spectate" />
               </span>
             </Button>
-          )}
-          {showOptions && breakpoint !== "sm" && (
-            <>
-              <hr className={styleUtils.showLg} />
-              <Button preset="transparent" className={styleUtils.showLg} onClick={onOptions}>
-                <SettingsIcon />
-                <span>
-                  <FormattedMessage id="room-entry-modal.options-button" defaultMessage="Options" />
-                </span>
-              </Button>
-            </>
           )}
         </Column>
       </Column>

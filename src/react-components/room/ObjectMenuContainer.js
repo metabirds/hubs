@@ -13,7 +13,6 @@ import {
 } from "./object-hooks";
 import { ReactComponent as PinIcon } from "../icons/Pin.svg";
 import { ReactComponent as LinkIcon } from "../icons/Link.svg";
-import { ReactComponent as GoToIcon } from "../icons/GoTo.svg";
 import { ReactComponent as DeleteIcon } from "../icons/Delete.svg";
 import { ReactComponent as AvatarIcon } from "../icons/Avatar.svg";
 import { ReactComponent as HideIcon } from "../icons/Hide.svg";
@@ -35,21 +34,9 @@ MyMenuItems.propTypes = {
 };
 
 function PlayerMenuItems({ hubChannel, activeObject, deselectObject }) {
-  const hideAvatar = useHideAvatar(hubChannel, activeObject.el);
+  // const hideAvatar = useHideAvatar(hubChannel, activeObject.el);
 
-  return (
-    <ObjectMenuButton
-      onClick={() => {
-        deselectObject();
-        hideAvatar();
-      }}
-    >
-      <HideIcon />
-      <span>
-        <FormattedMessage id="object-menu.hide-avatar-button" defaultMessage="Hide" />
-      </span>
-    </ObjectMenuButton>
-  );
+  return <></>;
 }
 
 PlayerMenuItems.propTypes = {
@@ -61,7 +48,6 @@ PlayerMenuItems.propTypes = {
 function ObjectMenuItems({ hubChannel, scene, activeObject, deselectObject, onGoToObject }) {
   const { canPin, isPinned, togglePinned } = usePinObject(hubChannel, scene, activeObject);
   const { canRemoveObject, removeObject } = useRemoveObject(hubChannel, scene, activeObject);
-  const { canGoTo, goToSelectedObject } = useGoToSelectedObject(scene, activeObject);
   // cyzyspace
   const [url, setUrl] = useState(getObjectUrl(activeObject));
   const mediaLoader = activeObject.el.components["media-loader"];
@@ -110,19 +96,6 @@ function ObjectMenuItems({ hubChannel, scene, activeObject, deselectObject, onGo
           </span>
         </ObjectMenuButton>
       )}
-      <ObjectMenuButton
-        disabled={!canGoTo}
-        onClick={() => {
-          goToSelectedObject();
-          deselectObject();
-          onGoToObject();
-        }}
-      >
-        <GoToIcon />
-        <span>
-          <FormattedMessage id="object-menu.view-object-button" defaultMessage="View" />
-        </span>
-      </ObjectMenuButton>
       <ObjectMenuButton
         disabled={!canRemoveObject}
         onClick={() => {

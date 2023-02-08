@@ -20,7 +20,14 @@ export function AvatarSettingsContent({
     <Column as="form" className={styles.content} {...rest}>
       <TextInputField
         disabled={disableDisplayNameInput}
-        label={<FormattedMessage id="avatar-settings-content.display-name-label" defaultMessage="Display Name" />}
+        className={styles.displayName}
+        label={
+          <FormattedMessage
+            id="avatar-settings-content.display-name-label"
+            defaultMessage="Display Name"
+            values={{ linebreak: <br /> }}
+          />
+        }
         value={displayName}
         pattern={displayNamePattern}
         spellCheck="false"

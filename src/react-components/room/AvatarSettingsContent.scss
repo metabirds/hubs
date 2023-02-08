@@ -32,3 +32,10 @@
     margin-bottom: 8px;
   }
 }
+
+:local(.display-name) {
+  label {
+    text-align: left;
+    color: theme.$text2-color;
+  }
+}

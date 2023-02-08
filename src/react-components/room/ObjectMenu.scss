@@ -50,6 +50,7 @@
   height: 48px;
   align-items: center;
   justify-content: center;
+  min-width: 180px;
 
   @media(min-width: theme.$breakpoint-lg) and (min-height: theme.$breakpoint-vr) {
     display: flex;

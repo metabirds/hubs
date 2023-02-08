@@ -411,6 +411,46 @@
       }
     }
   }
+
+  &.raiseHandButton {
+    :local(.icon-container) {
+      // background-color: theme.$accent1-color;
+      // border-color: theme.$accent1-border-color;
+      background-color: theme.$toolbar-icon-selected-bg;
+      border-color: theme.$toolbar-basic-border-color;
+    }  
+  
+    &:hover :local(.icon-container) {
+      border-color: theme.$accent1-border-color;
+    }
+  
+    &:active :local(.icon-container) {
+      background-color: theme.$accent1-color-pressed;
+    }
+  
+    &:local(.selected) {
+      :local(.icon-container) {
+        background-color: theme.$accent1-color;
+        border-color: theme.$accent1-border-color;
+      }
+  
+      label {
+        color: theme.$toolbar-label-accent1;
+      }
+  
+      &:hover {
+        :local(.icon-container) {
+          border-color: theme.$accent1-color-hover;
+        }
+      }
+    
+      &:active {
+        :local(.icon-container) {
+          border-color: theme.$accent1-border-color;
+        }
+      }
+    }
+  }
 }
 
 :local(.accent2) {

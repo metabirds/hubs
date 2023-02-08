@@ -50,3 +50,9 @@
     }
   }
 }
+
+:local(.smallButton) {
+  min-height: auto;
+  height: 36px;
+  margin: 0;
+}
