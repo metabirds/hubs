@@ -281,15 +281,19 @@ const logMessages = defineMessages({
 export function formatSystemMessage(entry, intl) {
   switch (entry.type) {
     case "join":
-      return intl.formatMessage(joinedMessages[entry.presence], { name: <b>{entry.name}</b> });
+      return intl.formatMessage(joinedMessages[entry.presence], {
+        name: <b>{entry.name !== "" ? entry.name : "ゲスト"}</b>
+      });
     case "entered":
-      return intl.formatMessage(enteredMessages[entry.presence], { name: <b>{entry.name}</b> });
+      return intl.formatMessage(enteredMessages[entry.presence], {
+        name: <b>{entry.name !== "" ? entry.name : "ゲスト"}</b>
+      });
     case "leave":
       return (
         <FormattedMessage
           id="chat-sidebar.system-message.leave"
           defaultMessage="{name} left."
-          values={{ name: <b>{entry.name}</b> }}
+          values={{ name: <b>{entry.name !== "" ? entry.name : "ゲスト"}</b> }}
         />
       );
     case "display_name_changed":
@@ -297,7 +301,10 @@ export function formatSystemMessage(entry, intl) {
         <FormattedMessage
           id="chat-sidebar.system-message.name-change"
           defaultMessage="{oldName} is now known as {newName}"
-          values={{ oldName: <b>{entry.oldName}</b>, newName: <b>{entry.newName}</b> }}
+          values={{
+            oldName: <b>{entry.oldName !== "" ? entry.oldName : "ゲスト"}</b>,
+            newName: <b>{entry.newName}</b>
+          }}
         />
       );
     case "scene_changed":
@@ -305,7 +312,7 @@ export function formatSystemMessage(entry, intl) {
         <FormattedMessage
           id="chat-sidebar.system-message.scene-change"
           defaultMessage="{name} changed the scene to {sceneName}"
-          values={{ name: <b>{entry.name}</b>, sceneName: <b>{entry.sceneName}</b> }}
+          values={{ name: <b>{entry.name !== "" ? entry.name : "ゲスト"}</b>, sceneName: <b>{entry.sceneName}</b> }}
         />
       );
     case "hub_name_changed":
@@ -313,7 +320,7 @@ export function formatSystemMessage(entry, intl) {
         <FormattedMessage
           id="chat-sidebar.system-message.hub-name-change"
           defaultMessage="{name} changed the name of the room to {hubName}"
-          values={{ name: <b>{entry.name}</b>, hubName: <b>{entry.hubName}</b> }}
+          values={{ name: <b>{entry.name !== "" ? entry.name : "ゲスト"}</b>, hubName: <b>{entry.hubName}</b> }}
         />
       );
     case "hub_changed":

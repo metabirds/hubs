@@ -92,7 +92,7 @@ export function RaiseHandPopoverButton({ presence, onToggleHandRaised }) {
       {({ popoverVisible, triggerRef }) => (
         <ToolbarButton
           ref={triggerRef}
-          icon={<HandRaisedIcon width="32px" height="32px" style={{ marginLeft: "5px" }} />}
+          icon={<HandRaisedIcon width="32px" height="32px" style={{ marginLeft: "3px" }} />}
           selected={popoverVisible}
           onClick={() => {
             onToggleHandRaised();
