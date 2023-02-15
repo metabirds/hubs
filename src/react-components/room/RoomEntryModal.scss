@@ -49,6 +49,15 @@
       margin-right: 8px;
     }
   }
+  .joinRoomButton {
+    width: 240px;
+    padding: 32px 24px;
+    font-size: 18px;
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
 }
 
 :local(.smallButton) {

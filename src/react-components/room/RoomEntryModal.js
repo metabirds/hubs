@@ -32,11 +32,11 @@ export function RoomEntryModal({
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
       <Column center className={styles.content}>
-        {breakpoint !== "sm" && breakpoint !== "md" && (
-          <div className={styles.logoContainer}>
-            <AppLogo />
-          </div>
-        )}
+        {/* {breakpoint !== "sm" && breakpoint !== "md" && ( */}
+        <div className={styles.logoContainer}>
+          <AppLogo />
+        </div>
+        {/* )} */}
         <div className={styles.roomName}>
           <h5>
             <FormattedMessage id="room-entry-modal.room-name-label" defaultMessage="Room Name" />
@@ -45,7 +45,7 @@ export function RoomEntryModal({
         </div>
         <Column center className={styles.buttons}>
           {showJoinRoom && (
-            <Button preset="accent4" onClick={onJoinRoom}>
+            <Button preset="accent4" onClick={onJoinRoom} className="joinRoomButton">
               <EnterIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.join-room-button" defaultMessage="Join Room" />

@@ -35,7 +35,12 @@
 
 :local(.display-name) {
   label {
+    color: theme.$text2-color;
     text-align: left;
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+  small {
     color: theme.$text2-color;
   }
 }
