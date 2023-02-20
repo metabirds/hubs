@@ -1598,6 +1598,12 @@ class UIRoot extends Component {
                           label={<FormattedMessage id="toolbar.join-room-button" defaultMessage="Join Room" />}
                           preset="accept"
                           onClick={() => this.setState({ watching: false })}
+                          toolbarDescription={
+                            <FormattedMessage
+                              id="toolbar-description.join-room-button"
+                              defaultMessage="ルームに入室します"
+                            />
+                          }
                         />
                         {enableSpectateVRButton && (
                           <ToolbarButton
@@ -1607,6 +1613,12 @@ class UIRoot extends Component {
                               <FormattedMessage id="toolbar.spectate-in-vr-button" defaultMessage="Spectate in VR" />
                             }
                             onClick={() => this.props.scene.enterVR()}
+                            toolbarDescription={
+                              <FormattedMessage
+                                id="toolbar-description.vr-button"
+                                defaultMessage="VRデバイスで入室します"
+                              />
+                            }
                           />
                         )}
                       </>
@@ -1635,6 +1647,12 @@ class UIRoot extends Component {
                             label={<FormattedMessage id="place-popover.item-type.pen" defaultMessage="Pen" />}
                             onClick={this.spawnPen}
                             selected={this.state.hasPen}
+                            toolbarDescription={
+                              <FormattedMessage
+                                id="toolbar-description.pen-button"
+                                defaultMessage="ペンで空間に線を描きます"
+                              />
+                            }
                           />
                         )}
                         {this.props.hubChannel.can("spawn_emoji") && (
@@ -1664,6 +1682,12 @@ class UIRoot extends Component {
                           />
                         }
                         onClick={() => this.toggleSidebar("profile")}
+                        toolbarDescription={
+                          <FormattedMessage
+                            id="toolbar-description.profile-button"
+                            defaultMessage="アバターや名前を変更します"
+                          />
+                        }
                       />
                     )}
                     {entered && isMobileVR && (
@@ -1673,6 +1697,12 @@ class UIRoot extends Component {
                         preset="accept"
                         label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
                         onClick={() => exit2DInterstitialAndEnterVR(true)}
+                        toolbarDescription={
+                          <FormattedMessage
+                            id="toolbar-description.vr-button"
+                            defaultMessage="VRデバイスで入室します"
+                          />
+                        }
                       />
                     )}
                   </>
@@ -1685,6 +1715,12 @@ class UIRoot extends Component {
                         preset="accept"
                         label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
                         onClick={() => exit2DInterstitialAndEnterVR(true)}
+                        toolbarDescription={
+                          <FormattedMessage
+                            id="toolbar-description.vr-button"
+                            defaultMessage="VRデバイスで入室します"
+                          />
+                        }
                       />
                     )}
                     {entered && (
@@ -1698,6 +1734,12 @@ class UIRoot extends Component {
                             reason: LeaveReason.leaveRoom
                           });
                         }}
+                        toolbarDescription={
+                          <FormattedMessage
+                            id="toolbar-description.leave-room-button"
+                            defaultMessage="このルームから退室します"
+                          />
+                        }
                       />
                     )}
                     <MoreMenuPopoverButton menu={moreMenu} />

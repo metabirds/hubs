@@ -4,7 +4,7 @@ import { ButtonGridPopover } from "../popover/ButtonGridPopover";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
-import { defineMessage, useIntl } from "react-intl";
+import { defineMessage, useIntl, FormattedMessage } from "react-intl";
 
 const placePopoverTitle = defineMessage({
   id: "place-popover.title",
@@ -37,6 +37,12 @@ export function PlacePopoverButton({ items }) {
           onClick={togglePopover}
           label={title}
           preset="accent3"
+          toolbarDescription={
+            <FormattedMessage
+              id="toolbar-description.object-button"
+              defaultMessage="画像や動画などのオブジェクトを配置します"
+            />
+          }
         />
       )}
     </Popover>

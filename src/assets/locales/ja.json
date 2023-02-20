@@ -665,5 +665,20 @@
   "webvr-unsupported-modal.title": "VRで入室",
   "webvr-unsupported-modal.webvr-rocks-link": "実験的なVRをサポートしているブラウザの一覧は <a>WebVR Rocks</a> を確認してください。",
   "whats-new-page.title": "新着情報",
-  "third-person-button-container.label": "視点変更"
+  "third-person-button-container.label": "視点変更",
+  "toolbar-description.join-room-button": "ルームに入室します",
+  "toolbar-description.vr-button": "VRデバイスで入室します",
+  "toolbar-description.pen-button": "ペンで空間に線を描きます",
+  "toolbar-description.profile-button": "アバターや名前を変更します",
+  "toolbar-description.leave-room-button": "このルームから退室します",
+  "toolbar-description.mic-select-button": "マイク・スピーカーの設定を行います",
+  "toolbar-description.mute-button": "マイクの有効/ミュート状態を切り替えます",
+  "toolbar-description.chat-button": "テキストチャットウィンドウを開きます",
+  "toolbar-description.invite-button": "他の人をこのルームに招待します",
+  "toolbar-description.menu-button": " メニューを開きます",
+  "toolbar-description.object-button": "画像や動画などのオブジェクトを配置します",
+  "toolbar-description.share-button": "カメラ映像の投影や画面共有(PC限定)を行います",
+  "toolbar-description.raise-hand-button": "挙手をして助けを求めます",
+  "toolbar-description.toggle-TPS-button": "一人称/三人称視点を切り替えます",
+  "toolbar-description.reaction-button": "リアクション絵文字を空間中に表示します"
 }

@@ -86,6 +86,12 @@ export function ReactionPopoverButton({ items }) {
           }}
           label={title}
           preset="accent2"
+          toolbarDescription={
+            <FormattedMessage
+              id="toolbar-description.reaction-button"
+              defaultMessage="リアクション絵文字を空間中に表示します"
+            />
+          }
         />
       )}
     </Popover>

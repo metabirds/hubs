@@ -89,6 +89,9 @@ export function InvitePopoverButton({
           selected={popoverVisible}
           onClick={togglePopover}
           label={title}
+          toolbarDescription={
+            <FormattedMessage id="toolbar-description.invite-button" defaultMessage="他の人をこのルームに招待します" />
+          }
           {...rest}
         />
       )}

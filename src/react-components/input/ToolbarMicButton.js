@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import PropTypes from "prop-types";
-import { defineMessages, useIntl } from "react-intl";
+import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { useVolumeMeter } from "../misc/useVolumeMeter";
 
@@ -49,6 +49,12 @@ export function ToolbarMicButton({ scene, disabled, ...rest }) {
       type={"right"}
       title={disabled ? intl.formatMessage(micButtonMessages["title"]) : undefined}
       disabled={disabled}
+      toolbarDescription={
+        <FormattedMessage
+          id="toolbar-description.mute-button"
+          defaultMessage="マイクの有効/ミュート状態を切り替えます"
+        />
+      }
       {...rest}
     />
   );

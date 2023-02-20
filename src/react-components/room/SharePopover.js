@@ -4,7 +4,7 @@ import { ButtonGridPopover } from "../popover/ButtonGridPopover";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ShareIcon } from "../icons/Share.svg";
-import { defineMessage, useIntl } from "react-intl";
+import { defineMessage, useIntl, FormattedMessage } from "react-intl";
 
 const sharePopoverTitle = defineMessage({
   id: "share-popover.title",
@@ -59,6 +59,12 @@ export function SharePopoverButton({ items }) {
           onClick={togglePopover}
           label={title}
           preset="accent5"
+          toolbarDescription={
+            <FormattedMessage
+              id="toolbar-description.share-button"
+              defaultMessage="カメラ映像の投影や画面共有(PC限定)を行います"
+            />
+          }
         />
       )}
     </Popover>

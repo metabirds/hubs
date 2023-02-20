@@ -15,6 +15,9 @@ export function ToggleTpsContainer({ toggleTPS }) {
       preset="basic"
       onClick={toggleTPS}
       className="toggleTPSButton"
+      toolbarDescription={
+        <FormattedMessage id="toolbar-description.toggle-TPS-button" defaultMessage="一人称/三人称視点を切り替えます" />
+      }
     />
   );
 }

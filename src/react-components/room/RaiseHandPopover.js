@@ -104,6 +104,9 @@ export function RaiseHandPopoverButton({ presence, onToggleHandRaised }) {
           label={title}
           preset="accent1"
           className="raiseHandButton"
+          toolbarDescription={
+            <FormattedMessage id="toolbar-description.raise-hand-button" defaultMessage="挙手をして助けを求めます" />
+          }
         />
       )}
     </Popover>

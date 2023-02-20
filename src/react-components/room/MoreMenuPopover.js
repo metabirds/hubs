@@ -5,7 +5,7 @@ import styles from "./MoreMenuPopover.scss";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as MoreIcon } from "../icons/More.svg";
-import { useIntl, defineMessage } from "react-intl";
+import { useIntl, defineMessage, FormattedMessage } from "react-intl";
 
 function MoreMenuItem({ item, closePopover }) {
   const Icon = item.icon;
@@ -118,6 +118,9 @@ export function MoreMenuPopoverButton({ menu }) {
           selected={popoverVisible}
           onClick={togglePopover}
           label={title}
+          toolbarDescription={
+            <FormattedMessage id="toolbar-description.menu-button" defaultMessage="メニューを開きます" />
+          }
         />
       )}
     </Popover>

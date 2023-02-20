@@ -36,6 +36,7 @@ export const ToolbarButton = forwardRef(
       statusColor,
       type,
       disabled,
+      toolbarDescription,
       ...rest
     },
     ref
@@ -53,7 +54,9 @@ export const ToolbarButton = forwardRef(
         disabled={disabled}
         title={title}
         {...rest}
+        ontouchstart=""
       >
+        {toolbarDescription && <div className="toolbarDescription">{toolbarDescription}</div>}
         <div
           className={classNames(styles.iconContainer, iconContainerClassName, { [styles.isMobile]: isMobile })}
           disabled={disabled}
@@ -81,7 +84,8 @@ ToolbarButton.propTypes = {
   type: PropTypes.oneOf(types),
   large: PropTypes.bool,
   disabled: PropTypes.bool,
-  title: PropTypes.node
+  title: PropTypes.node,
+  toolbarDescription: PropTypes.node
 };
 
 ToolbarButton.defaultProps = {

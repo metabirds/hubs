@@ -4,7 +4,7 @@ import styles from "./AudioPopover.scss";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ArrowIcon } from "../icons/Arrow.svg";
-import { defineMessage, useIntl } from "react-intl";
+import { defineMessage, useIntl, FormattedMessage } from "react-intl";
 
 const invitePopoverTitle = defineMessage({
   id: "audio-toolbar-popover.title",
@@ -37,6 +37,12 @@ export const AudioPopoverButton = ({ initiallyVisible, content, micButton, disab
             className={popoverVisible ? styles.arrowButton : styles.arrowButtonSelected}
             title={title}
             disabled={disabled}
+            toolbarDescription={
+              <FormattedMessage
+                id="toolbar-description.mic-select-button"
+                defaultMessage="マイク・スピーカーの設定を行います"
+              />
+            }
           />
           {micButton}
         </div>
