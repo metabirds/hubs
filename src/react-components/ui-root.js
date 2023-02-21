@@ -1682,6 +1682,7 @@ class UIRoot extends Component {
                           />
                         }
                         onClick={() => this.toggleSidebar("profile")}
+                        className="rightPos"
                         toolbarDescription={
                           <FormattedMessage
                             id="toolbar-description.profile-button"
@@ -1728,6 +1729,7 @@ class UIRoot extends Component {
                         icon={<LeaveIcon />}
                         label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
                         preset="cancel"
+                        className="rightPos"
                         onClick={() => {
                           this.showNonHistoriedDialog(LeaveRoomModal, {
                             destinationUrl: "/",

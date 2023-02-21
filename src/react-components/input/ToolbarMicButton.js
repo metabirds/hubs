@@ -49,6 +49,7 @@ export function ToolbarMicButton({ scene, disabled, ...rest }) {
       type={"right"}
       title={disabled ? intl.formatMessage(micButtonMessages["title"]) : undefined}
       disabled={disabled}
+      className="leftPos"
       toolbarDescription={
         <FormattedMessage
           id="toolbar-description.mute-button"

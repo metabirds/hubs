@@ -118,6 +118,7 @@ export function MoreMenuPopoverButton({ menu }) {
           selected={popoverVisible}
           onClick={togglePopover}
           label={title}
+          className="rightPos"
           toolbarDescription={
             <FormattedMessage id="toolbar-description.menu-button" defaultMessage="メニューを開きます" />
           }

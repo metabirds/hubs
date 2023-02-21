@@ -677,7 +677,8 @@
   "toolbar-description.invite-button": "他の人をこのルームに招待します",
   "toolbar-description.menu-button": " メニューを開きます",
   "toolbar-description.object-button": "画像や動画などのオブジェクトを配置します",
-  "toolbar-description.share-button": "カメラ映像の投影や画面共有(PC限定)を行います",
+  "toolbar-description.share-button": "カメラ映像の投影や画面共有を行います",
+  "toolbar-description.share-camera-button": "カメラ映像の共有を行います",
   "toolbar-description.raise-hand-button": "挙手をして助けを求めます",
   "toolbar-description.toggle-TPS-button": "一人称/三人称視点を切り替えます",
   "toolbar-description.reaction-button": "リアクション絵文字を空間中に表示します"

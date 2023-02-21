@@ -54,7 +54,6 @@ export const ToolbarButton = forwardRef(
         disabled={disabled}
         title={title}
         {...rest}
-        ontouchstart=""
       >
         {toolbarDescription && <div className="toolbarDescription">{toolbarDescription}</div>}
         <div

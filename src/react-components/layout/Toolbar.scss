@@ -1,12 +1,19 @@
 @use '../styles/theme';
 
 :local(.toolbar) {
+  position: relative;
   height: 96px;
   display: flex;
   padding: 12px;
   background-color: theme.$background1-color;
   border-top: 1px solid theme.$border1-color;
 
+  * {
+    -webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+  }
   @media (min-width: theme.$breakpoint-lg) {
     padding: 12px 24px;
     justify-content: space-between;
@@ -40,8 +47,8 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 100%;
-    padding: 8px 12px 0;
+    height: calc(100% + 4px);
+    padding: 23px 12px 0;
     overflow-y: hidden;
     overflow-x: scroll;
     justify-content: center;
