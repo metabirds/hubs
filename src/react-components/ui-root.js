@@ -1140,22 +1140,22 @@ class UIRoot extends Component {
           />
         ),
         items: [
-          this.state.signedIn
-            ? {
-                id: "sign-out",
-                label: <FormattedMessage id="more-menu.sign-out" defaultMessage="Sign Out" />,
-                icon: LeaveIcon,
-                onClick: async () => {
-                  await this.props.authChannel.signOut(this.props.hubChannel);
-                  this.setState({ signedIn: false });
-                }
-              }
-            : {
-                id: "sign-in",
-                label: <FormattedMessage id="more-menu.sign-in" defaultMessage="Sign In" />,
-                icon: EnterIcon,
-                onClick: () => this.showContextualSignInDialog()
-              },
+          // this.state.signedIn
+          //   ? {
+          //       id: "sign-out",
+          //       label: <FormattedMessage id="more-menu.sign-out" defaultMessage="Sign Out" />,
+          //       icon: LeaveIcon,
+          //       onClick: async () => {
+          //         await this.props.authChannel.signOut(this.props.hubChannel);
+          //         this.setState({ signedIn: false });
+          //       }
+          //     }
+          //   : {
+          //       id: "sign-in",
+          //       label: <FormattedMessage id="more-menu.sign-in" defaultMessage="Sign In" />,
+          //       icon: EnterIcon,
+          //       onClick: () => this.showContextualSignInDialog()
+          //     },
           canCreateRoom && {
             id: "create-room",
             label: <FormattedMessage id="more-menu.create-room" defaultMessage="Create Room" />,
@@ -1172,20 +1172,20 @@ class UIRoot extends Component {
             icon: AvatarIcon,
             onClick: () => this.setSidebar("profile")
           },
-          {
-            id: "favorite-rooms",
-            label: <FormattedMessage id="more-menu.favorite-rooms" defaultMessage="Favorite Rooms" />,
-            icon: FavoritesIcon,
-            onClick: () =>
-              this.props.performConditionalSignIn(
-                () => this.props.hubChannel.signedIn,
-                () => {
-                  showFullScreenIfAvailable();
-                  this.props.mediaSearchStore.sourceNavigateWithNoNav("favorites", "use");
-                },
-                SignInMessages.favoriteRooms
-              )
-          },
+          // {
+          //   id: "favorite-rooms",
+          //   label: <FormattedMessage id="more-menu.favorite-rooms" defaultMessage="Favorite Rooms" />,
+          //   icon: FavoritesIcon,
+          //   onClick: () =>
+          //     this.props.performConditionalSignIn(
+          //       () => this.props.hubChannel.signedIn,
+          //       () => {
+          //         showFullScreenIfAvailable();
+          //         this.props.mediaSearchStore.sourceNavigateWithNoNav("favorites", "use");
+          //       },
+          //       SignInMessages.favoriteRooms
+          //     )
+          // },
           {
             id: "preferences",
             label: <FormattedMessage id="more-menu.preferences" defaultMessage="Preferences" />,
@@ -1211,6 +1211,7 @@ class UIRoot extends Component {
               icon: InviteIcon,
               onClick: () => this.props.scene.emit("action_invite")
             },
+            isModerator && {
           this.isFavorited()
             ? {
                 id: "unfavorite-room",
@@ -1223,7 +1224,7 @@ class UIRoot extends Component {
                 label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
                 icon: StarOutlineIcon,
                 onClick: () => this.toggleFavorited()
-              },
+              }},
           isModerator &&
             entered && {
               id: "streamer-mode",
