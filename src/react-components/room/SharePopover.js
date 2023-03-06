@@ -40,7 +40,10 @@ export function SharePopoverButton({ items }) {
         preset="accent5"
         statusColor={activeItem && "recording"}
         toolbarDescription={
-          <FormattedMessage id="toolbar-description.share-camera-button" defaultMessage="カメラ映像の共有を行います" />
+          <FormattedMessage
+            id="toolbar-description.share-camera-button"
+            defaultMessage="自身の映像の投影(カメラ)ができます"
+          />
         }
       />
     );
@@ -65,7 +68,7 @@ export function SharePopoverButton({ items }) {
           toolbarDescription={
             <FormattedMessage
               id="toolbar-description.share-button"
-              defaultMessage="カメラ映像の投影や画面共有を行います"
+              defaultMessage="自身の映像の投影(カメラ)や資料の共有(画面)ができます"
             />
           }
         />

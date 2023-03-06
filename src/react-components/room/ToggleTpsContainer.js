@@ -16,7 +16,10 @@ export function ToggleTpsContainer({ toggleTPS }) {
       onClick={toggleTPS}
       className="toggleTPSButton"
       toolbarDescription={
-        <FormattedMessage id="toolbar-description.toggle-TPS-button" defaultMessage="一人称/三人称視点を切り替えます" />
+        <FormattedMessage
+          id="toolbar-description.toggle-TPS-button"
+          defaultMessage="自身のアバターの表示/非表示を切り替えます"
+        />
       }
     />
   );

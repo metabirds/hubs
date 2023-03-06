@@ -508,7 +508,7 @@ export function ChatToolbarButton(props) {
       preset="accent4"
       label={<FormattedMessage id="chat-toolbar-button" defaultMessage="Chat" />}
       toolbarDescription={
-        <FormattedMessage id="toolbar-description.chat-button" defaultMessage="テキストチャットウィンドウを開きます" />
+        <FormattedMessage id="toolbar-description.chat-button" defaultMessage="入室者全員にチャットができます" />
       }
     />
   );

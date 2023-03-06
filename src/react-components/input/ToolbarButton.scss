@@ -59,10 +59,10 @@
   .toolbarDescription {
     position: absolute;
     bottom: calc(100% - 10px);
-    width: 130px;
-    padding: 4px 2px;
+    width: 160px;
+    padding: 16px 12px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 12px;
     filter: drop-shadow(2px 2px 1px #444);
     transition: bottom 0.1s ease, opacity 0.1s ease;
     z-index: 100;
@@ -81,7 +81,14 @@
       border-width: 8px 8px 0 8px;
       border-color: #686868 transparent transparent transparent;
     }
+    @media (max-width: theme.$breakpoint-sm) {
+      width: 148px;
+      padding: 4px 2px;
+      font-size: 10px;
+    }
+
   }
+  
   &.leftPos .toolbarDescription {
     left: 0;
     &::before {

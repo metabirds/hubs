@@ -97,7 +97,7 @@ function isStep(step, item) {
 }
 
 function maxSteps(step) {
-  return isStep(step, "desktop") ? 3 : 2;
+  return isStep(step, "desktop") ? 2 : 2;
 }
 
 function Key({ children }) {
@@ -257,6 +257,7 @@ function onboardingSteps({ intl, step }) {
         control: {
           type: Step,
           params: {
+            p: chunks => <p style={{ width: "100%" }}>{chunks}</p>,
             left: <Key>{turnLeftKey}</Key>,
             right: <Key>{turnRightKey}</Key>
           }
@@ -365,7 +366,7 @@ export const Tooltip = memo(({ className, onPrev, onNext, onDismiss, step, ...re
   const { control, navigationBar } = useMemo(() => onboardingSteps({ intl, step }), [intl, step]);
   return (
     <div className={layoutClass}>
-      <div className={classNames(styles.tip, animationClass, className)} {...rest}>
+      <div className={classNames(styles.tip, animationClass, className, "cyzy-tour")} {...rest}>
         <div className={navigationBar?.type && styles.step}>
           <control.type step={control?.messageId || step} params={control?.params} />
         </div>
