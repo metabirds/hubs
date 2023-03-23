@@ -112,7 +112,7 @@
   "chat-sidebar.moderator-message.voice-chat-disabled": "管理者がボイスチャットをOFFにしました",
   "chat-sidebar.moderator-message.voice-chat-disabled-mod": "このルームではボイスチャットが無効にされています",
   "chat-sidebar.moderator-message.text-chat-enabled": "管理者がテキストチャットをONにしました",
-  "chat-sidebar.moderator-message.text-chat-disabled": "管理者がテキストチャットをOFFにしました",
+  "chat-sidebar.moderator-message.text-chat-disabled": "只今チャット機能はご利用いただけません",
   "chat-sidebar.moderator-message.text-chat-disabled-mod": "このルームではテキストチャットは送信できません",
   "chat-toolbar-button": "チャット",
   "close-room-modal.confirm": "はい,ルームを閉じます",
