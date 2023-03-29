@@ -1194,78 +1194,80 @@ class UIRoot extends Component {
           }
         ].filter(item => item)
       },
-      isModerator && {
+      {
         id: "room",
-        label: <FormattedMessage id="more-menu.room" defaultMessage="Room" />,
-        items: [
-          {
-            id: "room-info",
-            label: <FormattedMessage id="more-menu.room-info" defaultMessage="Room Info and Settings" />,
-            icon: HomeIcon,
-            onClick: () => this.setSidebar("room-info")
-          },
-          (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-            (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
-              id: "invite",
-              label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
-              icon: InviteIcon,
-              onClick: () => this.props.scene.emit("action_invite")
-            },
-          this.isFavorited()
-            ? {
-                id: "unfavorite-room",
-                label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
-                icon: StarIcon,
-                onClick: () => this.toggleFavorited()
-              }
-            : {
-                id: "favorite-room",
-                label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
-                icon: StarOutlineIcon,
-                onClick: () => this.toggleFavorited()
+        label: isModerator ? <FormattedMessage id="more-menu.room" defaultMessage="Room" /> : <></>,
+        items: isModerator
+          ? [
+              {
+                id: "room-info",
+                label: <FormattedMessage id="more-menu.room-info" defaultMessage="Room Info and Settings" />,
+                icon: HomeIcon,
+                onClick: () => this.setSidebar("room-info")
               },
-          isModerator &&
-            entered && {
-              id: "streamer-mode",
-              label: streaming ? (
-                <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
-              ) : (
-                <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
-              ),
-              icon: CameraIcon,
-              onClick: () => this.toggleStreamerMode()
-            },
-          (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-            entered && {
-              id: "leave-room",
-              label: <FormattedMessage id="more-menu.enter-leave-room" defaultMessage="Leave Room" />,
-              icon: LeaveIcon,
-              onClick: () => {
-                this.showNonHistoriedDialog(LeaveRoomModal, {
-                  destinationUrl: "/",
-                  reason: LeaveReason.leaveRoom
-                });
-              }
-            }
-          // canCloseRoom && {
-          //   id: "close-room",
-          //   label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
-          //   icon: DeleteIcon,
-          //   onClick: () =>
-          //     this.props.performConditionalSignIn(
-          //       () => this.props.hubChannel.can("update_hub"),
-          //       () => {
-          //         this.showNonHistoriedDialog(CloseRoomModal, {
-          //           roomName: this.props.hub.name,
-          //           onConfirm: () => {
-          //             this.props.hubChannel.closeHub();
-          //           }
-          //         });
-          //       },
-          //       SignInMessages.closeRoom
-          //     )
-          // }
-        ].filter(item => item)
+              (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
+                (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
+                  id: "invite",
+                  label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
+                  icon: InviteIcon,
+                  onClick: () => this.props.scene.emit("action_invite")
+                },
+              this.isFavorited()
+                ? {
+                    id: "unfavorite-room",
+                    label: <FormattedMessage id="more-menu.unfavorite-room" defaultMessage="Unfavorite Room" />,
+                    icon: StarIcon,
+                    onClick: () => this.toggleFavorited()
+                  }
+                : {
+                    id: "favorite-room",
+                    label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
+                    icon: StarOutlineIcon,
+                    onClick: () => this.toggleFavorited()
+                  },
+              isModerator &&
+                entered && {
+                  id: "streamer-mode",
+                  label: streaming ? (
+                    <FormattedMessage id="more-menu.exit-streamer-mode" defaultMessage="Exit Streamer Mode" />
+                  ) : (
+                    <FormattedMessage id="more-menu.enter-streamer-mode" defaultMessage="Enter Streamer Mode" />
+                  ),
+                  icon: CameraIcon,
+                  onClick: () => this.toggleStreamerMode()
+                },
+              (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
+                entered && {
+                  id: "leave-room",
+                  label: <FormattedMessage id="more-menu.enter-leave-room" defaultMessage="Leave Room" />,
+                  icon: LeaveIcon,
+                  onClick: () => {
+                    this.showNonHistoriedDialog(LeaveRoomModal, {
+                      destinationUrl: "/",
+                      reason: LeaveReason.leaveRoom
+                    });
+                  }
+                }
+              // canCloseRoom && {
+              //   id: "close-room",
+              //   label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
+              //   icon: DeleteIcon,
+              //   onClick: () =>
+              //     this.props.performConditionalSignIn(
+              //       () => this.props.hubChannel.can("update_hub"),
+              //       () => {
+              //         this.showNonHistoriedDialog(CloseRoomModal, {
+              //           roomName: this.props.hub.name,
+              //           onConfirm: () => {
+              //             this.props.hubChannel.closeHub();
+              //           }
+              //         });
+              //       },
+              //       SignInMessages.closeRoom
+              //     )
+              // }
+            ].filter(item => item)
+          : []
       },
       {
         id: "support",

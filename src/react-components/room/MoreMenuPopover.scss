@@ -19,6 +19,9 @@
 :local(.more-menu-item-list) {
   padding-top: 4px;
   padding-bottom: 16px;
+  &:empty {
+    padding: 0;
+  }
 }
 
 :local(.more-menu-item-target) {
