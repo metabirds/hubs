@@ -3,7 +3,7 @@
 :local(.loading-screen-layout) {
   pointer-events: auto;
   display: flex;
-  justify-content: center;
+  justify-content: stretch;
   align-items: center;
   flex-direction: column;
   position: fixed;
@@ -11,6 +11,7 @@
   right: 0;
   bottom: 0;
   top: 0;
+  height: 100svh;
   background: theme.$loading-screen-background;
 
   font-size: theme.$font-size-sm;
@@ -22,7 +23,9 @@
 
 :local(.center) {
   flex-grow: 0;
-  .cyzy-how-to-control {
+  margin-top: 10svh;
+  padding: 0;
+  .loading-image {
     display: block;
     margin: 8px auto 0;
     max-width: 800px;
@@ -36,6 +39,7 @@
   .cyzy-loading-message-wrap {
     display: flex;
     align-items: center;
+    margin-top: 30px;
   }
   .cyzy-spinner-wrap {
     width: 30px;
@@ -57,8 +61,12 @@
 }
 
 :local(.bottom) {
-  position: absolute;
-  bottom: 5%;
   width: 100%;
   padding: 0 48px;
+  margin-top: auto;
+  margin-bottom: 5svh;
+  .cyzy-loading-company-logo {
+    max-width: 120px;
+    margin-top: 60px;
+  }
 }

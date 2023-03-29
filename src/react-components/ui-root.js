@@ -1211,7 +1211,6 @@ class UIRoot extends Component {
               icon: InviteIcon,
               onClick: () => this.props.scene.emit("action_invite")
             },
-            isModerator && {
           this.isFavorited()
             ? {
                 id: "unfavorite-room",
@@ -1224,7 +1223,7 @@ class UIRoot extends Component {
                 label: <FormattedMessage id="more-menu.favorite-room" defaultMessage="Favorite Room" />,
                 icon: StarOutlineIcon,
                 onClick: () => this.toggleFavorited()
-              }},
+              },
           isModerator &&
             entered && {
               id: "streamer-mode",
