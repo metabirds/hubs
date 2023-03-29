@@ -1194,7 +1194,7 @@ class UIRoot extends Component {
           }
         ].filter(item => item)
       },
-      {
+      isModerator && {
         id: "room",
         label: <FormattedMessage id="more-menu.room" defaultMessage="Room" />,
         items: [
