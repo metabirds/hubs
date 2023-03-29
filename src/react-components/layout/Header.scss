@@ -76,8 +76,8 @@ header {
 
 :local(.home-link) {
   display: inline-block;
-  width: 124px;
-  height: 83px;
+  max-width: 124px;
+  max-height: 83px;
   @media(min-width: theme.$breakpoint-lg) {
    img {
     height: 32px;
