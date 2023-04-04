@@ -1667,9 +1667,11 @@ class UIRoot extends Component {
                         />
                       </>
                     )}
-                    <ChatToolbarButtonContainer
-                      onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
-                    />
+                    {window.APP.hub.member_permissions.text_chat && (
+                      <ChatToolbarButtonContainer
+                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
+                      />
+                    )}
                     {entered && (
                       <ToolbarButton
                         icon={<AvatarIcon />}
