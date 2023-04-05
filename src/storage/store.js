@@ -13,6 +13,7 @@ import { EventTarget } from "event-target-shim";
 import { fetchRandomDefaultAvatarId, generateRandomName } from "../utils/identity.js";
 import { NO_DEVICE_ID } from "../utils/media-devices-utils.js";
 import { AAModes } from "../constants";
+import { cyzyFetchParamsWithToken } from "../utils/cyzy-utils";
 
 const defaultMaterialQuality = (function () {
   const MATERIAL_QUALITY_OPTIONS = ["low", "medium", "high"];
@@ -347,7 +348,9 @@ export default class Store extends EventTarget {
 
     // Regenerate name to encourage users to change it.
     if (!this.state.activity.hasChangedName) {
-      this.update({ profile: { displayName: generateRandomName() } });
+      // cyzyspace
+      const params = await cyzyFetchParamsWithToken();
+      this.update({ profile: { displayName: params?.name || generateRandomName() } });
     }
   };
 
