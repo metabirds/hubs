@@ -347,10 +347,11 @@ export default class Store extends EventTarget {
     }
 
     // Regenerate name to encourage users to change it.
-    if (!this.state.activity.hasChangedName) {
+    const cyzyToken = qsGet("cyzyToken");
+    if (!this.state.activity.hasChangedName || cyzyToken) {
       // cyzyspace
       const params = await cyzyFetchParamsWithToken();
-      this.update({ profile: { displayName: params?.name || generateRandomName() } });
+      this.update({ profile: { displayName: (params?.name || "").substring(0, 32) || generateRandomName() } });
     }
   };
 
