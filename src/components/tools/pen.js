@@ -256,11 +256,11 @@ AFRAME.registerComponent("pen", {
       const sfx = this.el.sceneEl.systems["hubs-systems"].soundEffectsSystem;
       const paths = pathsMap[this.grabberId];
       if (userinput.get(paths.startDrawing)) {
-        this._startDraw();
+        // this._startDraw();
         sfx.playSoundOneShot(SOUND_PEN_START_DRAW);
       }
       if (userinput.get(paths.stopDrawing)) {
-        this._endDraw();
+        // this._endDraw();
         sfx.playSoundOneShot(SOUND_PEN_STOP_DRAW);
       }
       const penScaleMod = userinput.get(paths.scalePenTip);
