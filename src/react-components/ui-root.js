@@ -1641,19 +1641,21 @@ class UIRoot extends Component {
                             showNonHistoriedDialog={this.showNonHistoriedDialog}
                           />
                         ) : (
-                          <ToolbarButton
-                            icon={<PenIcon />}
-                            preset="accent3"
-                            label={<FormattedMessage id="place-popover.item-type.pen" defaultMessage="Pen" />}
-                            onClick={this.spawnPen}
-                            selected={this.state.hasPen}
-                            toolbarDescription={
-                              <FormattedMessage
-                                id="toolbar-description.pen-button"
-                                defaultMessage="ペンで空間に線を描きます"
-                              />
-                            }
-                          />
+                          this.props.hubChannel.can("spawn_drawing") && (
+                            <ToolbarButton
+                              icon={<PenIcon />}
+                              preset="accent3"
+                              label={<FormattedMessage id="place-popover.item-type.pen" defaultMessage="Pen" />}
+                              onClick={this.spawnPen}
+                              selected={this.state.hasPen}
+                              toolbarDescription={
+                                <FormattedMessage
+                                  id="toolbar-description.pen-button"
+                                  defaultMessage="ペンで空間に線を描きます"
+                                />
+                              }
+                            />
+                          )
                         )}
                         {this.props.hubChannel.can("spawn_emoji") && (
                           <ReactionPopoverContainer
