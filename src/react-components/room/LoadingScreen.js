@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { LoadingScreenLayout } from "../layout/LoadingScreenLayout";
 import { Spinner } from "../misc/Spinner";
 import { useRandomMessageTransition } from "./useRandomMessageTransition";
-import cyzyHowToControlImg from "../../assets/images/cyzy-how-to-control.png";
+import cyzyHowToControlImgPc from "../../assets/images/cyzy-how-to-control-pc.gif";
+import cyzyHowToControlImgSp from "../../assets/images/cyzy-how-to-control-sp.gif";
 export function LoadingScreen({ message, infoMessages }) {
   const infoMessage = useRandomMessageTransition(infoMessages);
   return (
@@ -16,7 +17,11 @@ export function LoadingScreen({ message, infoMessages }) {
             </div>
             <p>{message}</p>
           </div>
-          <img src={cyzyHowToControlImg} className="cyzy-how-to-control" alt={"how to control"} />
+          <img
+            src={window.ontouchstart === null ? cyzyHowToControlImgSp : cyzyHowToControlImgPc}
+            className="cyzy-how-to-control"
+            alt={"how to control"}
+          />
         </>
       }
       bottom={
