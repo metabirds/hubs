@@ -120,8 +120,9 @@
   color: theme.$text1-color;
 
   & > * {
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    white-space: pre-wrap;
+    // text-overflow: ellipsis;
+    word-wrap: break-word;
     overflow: hidden;
     margin: 0;
     display: block;
