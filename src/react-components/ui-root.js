@@ -866,6 +866,8 @@ class UIRoot extends Component {
           showSpectate={!this.state.waitingOnAudio}
           onSpectate={() => this.setState({ watching: true })}
           showOptions={this.props.hubChannel.canOrWillIfCreator("update_hub")}
+          hub={this.props.hub} //cyzyspace
+          hubChannel={this.props.hubChannel}
           onOptions={() => {
             this.props.performConditionalSignIn(
               () => this.props.hubChannel.can("update_hub"),

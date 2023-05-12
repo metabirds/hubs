@@ -26,6 +26,8 @@ export function RoomEntryModal({
   onSpectate,
   showOptions,
   onOptions,
+  hub,
+  hubChannel,
   ...rest
 }) {
   const breakpoint = useCssBreakpoints();
@@ -44,6 +46,12 @@ export function RoomEntryModal({
           <p>{roomName}</p>
         </div>
         <Column center className={styles.buttons}>
+          {!hubChannel.canEnterRoom(hub) && (
+            <>
+              <h6>只今満室でございます。</h6>
+              <p>後ほどもう一度お試しいただけますと幸いです。</p>
+            </>
+          )}
           {showJoinRoom && (
             <Button preset="accent4" onClick={onJoinRoom} className="joinRoomButton">
               <EnterIcon />
@@ -93,7 +101,9 @@ RoomEntryModal.propTypes = {
   showSpectate: PropTypes.bool,
   onSpectate: PropTypes.func,
   showOptions: PropTypes.bool,
-  onOptions: PropTypes.func
+  onOptions: PropTypes.func,
+  hub: PropTypes.object,
+  hubChannel: PropTypes.object
 };
 
 RoomEntryModal.defaultProps = {
