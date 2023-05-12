@@ -48,8 +48,12 @@ export function RoomEntryModal({
         <Column center className={styles.buttons}>
           {!hubChannel.canEnterRoom(hub) && (
             <>
-              <h6>只今満室でございます。</h6>
-              <p>後ほどもう一度お試しいただけますと幸いです。</p>
+              <h6>この部屋は入室数の上限に達しています</h6>
+              <p>
+                ブラウザの戻るボタンから
+                <br />
+                空いている他のお部屋をご選択ください
+              </p>
             </>
           )}
           {showJoinRoom && (
