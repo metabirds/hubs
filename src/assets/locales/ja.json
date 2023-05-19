@@ -127,9 +127,9 @@
   "chat-sidebar.moderator-message.text-chat-disabled": "管理者がテキストチャットをOFFにしました",
   "chat-sidebar.moderator-message.text-chat-disabled-mod": "このルームではテキストチャットは送信できません",
   "chat-sidebar.moderator-message.text-chat-enabled": "管理者がテキストチャットをONにしました",
-  "chat-sidebar.moderator-message.voice-chat-enabled": "管理者がボイスチャットをONにしました",
   "chat-sidebar.moderator-message.voice-chat-disabled": "管理者がボイスチャットをOFFにしました",
   "chat-sidebar.moderator-message.voice-chat-disabled-mod": "このルームではボイスチャットが無効にされています",
+  "chat-sidebar.moderator-message.voice-chat-enabled": "管理者がボイスチャットをONにしました",
   "chat-sidebar.system-message.entered-lobby": "{name} がロビーに入りました。",
   "chat-sidebar.system-message.entered-room": "{name} が入室しました。",
   "chat-sidebar.system-message.hub-change": "現在 {hubName} にいます。",
@@ -631,6 +631,7 @@
   "sign-in-modal.title": "サインイン",
   "sign-in-modal.wait-for-verification": "<p>メールは{email}に送信されました！</p><p>続行するには、モバイル、タブレット、またはPCを使用してメール内のリンクをクリックしてください。</p><p>メールアドレスをお持ちでない方は、アカウントを作成できません。</p>",
   "spectating-label.label": "ウォッチング",
+  "third-person-button-container.label": "視点変更",
   "tips.buttons.done": "完了",
   "tips.buttons.get-started": "始める",
   "tips.buttons.skip-tour": "ツアーをスキップ",
@@ -694,6 +695,5 @@
   "webvr-unsupported-modal.message": "WebVRはこのブラウザではサポートされていません。OculusやSteamVRで入場する場合は、Firefoxを使用してください。",
   "webvr-unsupported-modal.title": "VRで入室",
   "webvr-unsupported-modal.webvr-rocks-link": "実験的なVRをサポートしているブラウザの一覧は <a>WebVR Rocks</a> を確認してください。",
-  "whats-new-page.title": "新着情報",
-  "third-person-button-container.label": "視点変更"
+  "whats-new-page.title": "新着情報"
 }
