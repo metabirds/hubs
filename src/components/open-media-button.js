@@ -59,6 +59,8 @@ AFRAME.registerComponent("open-media-button", {
             } else {
               label = "visit room";
             }
+          } else if (window.daisyServerUri && src.match(window.daisyServerUri)) {
+            label = "visit room";
           }
         }
         this.label.setAttribute("text", "value", label);
@@ -118,6 +120,8 @@ AFRAME.registerComponent("open-media-button", {
             location.href = this.src;
           }
         }
+      } else if (window.daisyServerUri && this.src.match(window.daisyServerUri)) {
+        location.href = this.src;
       } else {
         // cyzyspace
         if (this.src.slice(0, 1) === "#") {
