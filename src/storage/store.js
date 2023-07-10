@@ -150,7 +150,7 @@ export const SCHEMA = {
         enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
         enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
         enableGyro: { type: "bool", default: true },
-        animateWaypointTransitions: { type: "bool", default: true },
+        animateWaypointTransitions: { type: "bool", default: false },
         showFPSCounter: { type: "bool", default: false },
         allowMultipleHubsInstances: { type: "bool", default: false },
         disableIdleDetection: { type: "bool", default: false },
