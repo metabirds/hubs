@@ -31,11 +31,11 @@ export function RoomEntryModal({
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
       <Column center className={styles.content}>
-        {breakpoint !== "sm" && breakpoint !== "md" && (
+        {/* {breakpoint !== "sm" && breakpoint !== "md" && (
           <div className={styles.logoContainer}>
             <AppLogo />
           </div>
-        )}
+        )} */}
         <div className={styles.roomName}>
           <h5>
             <FormattedMessage id="room-entry-modal.room-name-label" defaultMessage="Room Name" />

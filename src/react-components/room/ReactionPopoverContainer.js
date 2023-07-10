@@ -10,9 +10,7 @@ const emojiLabels = defineMessages({
   laugh: { id: "reaction-popover.emoji-label.laugh", defaultMessage: "Laugh" },
   clap: { id: "reaction-popover.emoji-label.clap", defaultMessage: "Clap" },
   heart: { id: "reaction-popover.emoji-label.heart", defaultMessage: "Heart" },
-  wave: { id: "reaction-popover.emoji-label.wave", defaultMessage: "Wave" },
-  angry: { id: "reaction-popover.emoji-label.angry", defaultMessage: "Angry" },
-  cry: { id: "reaction-popover.emoji-label.cry", defaultMessage: "Cry" }
+  wave: { id: "reaction-popover.emoji-label.wave", defaultMessage: "Wave" }
 });
 
 function usePresence(scene, initialPresence) {

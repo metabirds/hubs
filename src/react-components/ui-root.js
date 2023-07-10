@@ -1205,13 +1205,13 @@ class UIRoot extends Component {
                 icon: HomeIcon,
                 onClick: () => this.setSidebar("room-info")
               },
-              (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
-                (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
-                  id: "invite",
-                  label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
-                  icon: InviteIcon,
-                  onClick: () => this.props.scene.emit("action_invite")
-                },
+              // (this.props.breakpoint === "sm" || this.props.breakpoint === "md") &&
+              //   (this.props.hub.entry_mode !== "invite" || this.props.hubChannel.can("update_hub")) && {
+              //     id: "invite",
+              //     label: <FormattedMessage id="more-menu.invite" defaultMessage="Invite" />,
+              //     icon: InviteIcon,
+              //     onClick: () => this.props.scene.emit("action_invite")
+              //   },
               this.isFavorited()
                 ? {
                     id: "unfavorite-room",
@@ -1579,14 +1579,14 @@ class UIRoot extends Component {
                   ) : undefined
                 }
                 modal={this.state.dialog}
-                toolbarLeft={
-                  <InvitePopoverContainer
-                    hub={this.props.hub}
-                    hubChannel={this.props.hubChannel}
-                    scene={this.props.scene}
-                    store={this.props.store}
-                  />
-                }
+                // toolbarLeft={
+                //   <InvitePopoverContainer
+                //     hub={this.props.hub}
+                //     hubChannel={this.props.hubChannel}
+                //     scene={this.props.scene}
+                //     store={this.props.store}
+                //   />
+                // }
                 toolbarCenter={
                   <>
                     {watching && (

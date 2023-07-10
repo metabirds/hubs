@@ -6,7 +6,7 @@ import { useRandomMessageTransition } from "./useRandomMessageTransition";
 import configs from "../../utils/configs";
 
 export function LoadingScreen({ message, infoMessages }) {
-  const infoMessage = useRandomMessageTransition(infoMessages);
+  // const infoMessage = useRandomMessageTransition(infoMessages);
   return (
     <LoadingScreenLayout
       center={
@@ -21,10 +21,10 @@ export function LoadingScreen({ message, infoMessages }) {
       }
       bottom={
         <>
-          <div className="cyzy-loading-tips-wrap">
+          {/* <div className="cyzy-loading-tips-wrap">
             <h3>{infoMessage.heading}</h3>
             <p>{infoMessage.message}</p>
-          </div>
+          </div> */}
           <img src={configs.image("company_logo")} className="cyzy-loading-company-logo" alt={"company-logo"} />
         </>
       }

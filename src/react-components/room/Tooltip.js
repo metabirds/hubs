@@ -97,7 +97,7 @@ function isStep(step, item) {
 }
 
 function maxSteps(step) {
-  return isStep(step, "desktop") ? 3 : 2;
+  return isStep(step, "desktop") ? 2 : 2;
 }
 
 function Key({ children }) {
