@@ -20,9 +20,7 @@ export const emojis = [
   { id: "laugh", model: emoji1Model, particle: emoji1Particle },
   { id: "clap", model: emoji2Model, particle: emoji2Particle },
   { id: "heart", model: emoji3Model, particle: emoji3Particle },
-  { id: "wave", model: emoji4Model, particle: emoji4Particle },
-  { id: "angry", model: emoji5Model, particle: emoji5Particle },
-  { id: "cry", model: emoji6Model, particle: emoji6Particle }
+  { id: "wave", model: emoji4Model, particle: emoji4Particle }
 ].map(({ model, particle, ...rest }) => {
   return {
     ...rest,
