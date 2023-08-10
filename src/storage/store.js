@@ -13,7 +13,7 @@ import { EventTarget } from "event-target-shim";
 import { fetchRandomDefaultAvatarId, generateRandomName } from "../utils/identity.js";
 import { NO_DEVICE_ID } from "../utils/media-devices-utils.js";
 import { AAModes } from "../constants";
-import { cyzyFetchUserParamsWithToken } from "../utils/cyzy-utils";
+import { avatarNameToId, cyzyFetchUserParamsWithToken } from "../utils/cyzy-utils";
 
 const defaultMaterialQuality = (function () {
   const MATERIAL_QUALITY_OPTIONS = ["low", "medium", "high"];
@@ -347,12 +347,29 @@ export default class Store extends EventTarget {
     }
 
     // Regenerate name to encourage users to change it.
+    if (!this.state.activity.hasChangedName) {
+      this.update({ profile: { displayName: generateRandomName() } });
+    }
 
     // cyzyspace
-    const cyzyToken = qsGet("cyzyToken");
-    if (!this.state.activity.hasChangedName || cyzyToken) {
-      const params = await cyzyFetchUserParamsWithToken();
-      this.update({ profile: { displayName: (params?.name || "").substring(0, 32) || generateRandomName() } });
+    const params = await cyzyFetchUserParamsWithToken();
+    if (params) {
+      const newProfile = {};
+      if (params.name) {
+        const newDisplayName = (params?.name || "").substring(0, 32);
+        if (newDisplayName) {
+          newProfile.displayName = newDisplayName;
+        }
+      }
+      if (params.avatarName) {
+        const newAvatarId = await avatarNameToId(params?.avatarName);
+        if (newAvatarId) {
+          newProfile.avatarId = newAvatarId;
+        }
+      }
+      this.update({
+        profile: { ...(this.state.profile || {}), ...newProfile }
+      });
     }
   };
 
