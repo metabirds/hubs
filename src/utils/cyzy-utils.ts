@@ -1,8 +1,36 @@
 import { fetchReticulumAuthenticated } from "./phoenix-utils";
 import { qsGet } from "./qs_truthy";
 
-const CYZY_USER_PARAMS_SERVER_URL = '';
+const CYZY_USER_PARAMS_SERVER_URL = 'https://cyzy-user-params.cyzyspace.io';
 
+
+export async function cyzyPostUserParams() {
+  const url = CYZY_USER_PARAMS_SERVER_URL;
+  if (!url) {
+    return null;
+  }
+  const profile = window.APP.store.state.profile; 
+  const params = {
+    "name": profile?.displayName,
+    "avatarName": profile?.avatarName,
+  }
+  console.log("params", params);
+  try {
+    let res = await fetch(`${url}/users`, {
+      body: JSON.stringify(params),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(r => r.json());
+    return res.token;
+  } catch (error) {
+    console.error("failed to fetch", error);
+    return null;
+  }
+
+
+}
 export async function cyzyFetchUserParamsWithToken() {
   const url = CYZY_USER_PARAMS_SERVER_URL;
   if (!url) {

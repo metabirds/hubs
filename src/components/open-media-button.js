@@ -82,7 +82,7 @@ AFRAME.registerComponent("open-media-button", {
           const srcUrl = new URL(replacedHref);
           const qs = new URLSearchParams(srcUrl.search);
           if (qs.has("popupView")) {
-            this.postMessage(replacedHref);
+            this.postMessage(replacedHref, "popupView");
           } else {
             window.open(replacedHref);
           }
@@ -115,13 +115,20 @@ AFRAME.registerComponent("open-media-button", {
           const srcUrl = new URL(this.src);
           const qs = new URLSearchParams(srcUrl.search);
           if (qs.has("popupView")) {
-            this.postMessage(this.src);
+            this.postMessage(this.src, "popupView");
           } else {
             location.href = this.src;
           }
         }
       } else if (window.daisyServerUri && this.src.match(window.daisyServerUri)) {
-        location.href = this.src;
+        if (window.APP.store.state.profile.token) {
+          const srcUrl = new URL(this.src);
+          srcUrl.searchParams.append("token", window.APP.store.state.profile.token);
+          const urlString = srcUrl.toString();
+          this.postMessage(urlString, "moveToDaisy");
+        } else {
+          location.href = this.src;
+        }
       } else {
         // cyzyspace
         if (this.src.slice(0, 1) === "#") {
@@ -142,7 +149,7 @@ AFRAME.registerComponent("open-media-button", {
                 const srcUrl = new URL(v.url);
                 const qs = new URLSearchParams(srcUrl.search);
                 if (qs.has("popupView")) {
-                  this.postMessage(this.src);
+                  this.postMessage(this.src, "popupView");
                 } else {
                   window.open(this.src);
                 }
@@ -154,7 +161,7 @@ AFRAME.registerComponent("open-media-button", {
             const srcUrl = new URL(this.src);
             const qs = new URLSearchParams(srcUrl.search);
             if (qs.has("popupView")) {
-              this.postMessage(this.src);
+              this.postMessage(this.src, "popupView");
             } else {
               window.open(this.src);
             }
@@ -177,11 +184,19 @@ AFRAME.registerComponent("open-media-button", {
   pause() {
     this.el.object3D.removeEventListener("interact", this.onClick);
   },
-  postMessage(url) {
+  postMessage(url, type) {
     // cyzy space
-    window.postMessage({
-      eventType: "popupView",
-      params: { url: url }
-    });
+    if (type === "popupView") {
+      self.postMessage({
+        eventType: "popupView",
+        params: { url: url }
+      });
+    }
+    if (type === "moveToDaisy") {
+      self.postMessage({
+        eventType: "moveToDaisy",
+        params: { url: url }
+      });
+    }
   }
 });

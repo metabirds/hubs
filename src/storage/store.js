@@ -94,6 +94,8 @@ export const SCHEMA = {
             "^[\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}ー～　（）［］【】０-９A-Za-z0-9_~ -]{3,32}$"
         },
         avatarId: { type: "string" },
+        avatarName: { type: "string" },
+        token: { type: "string" },
         // personalAvatarId is obsolete, but we need it here for backwards compatibility.
         personalAvatarId: { type: "string" }
       }
@@ -485,6 +487,7 @@ export default class Store extends EventTarget {
     delete this[STORE_STATE_CACHE_KEY];
 
     if (newState.profile !== undefined) {
+      console.log(newState.profile);
       this.dispatchEvent(new CustomEvent("profilechanged"));
     }
     this.dispatchEvent(new CustomEvent("statechanged"));
