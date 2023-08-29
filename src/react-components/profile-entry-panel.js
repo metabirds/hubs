@@ -79,6 +79,10 @@ export default class ProfileEntryPanel extends Component {
     // cyzyspace
     const token = await cyzyPostUserParams();
     this.props.store.update({ profile: { token: token } });
+    self.postMessage({
+      eventType: "changeProfile",
+      params: {}
+    });
   };
 
   stopPropagation = e => {
