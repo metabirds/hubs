@@ -41,7 +41,7 @@ export async function cyzyFetchUserParamsWithToken() {
     return null;
   }
   try {
-    const result = await fetch(`${url}?token=${token}`);
+    const result = await fetch(`${url}/users?token=${token}`);
     const data = await result.json();
     return data;
   } catch (error) {
