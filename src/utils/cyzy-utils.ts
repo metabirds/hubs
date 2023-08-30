@@ -36,12 +36,12 @@ export async function cyzyFetchUserParamsWithToken() {
   if (!url) {
     return null;
   }
-  const token = qsGet("cyzyUserToken");
-  if (!token) {
+  const cyzyUserToken = qsGet("cyzyUserToken");
+  if (!cyzyUserToken) {
     return null;
   }
   try {
-    const result = await fetch(`${url}/users?token=${token}`);
+    const result = await fetch(`${url}/users?token=${cyzyUserToken}`);
     const data = await result.json();
     return data;
   } catch (error) {

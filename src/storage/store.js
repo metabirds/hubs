@@ -95,7 +95,7 @@ export const SCHEMA = {
         },
         avatarId: { type: "string" },
         avatarName: { type: "string" },
-        token: { type: "string" },
+        cyzyUserToken: { type: "string" },
         // personalAvatarId is obsolete, but we need it here for backwards compatibility.
         personalAvatarId: { type: "string" }
       }

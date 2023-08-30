@@ -121,11 +121,10 @@ AFRAME.registerComponent("open-media-button", {
           }
         }
       } else if (window.daisyServerUri && this.src.match(window.daisyServerUri)) {
-        if (window.APP.store.state.profile.token) {
+        if (window.APP.store.state.profile.cyzyUserToken) {
           const srcUrl = new URL(this.src);
-          srcUrl.searchParams.append("token", window.APP.store.state.profile.token);
-          const urlString = srcUrl.toString();
-          this.postMessage(urlString, "moveToDaisy");
+          srcUrl.searchParams.append("cyzyUserToken", window.APP.store.state.profile.cyzyUserToken);
+          location.href = srcUrl;
         } else {
           location.href = this.src;
         }

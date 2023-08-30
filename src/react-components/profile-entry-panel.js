@@ -31,7 +31,7 @@ export default class ProfileEntryPanel extends Component {
     avatarName: null,
     displayName: null,
     avatar: null,
-    token: null
+    cyzyUserToken: null
   };
 
   constructor(props) {
@@ -46,8 +46,8 @@ export default class ProfileEntryPanel extends Component {
   }
 
   getStateFromProfile = () => {
-    const { displayName, avatarId, avatarName } = this.props.store.state.profile;
-    return { displayName, avatarId, avatarName };
+    const { displayName, avatarId, avatarName, cyzyUserToken } = this.props.store.state.profile;
+    return { displayName, avatarId, avatarName, cyzyUserToken };
   };
 
   storeUpdated = () => {
@@ -70,15 +70,15 @@ export default class ProfileEntryPanel extends Component {
         displayName: this.state.displayName,
         avatarId: this.state.avatarId,
         avatarName: this.state.avatarName,
-        token: this.state.token
+        cyzyUserToken: this.state.cyzyUserToken
       }
     });
     this.props.finished();
     this.scene.emit("avatar_updated");
 
     // cyzyspace
-    const token = await cyzyPostUserParams();
-    this.props.store.update({ profile: { token: token } });
+    const cyzyUserToken = await cyzyPostUserParams();
+    this.props.store.update({ profile: { cyzyUserToken: cyzyUserToken } });
     self.postMessage({
       eventType: "changeProfile",
       params: {}
