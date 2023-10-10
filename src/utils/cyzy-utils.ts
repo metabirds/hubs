@@ -2,7 +2,7 @@ import { fetchReticulumAuthenticated } from "./phoenix-utils";
 import { qsGet } from "./qs_truthy";
 
 const CYZY_USER_PARAMS_SERVER_URL = 'https://cyzy-user-params.cyzyspace.io';
-
+const CYZY_AUTH_SERVER_API_ENDPOINT = 'https://auth-api-dev.cyzyspace.io/verify';
 
 export async function cyzyPostUserParams() {
   const url = CYZY_USER_PARAMS_SERVER_URL;
@@ -28,9 +28,8 @@ export async function cyzyPostUserParams() {
     console.error("failed to fetch", error);
     return null;
   }
-
-
 }
+
 export async function cyzyFetchUserParamsWithToken() {
   const url = CYZY_USER_PARAMS_SERVER_URL;
   if (!url) {
@@ -69,4 +68,23 @@ export async function avatarNameToId(name: string) {
   const avatars = await listFeaturedAvatars();
   const avatar = avatars.find((avatar: any) => avatar.name === name);
   return avatar?.id || null;
+}
+
+export async function isCyzyUser() {
+  const url = CYZY_AUTH_SERVER_API_ENDPOINT;
+  if (!url) {
+    return false;
+  }
+  const cyzyAuthToken = qsGet("cyzyAuthToken");
+  if (!cyzyAuthToken) {
+    return false;
+  }
+  try {
+    const result = await fetch(`${url}?token=${cyzyAuthToken}`);
+    const data = await result.json();
+    console.log('auth result:', data);
+    return !!data;
+  } catch (error) {
+    return false;
+  }
 }

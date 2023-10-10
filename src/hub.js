@@ -257,6 +257,7 @@ import { swapActiveScene } from "./bit-systems/scene-loading";
 import { setLocalClientID } from "./bit-systems/networking";
 import { listenForNetworkMessages } from "./utils/listen-for-network-messages";
 import { exposeBitECSDebugHelpers } from "./bitecs-debug-helpers";
+import { isCyzyUser } from "./utils/cyzy-utils";
 
 const PHOENIX_RELIABLE_NAF = "phx-reliable";
 NAF.options.firstSyncSource = PHOENIX_RELIABLE_NAF;
@@ -727,6 +728,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const hubId = getCurrentHubId();
   console.log(`Hub ID: ${hubId}`);
+
+  const authResult = await isCyzyUser();
+  if (!authResult) {
+    window.location.href = `https://auth-dev.cyzyspace.io/signin?redirectUrl=${window.location.href}`;
+    return;
+  }
 
   const shouldRedirectToSignInPage =
     // Default room won't work if account is required to access
