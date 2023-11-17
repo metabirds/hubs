@@ -23,7 +23,8 @@ import {
 } from "three";
 import { AudioSettings, SourceType } from "./components/audio-params";
 import { createEffectsComposer } from "./effects";
-import { DialogAdapter } from "./naf-dialog-adapter";
+// import { DialogAdapter } from "./naf-dialog-adapter";
+import { DialogAdapter } from "./agora-dialog-adapter";
 import { mainTick } from "./systems/hubs-systems";
 import { waitForPreloads } from "./utils/preload";
 import SceneEntryManager from "./scene-entry-manager";
