@@ -16,6 +16,9 @@
   padding: 0 16px;
   margin-top: 16px;
   margin-bottom: 32px;
+  img {
+    max-height: 20svh;
+  }
 }
 
 :local(.room-name) {

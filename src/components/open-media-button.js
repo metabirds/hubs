@@ -59,6 +59,8 @@ AFRAME.registerComponent("open-media-button", {
             } else {
               label = "visit room";
             }
+          } else if (window.daisyServerUri && src.match(window.daisyServerUri)) {
+            label = "visit room";
           }
         }
         this.label.setAttribute("text", "value", label);
@@ -80,7 +82,7 @@ AFRAME.registerComponent("open-media-button", {
           const srcUrl = new URL(replacedHref);
           const qs = new URLSearchParams(srcUrl.search);
           if (qs.has("popupView")) {
-            this.postMessage(replacedHref);
+            this.postMessage(replacedHref, "popupView");
           } else {
             window.open(replacedHref);
           }
@@ -113,10 +115,18 @@ AFRAME.registerComponent("open-media-button", {
           const srcUrl = new URL(this.src);
           const qs = new URLSearchParams(srcUrl.search);
           if (qs.has("popupView")) {
-            this.postMessage(this.src);
+            this.postMessage(this.src, "popupView");
           } else {
             location.href = this.src;
           }
+        }
+      } else if (window.daisyServerUri && this.src.match(window.daisyServerUri)) {
+        if (window.APP.store.state.profile.cyzyUserToken) {
+          const srcUrl = new URL(this.src);
+          srcUrl.searchParams.append("cyzyUserToken", window.APP.store.state.profile.cyzyUserToken);
+          location.href = srcUrl;
+        } else {
+          location.href = this.src;
         }
       } else {
         // cyzyspace
@@ -138,7 +148,7 @@ AFRAME.registerComponent("open-media-button", {
                 const srcUrl = new URL(v.url);
                 const qs = new URLSearchParams(srcUrl.search);
                 if (qs.has("popupView")) {
-                  this.postMessage(this.src);
+                  this.postMessage(this.src, "popupView");
                 } else {
                   window.open(this.src);
                 }
@@ -150,7 +160,7 @@ AFRAME.registerComponent("open-media-button", {
             const srcUrl = new URL(this.src);
             const qs = new URLSearchParams(srcUrl.search);
             if (qs.has("popupView")) {
-              this.postMessage(this.src);
+              this.postMessage(this.src, "popupView");
             } else {
               window.open(this.src);
             }
@@ -173,11 +183,19 @@ AFRAME.registerComponent("open-media-button", {
   pause() {
     this.el.object3D.removeEventListener("interact", this.onClick);
   },
-  postMessage(url) {
+  postMessage(url, type) {
     // cyzy space
-    window.postMessage({
-      eventType: "popupView",
-      params: { url: url }
-    });
+    if (type === "popupView") {
+      self.postMessage({
+        eventType: "popupView",
+        params: { url: url }
+      });
+    }
+    if (type === "moveToDaisy") {
+      self.postMessage({
+        eventType: "moveToDaisy",
+        params: { url: url }
+      });
+    }
   }
 });

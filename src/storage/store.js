@@ -13,6 +13,7 @@ import { EventTarget } from "event-target-shim";
 import { fetchRandomDefaultAvatarId, generateRandomName } from "../utils/identity.js";
 import { NO_DEVICE_ID } from "../utils/media-devices-utils.js";
 import { AAModes } from "../constants";
+import { avatarNameToId, cyzyFetchUserParamsWithToken } from "../utils/cyzy-utils";
 
 const defaultMaterialQuality = (function () {
   const MATERIAL_QUALITY_OPTIONS = ["low", "medium", "high"];
@@ -93,6 +94,8 @@ export const SCHEMA = {
             "^[\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}ー～　（）［］【】０-９A-Za-z0-9_~ -]{3,32}$"
         },
         avatarId: { type: "string" },
+        avatarName: { type: "string" },
+        cyzyUserToken: { type: "string" },
         // personalAvatarId is obsolete, but we need it here for backwards compatibility.
         personalAvatarId: { type: "string" }
       }
@@ -150,7 +153,7 @@ export const SCHEMA = {
         enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
         enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
         enableGyro: { type: "bool", default: true },
-        animateWaypointTransitions: { type: "bool", default: true },
+        animateWaypointTransitions: { type: "bool", default: false },
         showFPSCounter: { type: "bool", default: false },
         allowMultipleHubsInstances: { type: "bool", default: false },
         disableIdleDetection: { type: "bool", default: false },
@@ -349,6 +352,27 @@ export default class Store extends EventTarget {
     if (!this.state.activity.hasChangedName) {
       this.update({ profile: { displayName: generateRandomName() } });
     }
+
+    // cyzyspace
+    const params = await cyzyFetchUserParamsWithToken();
+    if (params) {
+      const newProfile = {};
+      if (params.name) {
+        const newDisplayName = (params?.name || "").substring(0, 32);
+        if (newDisplayName) {
+          newProfile.displayName = newDisplayName;
+        }
+      }
+      if (params.avatarName) {
+        const newAvatarId = await avatarNameToId(params?.avatarName);
+        if (newAvatarId) {
+          newProfile.avatarId = newAvatarId;
+        }
+      }
+      this.update({
+        profile: { ...(this.state.profile || {}), ...newProfile }
+      });
+    }
   };
 
   resetToRandomDefaultAvatar = async () => {
@@ -463,6 +487,7 @@ export default class Store extends EventTarget {
     delete this[STORE_STATE_CACHE_KEY];
 
     if (newState.profile !== undefined) {
+      console.log(newState.profile);
       this.dispatchEvent(new CustomEvent("profilechanged"));
     }
     this.dispatchEvent(new CustomEvent("statechanged"));

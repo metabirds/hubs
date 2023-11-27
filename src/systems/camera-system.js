@@ -204,7 +204,7 @@ export class CameraSystem {
     this.mode = CAMERA_MODE_SCENE_PREVIEW;
     this.snapshot = { audioTransform: new THREE.Matrix4(), matrixWorld: new THREE.Matrix4() };
     this.audioSourceTargetTransform = new THREE.Matrix4();
-    this.isTPS = false; // cyzyspace
+    this.isTPS = true; // cyzyspace
 
     if (customFOV) {
       this.viewingCamera.fov = customFOV;
@@ -427,6 +427,7 @@ export class CameraSystem {
       if (!this.enteredScene && entered) {
         this.enteredScene = true;
         this.mode = CAMERA_MODE_FIRST_PERSON;
+        if (window.defaultIsTPS) this.toggleTPS();
       }
       this.avatarPOVRotator = this.avatarPOVRotator || this.avatarPOV.components["pitch-yaw-rotator"];
       this.viewingCameraRotator = this.viewingCameraRotator || this.viewingCamera.el.components["pitch-yaw-rotator"];
