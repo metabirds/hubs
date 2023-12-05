@@ -39,6 +39,7 @@ export async function cyzyPostLog(type: string, message: string) {
   }
   const profile = window.APP.store.state.profile;
   const roomId = window.APP.hub.hub_id;
+  const hubsUserId = getHubsUserId();
   const params = {
     roomId: roomId,
     data: {
@@ -47,7 +48,7 @@ export async function cyzyPostLog(type: string, message: string) {
       author: profile?.displayName,
       originUrl: `${location.origin}/${roomId}}`
     },
-    hubsUserId: "aaaaa"
+    hubsUserId: hubsUserId
   }
   try {
     let res = await fetch(`${url}/api`, {
@@ -61,9 +62,8 @@ export async function cyzyPostLog(type: string, message: string) {
     console.log(error);
     return null;
   }
-
-
 }
+
 export async function cyzyFetchUserParamsWithToken() {
   const url = CYZY_USER_PARAMS_SERVER_URL;
   if (!url) {
@@ -102,4 +102,14 @@ export async function avatarNameToId(name: string) {
   const avatars = await listFeaturedAvatars();
   const avatar = avatars.find((avatar: any) => avatar.name === name);
   return avatar?.id || null;
+}
+
+export async function getHubsUserId() {
+  let hubsUserId = localStorage.getItem("hubsUserId");
+  if (!hubsUserId) {
+    hubsUserId = Math.random().toString(36).substring(2);
+    localStorage.setItem("hubsUserId", hubsUserId);
+    console.log("hubsUserId:", hubsUserId);
+  }
+  return hubsUserId;
 }
