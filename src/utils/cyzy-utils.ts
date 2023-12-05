@@ -2,6 +2,7 @@ import { fetchReticulumAuthenticated } from "./phoenix-utils";
 import { qsGet } from "./qs_truthy";
 
 const CYZY_USER_PARAMS_SERVER_URL = 'https://cyzy-user-params.cyzyspace.io';
+const CYZY_CHAT_LOGGER_URL = 'https://logger-dev.cyzyspace.io'
 
 
 export async function cyzyPostUserParams() {
@@ -26,6 +27,38 @@ export async function cyzyPostUserParams() {
     return res.token;
   } catch (error) {
     console.error("failed to fetch", error);
+    return null;
+  }
+}
+
+export async function cyzyPostLog(type: string, message: string) {
+  console.log("cyzyPostChatLog", {type, message})
+  const url = CYZY_CHAT_LOGGER_URL;
+  if (!url) {
+    return null;
+  }
+  const profile = window.APP.store.state.profile;
+  const roomId = window.APP.hub.hub_id;
+  const params = {
+    roomId: roomId,
+    data: {
+      category: type,
+      message: message,
+      author: profile?.displayName,
+      originUrl: `${location.origin}/${roomId}}`
+    },
+    hubsUserId: "aaaaa"
+  }
+  try {
+    let res = await fetch(`${url}/api`, {
+      body: JSON.stringify(params),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  } catch (error) {
+    console.log(error);
     return null;
   }
 

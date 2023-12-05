@@ -67,6 +67,7 @@ export class App {
   entryManager?: SceneEntryManager;
   messageDispatch?: any;
   store: Store;
+  hub: any; //cyzyspace
 
   mediaSearchStore = new MediaSearchStore();
 

@@ -3,6 +3,7 @@ import { EventTarget } from "event-target-shim";
 import { Presence } from "phoenix";
 import { migrateChannelToSocket, discordBridgesForPresences, migrateToChannel } from "./phoenix-utils";
 import configs from "./configs";
+import { cyzyPostLog } from "./cyzy-utils";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_MONTH = 1000 * 60 * 60 * 24 * 30;
@@ -67,6 +68,11 @@ export default class HubChannel extends EventTarget {
     }
 
     return !!presenceState.metas[0].permissions[permission];
+  }
+
+  push(type, message) {
+    cyzyPostLog(type, message);
+    return this.channel.push(type, message); // 元のメソッドを呼び出す
   }
 
   // Returns true if the current session has the given permission, *or* will get the permission
@@ -319,6 +325,7 @@ export default class HubChannel extends EventTarget {
 
   sendMessage = (body, type = "chat") => {
     if (!body) return;
+    cyzyPostLog("chat", body); //cyzyspace
     this.channel.push("message", { body, type });
   };
 
