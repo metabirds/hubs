@@ -32,21 +32,27 @@ export async function cyzyPostUserParams() {
 }
 
 export async function cyzyPostLog(type: string, message: string) {
-  console.log("cyzyPostChatLog", {type, message})
   const url = CYZY_CHAT_LOGGER_URL;
   if (!url) {
     return null;
   }
   const profile = window.APP.store.state.profile;
   const roomId = window.APP.hub.hub_id;
-  const hubsUserId = getHubsUserId();
+
+  // @ts-ignore
+  let hubsUserId = window.APP.hubChannel._permissions.account_id || localStorage.getItem("hubsUserId");
+  if (!hubsUserId) {
+    hubsUserId = `guest-${Math.random().toString(36).substring(2)}`;
+    localStorage.setItem("hubsUserId", hubsUserId);
+  }
+
   const params = {
     roomId: roomId,
     data: {
       category: type,
       message: message,
       author: profile?.displayName,
-      originUrl: `${location.origin}/${roomId}}`
+      originUrl: `${location.origin}/${roomId}`
     },
     hubsUserId: hubsUserId
   }
@@ -104,8 +110,9 @@ export async function avatarNameToId(name: string) {
   return avatar?.id || null;
 }
 
-export async function getHubsUserId() {
-  let hubsUserId = localStorage.getItem("hubsUserId");
+export function getHubsUserId() {
+  // @ts-ignore
+  let hubsUserId = window.APP.hubChannel?._permissions.account_id || localStorage.getItem("hubsUserId");
   if (!hubsUserId) {
     hubsUserId = Math.random().toString(36).substring(2);
     localStorage.setItem("hubsUserId", hubsUserId);

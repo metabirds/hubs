@@ -16,6 +16,20 @@ function isSameDay(da, db) {
   return isSameMonth(da, db) && da.getDate() == db.getDate();
 }
 
+function logAndPushToChannnel(event, content, channel) {
+  // cyzyspace
+  if (!channel) return;
+
+  switch (event) {
+    case "message":
+      if (content.type === "chat") {
+        cyzyPostLog("chat", content.body);
+      }
+      break;
+  }
+  return channel.push(event, content);
+}
+
 // Permissions that will be assumed if the user becomes the creator.
 const HUB_CREATOR_PERMISSIONS = [
   "update_hub",
@@ -68,11 +82,6 @@ export default class HubChannel extends EventTarget {
     }
 
     return !!presenceState.metas[0].permissions[permission];
-  }
-
-  push(type, message) {
-    cyzyPostLog(type, message);
-    return this.channel.push(type, message); // 元のメソッドを呼び出す
   }
 
   // Returns true if the current session has the given permission, *or* will get the permission
@@ -325,8 +334,7 @@ export default class HubChannel extends EventTarget {
 
   sendMessage = (body, type = "chat") => {
     if (!body) return;
-    cyzyPostLog("chat", body); //cyzyspace
-    this.channel.push("message", { body, type });
+    logAndPushToChannnel("message", { body, type }, this.channel);
   };
 
   _getCreatorAssignmentToken = () => {
