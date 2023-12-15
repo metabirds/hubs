@@ -40,7 +40,7 @@ export async function cyzyPostLog(type: string, message: string) {
   const roomId = window.APP.hub.hub_id;
 
   // @ts-ignore
-  let hubsUserId = window.APP.hubChannel._permissions.account_id || localStorage.getItem("hubsUserId");
+  let hubsUserId = window.APP.hubChannel.store.state.credentials.email || localStorage.getItem("hubsUserId");
   if (!hubsUserId) {
     hubsUserId = `guest-${Math.random().toString(36).substring(2)}`;
     localStorage.setItem("hubsUserId", hubsUserId);
