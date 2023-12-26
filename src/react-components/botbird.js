@@ -35,7 +35,7 @@ const Botbird = () => {
       window.removeEventListener("message", handleMessage);
       document.body.removeChild(scriptElement);
     };
-  }, [cyzyBotId]);
+  }, [enableCyzyBot, cyzyBotId]);
 
   return enableCyzyBot ? <div id="pastedChatBox" style={{ position: "absolite", pointerEvents: "all" }} /> : null;
 };
