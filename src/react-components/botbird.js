@@ -20,11 +20,11 @@ const Botbird = () => {
     const scriptElement = document.createElement("script");
     scriptElement.src =
       cyzyBotId === "bot1"
-        ? window.cyzyBotId.bot1
+        ? window.cyzyBotSrc.bot1
         : cyzyBotId === "bot2"
-        ? window.cyzyBotId.bot2
+        ? window.cyzyBotSrc.bot2
         : cyzyBotId === "bot3"
-        ? window.cyzyBotId.bot3
+        ? window.cyzyBotSrc.bot3
         : "";
     scriptElement.async = true;
     if (scriptElement.src) {
