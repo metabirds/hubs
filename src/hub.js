@@ -178,6 +178,8 @@ import "./systems/listed-media";
 import "./systems/linked-media";
 import "./systems/audio-debug-system";
 import "./systems/audio-gain-system";
+//cyzy
+import "./systems/cyzy-extension-system";
 
 import "./gltf-component-mappings";
 
