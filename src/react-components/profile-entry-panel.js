@@ -5,6 +5,7 @@ import { replaceHistoryState } from "../utils/history";
 import { AvatarSettingsSidebar } from "./room/AvatarSettingsSidebar";
 import { AvatarSetupModal } from "./room/AvatarSetupModal";
 import AvatarPreview from "./avatar-preview";
+import { cyzyPostUserParams } from "../utils/cyzy-utils";
 
 export default class ProfileEntryPanel extends Component {
   static propTypes = {
@@ -27,9 +28,11 @@ export default class ProfileEntryPanel extends Component {
 
   state = {
     avatarId: null,
+    avatarName: null,
     displayName: null,
     avatar: null,
-    pronouns: null
+    pronouns: null,
+    cyzyUserToken: null
   };
 
   constructor(props) {
@@ -43,13 +46,13 @@ export default class ProfileEntryPanel extends Component {
   }
 
   getStateFromProfile = () => {
-    const { displayName, avatarId, pronouns } = this.props.store.state.profile;
-    return { displayName, avatarId, pronouns };
+    const { displayName, avatarId, pronouns, avatarName, cyzyUserToken } = this.props.store.state.profile;
+    return { displayName, avatarId, pronouns, avatarName, cyzyUserToken };
   };
 
   storeUpdated = () => this.setState(this.getStateFromProfile());
 
-  saveStateAndFinish = e => {
+  saveStateAndFinish = async e => {
     e && e.preventDefault();
 
     const { displayName, pronouns } = this.props.store.state.profile;
@@ -65,11 +68,21 @@ export default class ProfileEntryPanel extends Component {
       profile: {
         displayName: this.state.displayName,
         avatarId: this.state.avatarId,
-        pronouns: this.state.pronouns
+        pronouns: this.state.pronouns,
+        avatarName: this.state.avatarName,
+        cyzyUserToken: this.state.cyzyUserToken
       }
     });
     this.props.finished();
     this.scene.emit("avatar_updated");
+
+    // cyzyspace
+    const cyzyUserToken = await cyzyPostUserParams();
+    this.props.store.update({ profile: { cyzyUserToken: cyzyUserToken } });
+    self.postMessage({
+      eventType: "changeProfile",
+      params: {}
+    });
   };
 
   stopPropagation = e => {
@@ -121,6 +134,7 @@ export default class ProfileEntryPanel extends Component {
     const avatar = await fetchAvatar(this.state.avatarId);
     if (this.state.avatarId !== avatar.avatar_id) return; // This is an old result, ignore it
     this.setState({ avatar });
+    this.setState({ avatarName: avatar.name });
   };
 
   render() {

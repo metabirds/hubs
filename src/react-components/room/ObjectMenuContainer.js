@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { ObjectMenu, ObjectMenuButton } from "./ObjectMenu";
 import { useObjectList } from "./hooks/useObjectList";
@@ -18,6 +18,12 @@ import { ReactComponent as DeleteIcon } from "../icons/Delete.svg";
 import { ReactComponent as AvatarIcon } from "../icons/Avatar.svg";
 import { ReactComponent as HideIcon } from "../icons/Hide.svg";
 import { FormattedMessage } from "react-intl";
+import {
+  CYZY_ROOM_ID_PLACEHOLDER,
+  cyzyAddValidationQuery,
+  cyzyGetCurrentRoomId,
+  cyzyReplaceRoomUrl
+} from "../../utils/cyzy-utils";
 
 function MyMenuItems({ onOpenProfile }) {
   return (
@@ -62,7 +68,27 @@ function ObjectMenuItems({ hubChannel, scene, activeObject, deselectObject, onGo
   const { canPin, isPinned, togglePinned } = usePinObject(hubChannel, scene, activeObject);
   const { canRemoveObject, removeObject } = useRemoveObject(hubChannel, scene, activeObject);
   const { canGoTo, goToSelectedObject } = useGoToSelectedObject(scene, activeObject);
-  const url = getObjectUrl(activeObject);
+  // cyzyspace
+  const [url, setUrl] = useState(getObjectUrl(activeObject));
+  const mediaLoader = activeObject.el.components["media-loader"];
+
+  if (url && (url.match(CYZY_ROOM_ID_PLACEHOLDER) || url.match("linkhref-"))) {
+    const replacedHref = cyzyReplaceRoomUrl(url, cyzyGetCurrentRoomId());
+    const validationUrl = cyzyAddValidationQuery(replacedHref);
+    fetch(validationUrl, { method: "GET" })
+      .then(v => {
+        if (v.status === 200) {
+          setUrl(replacedHref);
+        } else {
+          console.log("head response - error:", v.status);
+          setUrl(mediaLoader.data.src);
+        }
+      })
+      .catch(() => {
+        console.log("head request - failed:", replacedHref);
+        setUrl(mediaLoader.data.src);
+      });
+  }
 
   return (
     <>

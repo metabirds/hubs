@@ -55,7 +55,7 @@ import { ContentMenu, PeopleMenuButton, ObjectsMenuButton, ECSDebugMenuButton } 
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
-import { ReactComponent as DeleteIcon } from "./icons/Delete.svg";
+// import { ReactComponent as DeleteIcon } from "./icons/Delete.svg";
 import { ReactComponent as FavoritesIcon } from "./icons/Favorites.svg";
 import { ReactComponent as StarOutlineIcon } from "./icons/StarOutline.svg";
 import { ReactComponent as StarIcon } from "./icons/Star.svg";
@@ -89,12 +89,13 @@ import { RoomSettingsSidebarContainer } from "./room/RoomSettingsSidebarContaine
 import { AutoExitWarningModal, AutoExitReason } from "./room/AutoExitWarningModal";
 import { ExitReason } from "./room/ExitedRoomScreen";
 import { UserProfileSidebarContainer } from "./room/UserProfileSidebarContainer";
-import { CloseRoomModal } from "./room/CloseRoomModal";
+// import { CloseRoomModal } from "./room/CloseRoomModal";
 import { WebVRUnsupportedModal } from "./room/WebVRUnsupportedModal";
 import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip, RecordModeTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
+import { ToggleTpsContainer } from "./room/ToggleTpsContainer";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { TERMS, PRIVACY } from "../constants";
 import { ECSDebugSidebarContainer } from "./debug-panel/ECSSidebar";
@@ -171,6 +172,7 @@ class UIRoot extends Component {
     activeObject: PropTypes.object,
     selectedObject: PropTypes.object,
     breakpoint: PropTypes.string,
+    locationHash: PropTypes.string, // cyzyspace
     canVoiceChat: PropTypes.bool
   };
 
@@ -191,6 +193,7 @@ class UIRoot extends Component {
     showPrefs: false,
     watching: false,
     isStreaming: false,
+    isTPS: false, // cyzyspace
     isRecordingMode: false,
 
     waitingOnAudio: false,
@@ -501,6 +504,11 @@ class UIRoot extends Component {
     this.setState({ showVideoShareFailed: true });
   };
 
+  // cyzyspace
+  toggleTPS = () => {
+    this.setState({ isTPS: this.props.scene.systems["hubs-systems"].cameraSystem.toggleTPS() !== 1 });
+  };
+
   shareVideo = mediaSource => {
     this.props.scene.emit(`action_share_${mediaSource}`);
   };
@@ -638,6 +646,12 @@ class UIRoot extends Component {
 
     // Push the new history state before going into VR, otherwise menu button will take us back
     clearHistoryState(this.props.history);
+
+    // cysyspace: restore hash
+    if (this.props.locationHash) {
+      console.log("restore stored hash", this.props.locationHash);
+      window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
+    }
 
     const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
@@ -1129,7 +1143,7 @@ class UIRoot extends Component {
     const renderEntryFlow = (!enteredOrWatching && this.props.hub) || this.isWaitingForAutoExit();
 
     const canCreateRoom = !configs.feature("disable_room_creation") || configs.isAdmin();
-    const canCloseRoom = this.props.hubChannel && !!this.props.hubChannel.canOrWillIfCreator("close_hub");
+    // const canCloseRoom = this.props.hubChannel && !!this.props.hubChannel.canOrWillIfCreator("close_hub");
     const isModerator = this.props.hubChannel && this.props.hubChannel.canOrWillIfCreator("kick_users") && !isMobileVR;
 
     const moreMenu = [
@@ -1258,25 +1272,26 @@ class UIRoot extends Component {
                   reason: LeaveReason.leaveRoom
                 });
               }
-            },
-          canCloseRoom && {
-            id: "close-room",
-            label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
-            icon: DeleteIcon,
-            onClick: () =>
-              this.props.performConditionalSignIn(
-                () => this.props.hubChannel.can("update_hub"),
-                () => {
-                  this.showNonHistoriedDialog(CloseRoomModal, {
-                    roomName: this.props.hub.name,
-                    onConfirm: () => {
-                      this.props.hubChannel.closeHub();
-                    }
-                  });
-                },
-                SignInMessages.closeRoom
-              )
-          }
+            }
+          // cyzyspace
+          // canCloseRoom && {
+          //   id: "close-room",
+          //   label: <FormattedMessage id="more-menu.close-room" defaultMessage="Close Room" />,
+          //   icon: DeleteIcon,
+          //   onClick: () =>
+          //     this.props.performConditionalSignIn(
+          //       () => this.props.hubChannel.can("update_hub"),
+          //       () => {
+          //         this.showNonHistoriedDialog(CloseRoomModal, {
+          //           roomName: this.props.hub.name,
+          //           onConfirm: () => {
+          //             this.props.hubChannel.closeHub();
+          //           }
+          //         });
+          //       },
+          //       SignInMessages.closeRoom
+          //     )
+          // }
         ].filter(item => item)
       },
       {
@@ -1628,6 +1643,12 @@ class UIRoot extends Component {
                         {!isLockedDownDemo && (
                           <>
                             <AudioPopoverButtonContainer scene={this.props.scene} />
+                            {/* cyzyspace */}
+                            <ToggleTpsContainer
+                              scene={this.props.scene}
+                              isTPS={this.state.isTPS}
+                              toggleTPS={this.toggleTPS}
+                            />
                             <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
                             <PlacePopoverContainer
                               scene={this.props.scene}

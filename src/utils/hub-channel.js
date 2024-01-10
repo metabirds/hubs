@@ -3,6 +3,7 @@ import { EventTarget } from "event-target-shim";
 import { Presence } from "phoenix";
 import { migrateChannelToSocket, discordBridgesForPresences, migrateToChannel } from "./phoenix-utils";
 import configs from "./configs";
+import { cyzyPostLog } from "./cyzy-utils";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const MS_PER_MONTH = 1000 * 60 * 60 * 24 * 30;
@@ -13,6 +14,20 @@ function isSameMonth(da, db) {
 
 function isSameDay(da, db) {
   return isSameMonth(da, db) && da.getDate() == db.getDate();
+}
+
+function logAndPushToChannnel(event, content, channel) {
+  // cyzyspace
+  if (!channel) return;
+
+  switch (event) {
+    case "message":
+      if (content.type === "chat") {
+        cyzyPostLog("chat", content.body);
+      }
+      break;
+  }
+  return channel.push(event, content);
 }
 
 // Permissions that will be assumed if the user becomes the creator.
@@ -319,7 +334,7 @@ export default class HubChannel extends EventTarget {
 
   sendMessage = (body, type = "chat") => {
     if (!body) return;
-    this.channel.push("message", { body, type });
+    logAndPushToChannnel("message", { body, type }, this.channel);
   };
 
   _getCreatorAssignmentToken = () => {

@@ -31,6 +31,15 @@ import { SHAPE } from "three-ammo/constants";
 import { addComponent } from "bitecs";
 import { MediaContentBounds } from "../bit-components";
 
+// cysyspace
+import qsTruthy from "../utils/qs_truthy";
+import {
+  CYZY_ROOM_ID_PLACEHOLDER,
+  cyzyAddValidationQuery,
+  cyzyGetCurrentRoomId,
+  cyzyReplaceRoomUrl
+} from "../utils/cyzy-utils";
+
 let loadingObject;
 
 waitForDOMContentLoaded().then(() => {
@@ -38,6 +47,8 @@ waitForDOMContentLoaded().then(() => {
     loadingObject = gltf;
   });
 });
+
+const disableDynamicRoomPath = qsTruthy("disableDynamicRoomPath"); // cyzyspace
 
 AFRAME.registerComponent("media-loader", {
   schema: {
@@ -353,6 +364,11 @@ AFRAME.registerComponent("media-loader", {
         src = this.data.src = `${window.location.origin}${window.location.pathname}${window.location.search}${src}`;
       }
 
+      //cyzyspace: replace placeholders.
+      if (!disableDynamicRoomPath) {
+        src = this.data.src = cyzyReplaceRoomUrl(src, cyzyGetCurrentRoomId());
+      }
+
       let canonicalUrl = src;
       let canonicalAudioUrl = null; // set non-null only if audio track is separated from video track (eg. 360 video)
       let accessibleUrl = src;
@@ -479,7 +495,26 @@ AFRAME.registerComponent("media-loader", {
                 isFlat: true
               });
             } else if (this.data.mediaOptions.href) {
-              this.el.setAttribute("hover-menu__link", { template: "#link-hover-menu", isFlat: true });
+              // cyzyspace
+              const href = this.data.mediaOptions.href;
+              if (href.match(CYZY_ROOM_ID_PLACEHOLDER)) {
+                const replacedHref = cyzyReplaceRoomUrl(href, cyzyGetCurrentRoomId());
+                const validationUrl = cyzyAddValidationQuery(replacedHref);
+                fetch(validationUrl, { method: "GET" })
+                  .then(v => {
+                    if (v.status === 200) {
+                      this.el.setAttribute("hover-menu__link", { template: "#link-hover-menu", isFlat: true });
+                    } else {
+                      console.log("head response - error:", v.status);
+                    }
+                  })
+                  .catch(() => {
+                    console.log("head request - failed:", replacedHref);
+                  });
+                this.data.mediaOptions.href = replacedHref;
+              } else {
+                this.el.setAttribute("hover-menu__link", { template: "#link-hover-menu", isFlat: true });
+              }
             }
           },
           { once: true }

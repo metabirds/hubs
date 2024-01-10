@@ -13,6 +13,7 @@ import { EventTarget } from "event-target-shim";
 import { fetchRandomDefaultAvatarId, generateRandomName } from "../utils/identity.js";
 import { NO_DEVICE_ID } from "../utils/media-devices-utils.js";
 import { AAModes } from "../constants";
+import { avatarNameToId, cyzyCheckIsMobile, cyzyFetchUserParamsWithToken } from "../utils/cyzy-utils";
 
 const defaultMaterialQuality = (function () {
   const MATERIAL_QUALITY_OPTIONS = ["low", "medium", "high"];
@@ -20,7 +21,8 @@ const defaultMaterialQuality = (function () {
   // HACK: AFRAME is not available on all pages, so we catch the ReferenceError.
   // We could move AFRAME's device utils into a separate package (or into this repo)
   // if we wanted to use these checks without having to import all of AFRAME.
-  const isMobile = window.AFRAME && (AFRAME.utils.device.isMobile() || AFRAME.utils.device.isMobileVR());
+  const isMobile =
+    (window.AFRAME && (AFRAME.utils.device.isMobile() || AFRAME.utils.device.isMobileVR())) || cyzyCheckIsMobile();
   if (isMobile) {
     const qsMobileDefault = qsGet("default_mobile_material_quality");
     if (qsMobileDefault && MATERIAL_QUALITY_OPTIONS.indexOf(qsMobileDefault) !== -1) {
@@ -63,9 +65,15 @@ export const SCHEMA = {
       type: "object",
       additionalProperties: false,
       properties: {
-        displayName: { type: "string", pattern: "^[A-Za-z0-9_~\\s\\-]{3,32}$" },
+        displayName: {
+          type: "string",
+          pattern:
+            "^[\\p{Script=Han}\\p{Script=Hiragana}\\p{Script=Katakana}ー～　（）［］【】０-９A-Za-z0-9_~ -]{3,32}$"
+        },
         avatarId: { type: "string" },
         pronouns: { type: "string", pattern: "^([a-zA-Z]{1,32}\\/){0,4}[a-zA-Z]{1,32}$" },
+        avatarName: { type: "string" },
+        token: { type: "string" },
         // personalAvatarId is obsolete, but we need it here for backwards compatibility.
         personalAvatarId: { type: "string" }
       }
@@ -123,7 +131,7 @@ export const SCHEMA = {
         enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
         enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
         enableGyro: { type: "bool", default: true },
-        animateWaypointTransitions: { type: "bool", default: true },
+        animateWaypointTransitions: { type: "bool", default: false },
         showFPSCounter: { type: "bool", default: false },
         allowMultipleHubsInstances: { type: "bool", default: false },
         disableIdleDetection: { type: "bool", default: false },
@@ -323,6 +331,27 @@ export default class Store extends EventTarget {
     if (!this.state.activity.hasChangedNameOrPronouns) {
       this.update({ profile: { displayName: generateRandomName() } });
     }
+
+    // cyzyspace
+    const params = await cyzyFetchUserParamsWithToken();
+    if (params) {
+      const newProfile = {};
+      if (params.name) {
+        const newDisplayName = (params?.name || "").substring(0, 32);
+        if (newDisplayName) {
+          newProfile.displayName = newDisplayName;
+        }
+      }
+      if (params.avatarName) {
+        const newAvatarId = await avatarNameToId(params?.avatarName);
+        if (newAvatarId) {
+          newProfile.avatarId = newAvatarId;
+        }
+      }
+      this.update({
+        profile: { ...(this.state.profile || {}), ...newProfile }
+      });
+    }
   };
 
   resetToRandomDefaultAvatar = async () => {
@@ -409,6 +438,10 @@ export default class Store extends EventTarget {
     // Cleanup unsupported properties
     if (!valid) {
       errors.forEach(error => {
+        // Ignore jsonschema error for displayName, as jsonschema validator don't enable 'unicode'
+        // flag for RegExp constructor before 1.2.9.
+        if (error.property === "instance.profile.displayName") return;
+
         console.error(`Removing invalid preference from store: ${error.message}`);
         delete error.instance[error.argument];
       });

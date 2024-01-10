@@ -23,6 +23,7 @@ import { scaleToAspectRatio } from "../utils/scale-to-aspect-ratio";
 import { isSafari } from "../utils/detect-safari";
 import { isIOS as detectIOS } from "../utils/is-mobile";
 import { Layers } from "../camera-layers";
+import { CYZY_ROOM_ID_PLACEHOLDER } from "../utils/cyzy-utils";
 
 const ONCE_TRUE = { once: true };
 const TYPE_IMG_PNG = { type: "image/png" };
@@ -686,7 +687,13 @@ AFRAME.registerComponent("media-video", {
       this.seekBackButton.object3D.visible =
         mayModifyPlayHead;
 
-    this.linkButton.object3D.visible = !!mediaLoader.mediaOptions.href;
+    // cyzyspace
+    const href = mediaLoader.mediaOptions.href;
+    if (href && href.match(CYZY_ROOM_ID_PLACEHOLDER)) {
+      this.linkButton.object3D.visible = false;
+    } else {
+      this.linkButton.object3D.visible = !!mediaLoader.mediaOptions.href;
+    }
 
     if (this.videoIsLive) {
       this.timeLabel.setAttribute("text", "value", "LIVE");
