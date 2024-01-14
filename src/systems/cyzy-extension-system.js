@@ -1,3 +1,4 @@
+// cyzyspace : for searching scripts
 import { loadModel } from "../components/gltf-model-plus";
 import { getSceneUrlForHub } from "../hub"; //
 AFRAME.registerSystem("cyzy-extension", {
@@ -49,12 +50,6 @@ AFRAME.registerSystem("cyzy-extension", {
     // const gltfScene = cloneModelFromCache(sceneUrl);
     // console.log(gltfScene);
     this.getCustomUserData(gltfScene.scene);
-    //mock Data
-    this.cyzy_extension_bots["bot1"] = {
-      id: "bot1",
-      r: 3,
-      position: new THREE.Vector3()
-    };
   },
   getCustomUserData: function (modelData) {
     // console.log(modelData);
