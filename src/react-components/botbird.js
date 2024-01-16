@@ -4,38 +4,45 @@ const Botbird = () => {
   const [enableCyzyBot, setEnableCyzyBot] = useState(false);
   const [cyzyBotId, setCyzyBotId] = useState("");
 
+  const handleMessage = e => {
+    const { cyzyBot, cyzyBotId } = e.data;
+
+    if (cyzyBot === "enable") {
+      setEnableCyzyBot(true);
+      setCyzyBotId(cyzyBotId);
+    } else if (cyzyBot === "disable") {
+      setEnableCyzyBot(false);
+      setCyzyBotId("");
+    }
+  };
+  window.addEventListener("message", handleMessage);
+
   useEffect(() => {
-    const handleMessage = e => {
-      const { cyzyBot, cyzyBotId } = e.data;
-
-      if (cyzyBotId && cyzyBot === "enable") {
-        setEnableCyzyBot(true);
-        setCyzyBotId(cyzyBotId);
-      } else if (cyzyBot === "disable") {
-        setEnableCyzyBot(false);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
     const scriptElement = document.createElement("script");
+    scriptElement.id = "cyzyBotScript";
     scriptElement.src =
       cyzyBotId === "bot1"
-        ? window.cyzyBotSrc.bot1
+        ? window.cyzyBotSrc?.bot1
         : cyzyBotId === "bot2"
-        ? window.cyzyBotSrc.bot2
+        ? window.cyzyBotSrc?.bot2
         : cyzyBotId === "bot3"
-        ? window.cyzyBotSrc.bot3
+        ? window.cyzyBotSrc?.bot3
         : "";
+
     scriptElement.async = true;
-    if (scriptElement.src) {
+    if (scriptElement.src && cyzyBotId) {
       document.body.appendChild(scriptElement);
     }
 
+    const scriptDom = document.getElementById("cyzyBotScript");
+
     return () => {
       window.removeEventListener("message", handleMessage);
-      document.body.removeChild(scriptElement);
+      if (scriptDom) {
+        scriptDom.remove();
+      }
     };
-  }, [enableCyzyBot, cyzyBotId]);
+  }, [cyzyBotId]);
 
   return enableCyzyBot ? <div id="pastedChatBox" style={{ position: "absolite", pointerEvents: "all" }} /> : null;
 };
