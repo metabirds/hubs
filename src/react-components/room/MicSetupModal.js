@@ -56,6 +56,11 @@ export function MicSetupModal({
       className={className}
       {...rest}
     >
+      <p className={styles.noteForAudio}>
+        {
+          "このアプリケーションは、空間内のアバターと音声で会話をすることができます（パソコンや端末にマイクとスピーカーが接続（内蔵）されている場合は、どちらも「ON」にして下さい）。"
+        }
+      </p>
       <Column center padding grow className={styles.content}>
         <p>
           <FormattedMessage
