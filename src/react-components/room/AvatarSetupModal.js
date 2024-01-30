@@ -15,7 +15,7 @@ export function AvatarSetupModal({ className, onBack, ...rest }) {
     >
       <p className={styles.noteForAudio}>
         {
-          "このアプリケーションは、空間内のアバターと音声で会話をすることができます（パソコンや端末にマイクとスピーカーが接続（内蔵）されている場合は、どちらも「ON」にして下さい）。"
+          "このアプリケーションは、空間内のAIアバターと音声で会話をすることができます。各アバターに近づくと出てくるチャット画面にて「AI音声会話」をONにしてください。"
         }
       </p>
       <AvatarSettingsContent {...rest} />

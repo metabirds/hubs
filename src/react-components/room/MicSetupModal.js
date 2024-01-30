@@ -9,7 +9,7 @@ import { ReactComponent as InfoIcon } from "../icons/Info.svg";
 import styles from "./MicSetupModal.scss";
 import { BackButton } from "../input/BackButton";
 import { SelectInputField } from "../input/SelectInputField";
-import { ToggleInput } from "../input/ToggleInput";
+import { ToggleInputMic } from "../input/ToggleInputMic";
 import { Column } from "../layout/Column";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { Popover } from "../popover/Popover";
@@ -58,7 +58,7 @@ export function MicSetupModal({
     >
       <p className={styles.noteForAudio}>
         {
-          "このアプリケーションは、空間内のアバターと音声で会話をすることができます（パソコンや端末にマイクとスピーカーが接続（内蔵）されている場合は、どちらも「ON」にして下さい）。"
+          "このアプリケーションは、空間内のAIアバターと音声で会話をすることができます。各アバターに近づくと出てくるチャット画面にて「AI音声会話」をONにしてください。"
         }
       </p>
       <Column center padding grow className={styles.content}>
@@ -90,12 +90,12 @@ export function MicSetupModal({
                 <div className={styles.actionContainer}>
                   {permissionStatus === PermissionStatus.GRANTED ? (
                     <>
-                      <ToggleInput
+                      <ToggleInputMic
                         label={<FormattedMessage id="mic-setup-modal.mute-mic-toggle-v2" defaultMessage="Mute" />}
                         checked={isMicrophoneMuted}
                         onChange={onChangeMicrophoneMuted}
                       />
-                      <Popover
+                      {/* <Popover
                         title="Info"
                         content={
                           <Column className={styles.popoverContent}>
@@ -120,7 +120,7 @@ export function MicSetupModal({
                             />
                           </div>
                         )}
-                      </Popover>
+                      </Popover> */}
                     </>
                   ) : (
                     (permissionStatus === PermissionStatus.PROMPT && (

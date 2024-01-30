@@ -55,12 +55,13 @@
 }
 
 :local(.note-for-audio) {
-  width: 360px;
+  width: calc(100% - 32px);
+  max-width: 360px;
   margin: 16px auto 4px;
   padding: 8px;
   border-radius: 4px;
   text-align: justify;
-  font-size: 10px;
+  font-size: 0.8em;
   font-weight: bold;
   background: #484848;
   color: #FFF;

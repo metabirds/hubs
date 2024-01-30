@@ -21,7 +21,7 @@ export const AudioPopoverButtonContainer = ({ scene, initiallyVisible, content }
         <ToolbarMicButton
           scene={scene}
           icon={isMicMuted || !canVoiceChat || micPermissionDenied ? <MicrophoneMutedIcon /> : <MicrophoneIcon />}
-          label={<FormattedMessage id="voice-button-container.label" defaultMessage="Voice" />}
+          label={"ユーザーマイク"}
           preset="basic"
           onClick={toggleMute}
           statusColor={!micPermissionDenied && canVoiceChat ? (isMicMuted ? "disabled" : "enabled") : undefined}
