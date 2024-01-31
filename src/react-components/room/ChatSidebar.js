@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, forwardRef } from "react";
+import React, { useEffect, useRef, forwardRef, useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { Sidebar } from "../sidebar/Sidebar";
@@ -9,6 +9,8 @@ import { ReactComponent as SendIcon } from "../icons/Send.svg";
 import { ReactComponent as ReactionIcon } from "../icons/Reaction.svg";
 import { IconButton } from "../input/IconButton";
 import { TextAreaInput } from "../input/TextAreaInput";
+import { Column } from "../layout/Column";
+import { Button } from "../input/Button";
 import { Popover } from "../popover/Popover";
 import { EmojiPicker } from "./EmojiPicker";
 import styles from "./ChatSidebar.scss";
@@ -473,6 +475,12 @@ ChatMessageList.propTypes = {
 ChatMessageList.displayName = "ChatMessageList";
 
 export function ChatSidebar({ onClose, children, ...rest }) {
+  //cyzy space
+  const [consentPolicy, setConsentPolicy] = useState(false);
+  function handleConsent() {
+    window.concentPolicy = true;
+    setConsentPolicy(true);
+  }
   return (
     <Sidebar
       title={<FormattedMessage id="chat-sidebar.title" defaultMessage="Chat" />}
@@ -481,6 +489,19 @@ export function ChatSidebar({ onClose, children, ...rest }) {
       disableOverflowScroll
       {...rest}
     >
+      {!consentPolicy &&
+        !window.concentPolicy && ( //cyzy space
+          <div className={styles.chatConcentWrap}>
+            <div className={styles.chatConcentModal}>
+              <p className={styles.chatConcentText}>{window.concentMessage}</p>
+              <Column center className={styles.buttons}>
+                <Button preset="accent4" onClick={handleConsent}>
+                  <span>{"同意する"}</span>
+                </Button>
+              </Column>
+            </div>
+          </div>
+        )}
       {children}
     </Sidebar>
   );

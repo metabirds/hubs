@@ -20,6 +20,14 @@
   object-position: center;
   margin: 16px 16px 32px;
 }
+:local(.logo-container) {
+  padding: 0 16px;
+  margin-top: 16px;
+  margin-bottom: 32px;
+  img {
+    max-height: 20svh;
+  }
+}
 
 :local(.room-name) {
   display: flex;
@@ -53,4 +61,17 @@
       margin-right: 8px;
     }
   }
+}
+
+:local(.note-for-audio) {
+  width: calc(100% - 32px);
+  max-width: 360px;
+  margin: 16px auto 4px;
+  padding: 8px;
+  border-radius: 4px;
+  text-align: justify;
+  font-size: 0.8em;
+  font-weight: bold;
+  background: #484848;
+  color: #fff;
 }

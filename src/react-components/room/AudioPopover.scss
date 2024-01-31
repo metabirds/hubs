@@ -17,7 +17,14 @@
 }
 
 :local(.buttons-container) {
+  position: relative;
   display: flex;
+  label {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
 }
 
 :local(.icon-enabled) {

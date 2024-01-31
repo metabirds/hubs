@@ -466,6 +466,7 @@ export default class Store extends EventTarget {
     delete this[STORE_STATE_CACHE_KEY];
 
     if (newState.profile !== undefined) {
+      console.log(newState.profile);
       this.dispatchEvent(new CustomEvent("profilechanged"));
     }
     this.dispatchEvent(new CustomEvent("statechanged"));

@@ -9,7 +9,7 @@ import { ReactComponent as InfoIcon } from "../icons/Info.svg";
 import styles from "./MicSetupModal.scss";
 import { BackButton } from "../input/BackButton";
 import { SelectInputField } from "../input/SelectInputField";
-import { ToggleInput } from "../input/ToggleInput";
+import { ToggleInputMic } from "../input/ToggleInputMic";
 import { Column } from "../layout/Column";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { PermissionStatus } from "../../utils/media-devices-utils";
@@ -56,6 +56,11 @@ export function MicSetupModal({
       className={className}
       {...rest}
     >
+      <p className={styles.noteForAudio}>
+        {
+          "このアプリケーションは、空間内のAIアバターと音声で会話をすることができます。各アバターに近づくと出てくるチャット画面にて「AI音声会話」をONにしてください。"
+        }
+      </p>
       <Column center padding grow className={styles.content}>
         <p>
           <FormattedMessage
@@ -85,7 +90,7 @@ export function MicSetupModal({
                 <div className={styles.actionContainer}>
                   {permissionStatus === PermissionStatus.GRANTED ? (
                     <>
-                      <ToggleInput
+                      <ToggleInputMic
                         label={<FormattedMessage id="mic-setup-modal.mute-mic-toggle-v2" defaultMessage="Mute" />}
                         checked={isMicrophoneMuted}
                         onChange={onChangeMicrophoneMuted}
@@ -97,6 +102,32 @@ export function MicSetupModal({
                       >
                         <InfoIcon className={styles.infoIcon} />
                       </ToolTip>
+                      {/* <Popover
+                        title="Info"
+                        content={
+                          <Column className={styles.popoverContent}>
+                            <FormattedMessage
+                              id="mic-setup-modal.mute-mic-info"
+                              defaultMessage="You can mute anytime after you enter the room"
+                            />
+                          </Column>
+                        }
+                        placement="top"
+                        showHeader={false}
+                        disableFullscreen
+                        popoverClass={styles.popover}
+                        arrowClass={styles.popoverArrow}
+                      >
+                        {({ openPopover, closePopover, triggerRef }) => (
+                          <div ref={triggerRef}>
+                            <InfoIcon
+                              className={styles.infoIcon}
+                              onMouseEnter={openPopover}
+                              onMouseLeave={closePopover}
+                            />
+                          </div>
+                        )}
+                      </Popover> */}
                     </>
                   ) : (
                     (permissionStatus === PermissionStatus.PROMPT && (

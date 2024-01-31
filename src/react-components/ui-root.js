@@ -95,7 +95,7 @@ import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip, RecordModeTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
-import { ToggleTpsContainer } from "./room/ToggleTpsContainer";
+import { ToggleTpsContainer } from "./room/ToggleTpsContainer"; // cyzyspace
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { TERMS, PRIVACY } from "../constants";
 import { ECSDebugSidebarContainer } from "./debug-panel/ECSSidebar";
@@ -119,6 +119,7 @@ async function grantedMicLabels() {
   return mediaDevices.filter(d => d.label && d.kind === "audioinput").map(d => d.label);
 }
 
+const isSmallScreen = window.innerWidth < 450;
 const isMobile = AFRAME.utils.device.isMobile();
 const isMobileVR = AFRAME.utils.device.isMobileVR();
 const AUTO_EXIT_TIMER_SECONDS = 10;
@@ -647,13 +648,14 @@ class UIRoot extends Component {
     // Push the new history state before going into VR, otherwise menu button will take us back
     clearHistoryState(this.props.history);
 
-    // cysyspace: restore hash
+    // cyzyspace
+    //restore hash
     if (this.props.locationHash) {
       console.log("restore stored hash", this.props.locationHash);
       window.history.replaceState(null, null, document.location.href.split("#")[0] + this.props.locationHash);
     }
 
-    const muteOnEntry = this.props.store.state.preferences.muteMicOnEntry;
+    const muteOnEntry = true;
     await this.props.enterScene(this.state.enterInVR, muteOnEntry);
 
     this.setState({ entered: true, entering: false, showShareDialog: false });

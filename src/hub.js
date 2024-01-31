@@ -181,6 +181,9 @@ import "./systems/listed-media";
 import "./systems/linked-media";
 import "./systems/audio-debug-system";
 import "./systems/audio-gain-system";
+//cyzy
+import "./systems/cyzy-extension-system";
+
 import "./gltf-component-mappings";
 
 import { App, getScene } from "./app";
@@ -230,6 +233,7 @@ if (isEmbed && !qs.get("embed_token")) {
   // Should be covered by X-Frame-Options, but just in case.
   throw new Error("no embed token");
 }
+const locationHash = document.location.hash;
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -296,7 +300,15 @@ const isDebug = qsTruthy("debug");
 let root;
 
 if (!isBotMode && !isTelemetryDisabled) {
-  registerTelemetry("/hub", "Room Landing Page");
+  const defaultRoomId = configs.feature("default_room_id");
+
+  const hubId =
+    qs.get("hub_id") ||
+    (document.location.pathname === "/" && defaultRoomId
+      ? defaultRoomId
+      : document.location.pathname.substring(1).split("/")[0]);
+
+  registerTelemetry(`/hub/${hubId}`, "Room Landing Page");
 }
 
 disableiOSZoom();
@@ -369,6 +381,7 @@ function mountUI(props = {}) {
                     forcedVREntryType,
                     store,
                     mediaSearchStore,
+                    locationHash,
                     ...props,
                     ...routeProps
                   }}

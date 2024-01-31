@@ -30,6 +30,11 @@ export function RoomEntryModal({
   const breakpoint = useCssBreakpoints();
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
+      <p className={styles.noteForAudio}>
+        {
+          "このアプリケーションは、空間内のAIアバターと音声で会話をすることができます。各アバターに近づくと出てくるチャット画面にて「AI音声会話」をONにしてください。"
+        }
+      </p>
       <Column center className={styles.content}>
         {breakpoint !== "sm" && breakpoint !== "md" && <AppLogo className={styles.logo} />}
         <div className={styles.roomName}>
