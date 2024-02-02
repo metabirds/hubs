@@ -3,7 +3,7 @@ name: Build and Push to ECR
 on:
   push:
     branches:
-      - cyzyspace/ce-custom-client
+      - cyzyspace/ce-custom-client-231201
 
 jobs:
   build-and-push:
