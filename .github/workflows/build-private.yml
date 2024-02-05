@@ -29,7 +29,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY_NAME: metabirds/hubs
           IMAGE_TAG: ${{ github.sha }}
-          LATEST_TAG: latest
+          LATEST_TAG: 231201-latest
         run: |
           docker build -f RetPageOriginDockerfile -t $REPOSITORY_NAME .
           docker tag $REPOSITORY_NAME:latest $ECR_REGISTRY/$REPOSITORY_NAME:$LATEST_TAG
