@@ -50,6 +50,9 @@ export function ToolbarMicButton({ scene, disabled, ...rest }) {
       title={disabled ? intl.formatMessage(micButtonMessages["title"]) : undefined}
       disabled={disabled}
       {...rest}
+      style={{
+        position: "static"
+      }}
     />
   );
 }

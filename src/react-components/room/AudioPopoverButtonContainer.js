@@ -20,18 +20,18 @@ export const AudioPopoverButtonContainer = ({ scene, initiallyVisible }) => {
   const muteStatuses = defineMessages({
     mute: {
       id: "mute",
-      defaultMessage: "Mute"
+      defaultMessage: "OFF"
     },
     unmute: {
       id: "unmute",
-      defaultMessage: "Unmute"
+      defaultMessage: "ON"
     }
   });
 
   const description = intl.formatMessage(
     {
       id: "mute-tooltip.description",
-      defaultMessage: "{muteStatus} Microphone (M)"
+      defaultMessage: "ユーザーマイクを{muteStatus}にします"
     },
     { muteStatus: intl.formatMessage(muteStatuses[isMicMuted ? "unmute" : "mute"]) }
   );
@@ -40,8 +40,9 @@ export const AudioPopoverButtonContainer = ({ scene, initiallyVisible }) => {
     <AudioPopoverButton
       initiallyVisible={initiallyVisible}
       content={<AudioPopoverContentContainer scene={scene} />}
+      style={{ position: "static" }}
       micButton={
-        <ToolTip description={description}>
+        <ToolTip description={description} style={{ position: "static" }}>
           <ToolbarMicButton
             scene={scene}
             icon={isMicMuted || !canVoiceChat || micPermissionDenied ? <MicrophoneMutedIcon /> : <MicrophoneIcon />}
@@ -51,6 +52,7 @@ export const AudioPopoverButtonContainer = ({ scene, initiallyVisible }) => {
             statusColor={!micPermissionDenied && canVoiceChat ? (isMicMuted ? "disabled" : "enabled") : undefined}
             type={"right"}
             disabled={!canVoiceChat || micPermissionDenied}
+            style={{ position: "static" }}
           />
         </ToolTip>
       }

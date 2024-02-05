@@ -95,39 +95,13 @@ export function MicSetupModal({
                         checked={isMicrophoneMuted}
                         onChange={onChangeMicrophoneMuted}
                       />
-                      <ToolTip
+                      {/* <ToolTip
                         location="right"
                         category="primary"
                         description="Toggle mic on/off anytime after you enter the room (M)"
                       >
                         <InfoIcon className={styles.infoIcon} />
-                      </ToolTip>
-                      {/* <Popover
-                        title="Info"
-                        content={
-                          <Column className={styles.popoverContent}>
-                            <FormattedMessage
-                              id="mic-setup-modal.mute-mic-info"
-                              defaultMessage="You can mute anytime after you enter the room"
-                            />
-                          </Column>
-                        }
-                        placement="top"
-                        showHeader={false}
-                        disableFullscreen
-                        popoverClass={styles.popover}
-                        arrowClass={styles.popoverArrow}
-                      >
-                        {({ openPopover, closePopover, triggerRef }) => (
-                          <div ref={triggerRef}>
-                            <InfoIcon
-                              className={styles.infoIcon}
-                              onMouseEnter={openPopover}
-                              onMouseLeave={closePopover}
-                            />
-                          </div>
-                        )}
-                      </Popover> */}
+                      </ToolTip> */}
                     </>
                   ) : (
                     (permissionStatus === PermissionStatus.PROMPT && (

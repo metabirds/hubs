@@ -9,12 +9,12 @@ import { ToolTip } from "@mozilla/lilypad-ui";
 
 const chatTooltipDescription = defineMessage({
   id: "chat-tooltip.description",
-  defaultMessage: "Open the chat sidebar (T)"
+  defaultMessage: "他のユーザーとチャットします"
 });
 
 type ChatToolbarButtonProps = {
   onClick: () => void;
-  selected: boolean
+  selected: boolean;
 };
 
 const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {

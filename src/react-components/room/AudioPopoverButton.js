@@ -9,7 +9,7 @@ import { ToolTip } from "@mozilla/lilypad-ui";
 
 const audioPopoverTitle = defineMessage({
   id: "audio-toolbar-popover.title",
-  defaultMessage: "Audio Settings"
+  defaultMessage: "オーディオ設定を開きます"
 });
 
 export const AudioPopoverButton = ({ initiallyVisible, content, micButton, disabled }) => {

@@ -15,7 +15,7 @@ import { ToolTip } from "@mozilla/lilypad-ui";
 
 const reactTooltipDescription = defineMessage({
   id: "react-tooltip.description",
-  defaultMessage: "Reactions"
+  defaultMessage: "空間中に絵文字を表示します"
 });
 
 const reactionPopoverTitle = defineMessage({
