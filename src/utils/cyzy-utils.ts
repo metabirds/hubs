@@ -2,9 +2,6 @@ import configs from "./configs";
 import { fetchReticulumAuthenticated } from "./phoenix-utils";
 import { qsGet } from "./qs_truthy";
 
-const CYZY_USER_PARAMS_SERVER_URL = "https://cyzy-user-params.cyzyspace.io";
-const CYZY_CHAT_LOGGER_URL = "https://logger-dev.cyzyspace.io";
-
 export const CYZY_ROOM_ID_PLACEHOLDER = "__ROOM_ID__";
 
 export function cyzyCheckIsMobile() {
@@ -47,7 +44,7 @@ export function cyzyAddValidationQuery(url: string) {
 }
 
 export async function cyzyPostUserParams() {
-  const url = CYZY_USER_PARAMS_SERVER_URL;
+  const url = (configs as any).CYZY_USER_PARAMS_SERVER_URL;
   if (!url) {
     return null;
   }
@@ -73,7 +70,7 @@ export async function cyzyPostUserParams() {
 }
 
 export async function cyzyPostLog(type: string, message: string) {
-  const url = CYZY_CHAT_LOGGER_URL;
+  const url = (configs as any).CYZY_CHAT_LOGGER_URL;
   if (!url) {
     return null;
   }
@@ -111,7 +108,7 @@ export async function cyzyPostLog(type: string, message: string) {
 }
 
 export async function cyzyFetchUserParamsWithToken() {
-  const url = CYZY_USER_PARAMS_SERVER_URL;
+  const url = (configs as any).CYZY_USER_PARAMS_SERVER_URL;
   if (!url) {
     return null;
   }

@@ -729,6 +729,8 @@ module.exports = async (env, argv) => {
           POSTGREST_SERVER: process.env.POSTGREST_SERVER,
           UPLOADS_HOST: process.env.UPLOADS_HOST,
           BASE_ASSETS_PATH: process.env.BASE_ASSETS_PATH,
+          CYZY_USER_PARAMS_SERVER_URL: process.env.CYZY_USER_PARAMS_SERVER_URL,
+          CYZY_CHAT_LOGGER_URL: process.env.CYZY_CHAT_LOGGER_URL,
           APP_CONFIG: appConfig
         })
       })
