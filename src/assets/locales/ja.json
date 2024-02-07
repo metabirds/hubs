@@ -695,5 +695,12 @@
   "webvr-unsupported-modal.message": "WebVRはこのブラウザではサポートされていません。OculusやSteamVRで入場する場合は、Firefoxを使用してください。",
   "webvr-unsupported-modal.title": "VRで入室",
   "webvr-unsupported-modal.webvr-rocks-link": "実験的なVRをサポートしているブラウザの一覧は <a>WebVR Rocks</a> を確認してください。",
-  "whats-new-page.title": "新着情報"
+  "whats-new-page.title": "新着情報",
+  "chat-tooltip.description": "他のユーザーとチャットします",
+  "react-tooltip.description": "空間中に絵文字を表示します",
+  "place-tooltip.description": "さまざまなオブジェクトやツールから選んで、部屋を編集できます",
+  "share-tooltip.description": "画面またはウェブカメラを部屋内のオブジェクトとして表示します",
+  "toggleTPS.description": "一人称視点と三人称視点を切り替えます",
+  "mute-tooltip.description": "ユーザーマイクを{muteStatus}にします",
+  "invite-tooltip.description": "ルームリンクを共有して他のゲストを招待します"
 }
