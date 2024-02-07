@@ -48,7 +48,7 @@ InvitePopoverContent.propTypes = {
 
 const inviteTooltipDescription = defineMessage({
   id: "invite-tooltip.description",
-  defaultMessage: "Copy room link to invite others to the room"
+  defaultMessage: "ルームリンクを共有して他のゲストを招待します"
 });
 
 const invitePopoverTitle = defineMessage({

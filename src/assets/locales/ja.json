@@ -21,7 +21,7 @@
   "audio-debug-view.media.outerGain": "範囲外での増加量",
   "audio-debug-view.media.refDistance": "基準距離",
   "audio-debug-view.media.rolloffFactor": "Rolloff",
-  "audio-toolbar-popover.title": "オーディオ設定",
+  "audio-toolbar-popover.title": "オーディオ設定を開きます",
   "auto-exit-warning-modal.message": "セッションを自動終了します {secondsRemaining} 秒",
   "auto-exit-warning-modal.reason.concurrent-session": "別のセッションを開始しました。",
   "auto-exit-warning-modal.reason.idle": "長時間アイドル状態です。",
