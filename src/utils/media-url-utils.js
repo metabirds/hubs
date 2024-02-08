@@ -71,6 +71,10 @@ export const scaledThumbnailUrlFor = (url, width, height) => {
 };
 
 export const isNonCorsProxyDomain = hostname => {
+  // cyzyspace
+  if (hostname.startsWith("cyzy-assets")) {
+    return false;
+  }
   return nonCorsProxyDomains.find(domain => hostname.endsWith(domain));
 };
 
