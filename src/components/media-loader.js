@@ -21,6 +21,7 @@ import {
 } from "../utils/media-url-utils";
 import { addAnimationComponents } from "../utils/animation";
 
+import configs from "../utils/configs";
 import loadingObjectSrc from "../assets/models/LoadingObject_Atom.glb";
 import { SOUND_MEDIA_LOADING, SOUND_MEDIA_LOADED } from "../systems/sound-effects-system";
 import { loadModel } from "./gltf-model-plus";

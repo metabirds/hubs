@@ -38,6 +38,7 @@ export default class ProfileEntryPanel extends Component {
   constructor(props) {
     super(props);
     this.state = this.getStateFromProfile();
+    console.log("this.state", this.state);
     if (props.avatarId) {
       this.state.avatarId = props.avatarId;
     }
@@ -50,7 +51,9 @@ export default class ProfileEntryPanel extends Component {
     return { displayName, avatarId, pronouns, avatarName, cyzyUserToken };
   };
 
-  storeUpdated = () => this.setState(this.getStateFromProfile());
+  storeUpdated = () => {
+    this.setState(this.getStateFromProfile());
+  };
 
   saveStateAndFinish = async e => {
     e && e.preventDefault();

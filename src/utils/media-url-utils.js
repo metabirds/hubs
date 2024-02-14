@@ -71,6 +71,10 @@ export const scaledThumbnailUrlFor = (url, width, height) => {
 };
 
 export const isNonCorsProxyDomain = hostname => {
+  // cyzyspace
+  if (hostname.startsWith("cyzy-assets")) {
+    return false;
+  }
   return nonCorsProxyDomains.find(domain => hostname.endsWith(domain));
 };
 
@@ -164,10 +168,15 @@ export const guessContentType = url => {
 const originIsHubsServer = new Map();
 async function isHubsServer(url) {
   if (!url) return false;
-  if (!url.startsWith("http")) {
+  if (!url.startsWith("http") && !url.startsWith("#")) {
     url = "https://" + url;
   }
-  const { origin } = new URL(url);
+
+  let origin;
+  if (!url.startsWith("#")) {
+    const result = new URL(url);
+    origin = result.origin;
+  }
 
   if (originIsHubsServer.has(origin)) {
     return originIsHubsServer.get(origin);
