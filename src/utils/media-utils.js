@@ -465,7 +465,7 @@ export async function createImageTexture(url, filter) {
       if (e.status) {
         throw new Error(`'${url}' could not be fetched (Error code: ${e.status}; Response: ${e.statusText})`);
       } else {
-        throw new Error("unknown error", e);
+        throw new Error(JSON.stringify(e));
       }
     }
   }
