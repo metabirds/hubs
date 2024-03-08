@@ -12,10 +12,20 @@
   }
 }
 
+:local(.notice) {
+  background: #ffd5d5;
+  padding: 8px;
+  width: 90%;
+  margin: 8px auto 0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
 :local(.logo-container) {
   padding: 0 16px;
   margin-top: 16px;
   margin-bottom: 32px;
+
 }
 
 :local(.room-name) {
