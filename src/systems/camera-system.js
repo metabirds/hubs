@@ -452,7 +452,7 @@ export class CameraSystem {
         position.setFromMatrixPosition(this.viewingCamera.matrixWorld);
         position.y = position.y - 1.6;
         setMatrixWorld(this.avatarRig.object3D, new THREE.Matrix4().compose(position, quat, scale));
-        scene.systems["hubs-systems"].characterController.fly = true;
+        scene.systems["hubs-systems"].characterController.fly = false; //cyzy space
         this.avatarPOV.object3D.updateMatrices();
         setMatrixWorld(this.avatarPOV.object3D, this.viewingCamera.matrixWorld);
       }

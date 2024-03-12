@@ -50,6 +50,7 @@ const ask = q => new Promise(res => rl.question(q, res));
   };
 
   writeFileSync(".ret.credentials", JSON.stringify(creds));
+  writeFileSync(`.ret.credentials.${host}`, JSON.stringify(creds));
   rl.close();
   console.log("Login successful.\nCredentials written to .ret.credentials. Run npm run logout to remove credentials.");
   process.exit(0);

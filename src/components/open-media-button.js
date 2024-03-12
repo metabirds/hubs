@@ -127,6 +127,8 @@ AFRAME.registerComponent("open-media-button", {
         } else {
           location.href = this.src;
         }
+      } else if (window.daisyServerUri && this.src.match(window.daisyServerUri)) {
+        location.href = this.src;
       } else {
         // cyzyspace
         if (this.src.slice(0, 1) === "#") {

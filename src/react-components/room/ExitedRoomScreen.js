@@ -140,7 +140,7 @@ export function ExitedRoomScreen({ reason, showTerms, termsUrl, showSourceLink }
               defaultMessage="You can also <a>create a new room</a>."
               values={{
                 // eslint-disable-next-line react/display-name
-                a: chunks => <a href="/">{chunks}</a>
+                a: chunks => <a href="/signin">{chunks}</a>
               }}
             />
           </p>
