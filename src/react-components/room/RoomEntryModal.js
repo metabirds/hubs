@@ -30,6 +30,10 @@ export function RoomEntryModal({
   const breakpoint = useCssBreakpoints();
   return (
     <Modal className={classNames(styles.roomEntryModal, className)} disableFullscreen {...rest}>
+      <p className={styles.notice}>
+        【予告】3/21(木)
+        VRシステムのアップグレードを行います。当日は空間への接続や画像・動画の表示が不安定になる可能性がございますのでご了承ください。
+      </p>
       <Column center className={styles.content}>
         {breakpoint !== "sm" && breakpoint !== "md" && <AppLogo className={styles.logo} />}
         <div className={styles.roomName}>

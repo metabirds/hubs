@@ -222,7 +222,7 @@ export class CameraSystem {
     this.mode = CAMERA_MODE_SCENE_PREVIEW;
     this.snapshot = { audioTransform: new THREE.Matrix4(), matrixWorld: new THREE.Matrix4() };
     this.audioSourceTargetTransform = new THREE.Matrix4();
-    this.isTPS = true; // cyzyspace
+    this.isTPS = false; // cyzyspace
 
     if (customFOV) {
       this.viewingCamera.fov = customFOV;

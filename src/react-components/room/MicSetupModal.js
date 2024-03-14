@@ -74,6 +74,10 @@ export function MicSetupModal({
                         <Spinner />
                       </div>
                     )}
+                    <div className={styles.iconInner}>
+                      <MicrophoneMutedIcon className={iconStyle} />
+                      <p>音声通話はご利用いただけません</p>
+                    </div>
                     {permissionStatus === PermissionStatus.GRANTED && isMicrophoneEnabled && !isMicrophoneMuted ? (
                       <MicrophoneIcon className={iconStyle} />
                     ) : (

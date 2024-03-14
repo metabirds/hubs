@@ -121,6 +121,7 @@ $mobile-breakpoint-width: 450px;
 }
 
 :local(.spinner-container) {
+  display: none;
   position: absolute;
   margin-left: -11px;
   margin-top: -11px;
@@ -133,4 +134,13 @@ $mobile-breakpoint-width: 450px;
 :local(.level-bar) {
   width: 24px;
   height: 100%;
+}
+
+:local(.icon-inner) {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  p {
+    margin-top: 8px;
+  }
 }

@@ -10,6 +10,8 @@ import { Column } from "../layout/Column";
 // cysyspace
 import { ReadyPlayerMeAvatarSelector } from "./ReadyPlayerMeAvatarSelector";
 
+import { ReadyPlayerMeAvatarSelector } from "./ReadyPlayerMeAvatarSelector";
+
 export function AvatarUrlModal({ onSubmit, onClose }) {
   const { handleSubmit, register, setValue } = useForm({
     defaultValues: {
@@ -26,6 +28,8 @@ export function AvatarUrlModal({ onSubmit, onClose }) {
     <Modal title="Custom Avatar URL" beforeTitle={<CloseButton onClick={onClose} />}>
       <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}>
         <TextInputField
+          name="url"
+          id="custom_avatar_url_input"
           label={<FormattedMessage id="avatar-url-modal.avatar-url-label" defaultMessage="Avatar GLB URL" />}
           placeholder="https://example.com/avatar.glb"
           type="url"

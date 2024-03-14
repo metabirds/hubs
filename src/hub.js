@@ -230,6 +230,8 @@ if (isEmbed && !qs.get("embed_token")) {
   // Should be covered by X-Frame-Options, but just in case.
   throw new Error("no embed token");
 }
+const locationHash = document.location.hash;
+window.disableAudio = true;
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -296,7 +298,15 @@ const isDebug = qsTruthy("debug");
 let root;
 
 if (!isBotMode && !isTelemetryDisabled) {
-  registerTelemetry("/hub", "Room Landing Page");
+  const defaultRoomId = configs.feature("default_room_id");
+
+  const hubId =
+    qs.get("hub_id") ||
+    (document.location.pathname === "/" && defaultRoomId
+      ? defaultRoomId
+      : document.location.pathname.substring(1).split("/")[0]);
+
+  registerTelemetry(`/hub/${hubId}`, "Room Landing Page");
 }
 
 disableiOSZoom();
@@ -369,6 +379,7 @@ function mountUI(props = {}) {
                     forcedVREntryType,
                     store,
                     mediaSearchStore,
+                    locationHash,
                     ...props,
                     ...routeProps
                   }}
@@ -1474,7 +1485,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   hubPhxChannel.on("permissions_updated", () => hubChannel.fetchPermissions());
 
   hubPhxChannel.on("mute", ({ session_id }) => {
-    if (session_id === NAF.clientId) {
+    if (!window.disableAudio && session_id === NAF.clientId) {
+      //cyzyspace
       APP.mediaDevicesManager.micEnabled = false;
     }
   });

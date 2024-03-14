@@ -95,7 +95,7 @@ import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip, RecordModeTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
-import { ToggleTpsContainer } from "./room/ToggleTpsContainer";
+import { ToggleTpsContainer } from "./room/ToggleTpsContainer"; // cyzyspace
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { TERMS, PRIVACY } from "../constants";
 import { ECSDebugSidebarContainer } from "./debug-panel/ECSSidebar";
@@ -587,7 +587,7 @@ class UIRoot extends Component {
 
     if (hasGrantedMic) {
       if (!this.mediaDevicesManager.isMicShared) {
-        await this.mediaDevicesManager.startMicShare({});
+        await this.mediaDevicesManager.startMicShare({ unmute: false });
       }
       this.beginOrSkipAudioSetup();
     } else {
@@ -619,7 +619,7 @@ class UIRoot extends Component {
 
   onRequestMicPermission = async () => {
     if (this.props.canVoiceChat) {
-      await this.mediaDevicesManager.startMicShare({});
+      await this.mediaDevicesManager.startMicShare({ unmute: false });
     }
   };
 
@@ -875,7 +875,7 @@ class UIRoot extends Component {
           }}
           showEnterOnDevice={!this.state.waitingOnAudio && !this.props.entryDisallowed && !isMobileVR}
           onEnterOnDevice={() => this.attemptLink()}
-          showSpectate={!this.state.waitingOnAudio}
+          showSpectate={false}
           onSpectate={() => this.setState({ watching: true })}
           showRoomSettings={this.props.hubChannel.canOrWillIfCreator("update_hub")}
           onRoomSettings={() => {
@@ -1642,7 +1642,7 @@ class UIRoot extends Component {
                       <>
                         {!isLockedDownDemo && (
                           <>
-                            <AudioPopoverButtonContainer scene={this.props.scene} />
+                            {/* <AudioPopoverButtonContainer scene={this.props.scene} /> */}
                             {/* cyzyspace */}
                             <ToggleTpsContainer
                               scene={this.props.scene}
