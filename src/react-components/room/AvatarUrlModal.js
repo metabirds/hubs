@@ -10,8 +10,6 @@ import { Column } from "../layout/Column";
 // cysyspace
 import { ReadyPlayerMeAvatarSelector } from "./ReadyPlayerMeAvatarSelector";
 
-import { ReadyPlayerMeAvatarSelector } from "./ReadyPlayerMeAvatarSelector";
-
 export function AvatarUrlModal({ onSubmit, onClose }) {
   const { handleSubmit, register, setValue } = useForm({
     defaultValues: {
