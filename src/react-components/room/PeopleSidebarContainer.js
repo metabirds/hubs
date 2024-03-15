@@ -54,7 +54,7 @@ function PeopleListContainer({ hubChannel, people, onSelectPerson, onClose }) {
       }
     }
   }, [people, hubChannel]);
-  const canVoiceChat = useCan("voice_chat");
+  const canVoiceChat = useCan("voice_chat") && APP.hub.member_permissions.voice_chat; //cyzyspace
   const { voice_chat: voiceChatEnabled } = useRoomPermissions();
   const isMod = useRole("owner");
 

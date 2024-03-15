@@ -16,7 +16,7 @@ import { useCan } from "./hooks/useCan";
 export function MicSetupModalContainer({ scene, ...rest }) {
   const { isMicEnabled, permissionStatus } = useMicrophoneStatus(scene);
   const { micDeviceChanged, micDevices } = useMicrophone(scene);
-  const canVoiceChat = useCan("voice_chat");
+  const canVoiceChat = useCan("voice_chat") && APP.hub.member_permissions.voice_chat; //cyzyspace
   const { speakerDeviceChanged, speakerDevices } = useSpeakers();
   const { playSound } = useSound({
     scene,

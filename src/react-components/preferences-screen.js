@@ -870,7 +870,7 @@ class PreferencesScreen extends Component {
 
     this.storeUpdated = this.storeUpdated.bind(this);
     this.permissionsUpdated = this.permissionsUpdated.bind(this);
-    const canVoiceChat = APP.hubChannel.can("voice_chat");
+    const canVoiceChat = APP.hubChannel.can("voice_chat") && APP.hub.member_permissions.voice_chat; //cyzyspace
 
     this.mediaDevicesManager = APP.mediaDevicesManager;
 

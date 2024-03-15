@@ -14,7 +14,7 @@ import { ToolTip } from "@mozilla/lilypad-ui";
 export const AudioPopoverButtonContainer = ({ scene, initiallyVisible }) => {
   const { isMicMuted, toggleMute, permissionStatus } = useMicrophoneStatus(scene);
   const micPermissionDenied = permissionStatus === PermissionStatus.DENIED;
-  const canVoiceChat = useCan("voice_chat");
+  const canVoiceChat = useCan("voice_chat") && APP.hub.member_permissions.voice_chat; //cyzyspace
   const intl = useIntl();
 
   const muteStatuses = defineMessages({
