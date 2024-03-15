@@ -1642,7 +1642,9 @@ class UIRoot extends Component {
                       <>
                         {!isLockedDownDemo && (
                           <>
-                            <AudioPopoverButtonContainer scene={this.props.scene} />
+                            {APP.hub.member_permissions.voice_chat && (
+                              <AudioPopoverButtonContainer scene={this.props.scene} />
+                            )}
                             {/* cyzyspace */}
                             <ToggleTpsContainer
                               scene={this.props.scene}

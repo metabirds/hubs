@@ -142,7 +142,7 @@ export function PeopleSidebar({
         ) : undefined
       }
     >
-      {!canVoiceChat && <PermissionNotification permission={"voice_chat"} />}
+      {/* {!canVoiceChat && <PermissionNotification permission={"voice_chat"} />} */}
       {!voiceChatEnabled && isMod && <PermissionNotification permission={"voice_chat"} isMod={true} />}
       <List>
         {!!people.length &&

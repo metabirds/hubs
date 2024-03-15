@@ -231,7 +231,6 @@ if (isEmbed && !qs.get("embed_token")) {
   throw new Error("no embed token");
 }
 const locationHash = document.location.hash;
-window.disableAudio = true;
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -298,15 +297,7 @@ const isDebug = qsTruthy("debug");
 let root;
 
 if (!isBotMode && !isTelemetryDisabled) {
-  const defaultRoomId = configs.feature("default_room_id");
-
-  const hubId =
-    qs.get("hub_id") ||
-    (document.location.pathname === "/" && defaultRoomId
-      ? defaultRoomId
-      : document.location.pathname.substring(1).split("/")[0]);
-
-  registerTelemetry(`/hub/${hubId}`, "Room Landing Page");
+  registerTelemetry("/hub", "Room Landing Page");
 }
 
 disableiOSZoom();
