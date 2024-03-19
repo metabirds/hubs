@@ -20,6 +20,14 @@
   object-position: center;
   margin: 16px 16px 32px;
 }
+// :local(.logo-container) {
+//   padding: 0 16px;
+//   margin-top: 16px;
+//   margin-bottom: 32px;
+//   img {
+//     max-height: 20svh;
+//   }
+// }
 
 :local(.room-name) {
   display: flex;

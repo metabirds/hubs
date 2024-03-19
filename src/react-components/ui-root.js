@@ -95,7 +95,7 @@ import { TweetModalContainer } from "./room/TweetModalContainer";
 import { TipContainer, FullscreenTip, RecordModeTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
-import { ToggleTpsContainer } from "./room/ToggleTpsContainer";
+import { ToggleTpsContainer } from "./room/ToggleTpsContainer"; // cyzyspace
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
 import { TERMS, PRIVACY } from "../constants";
 import { ECSDebugSidebarContainer } from "./debug-panel/ECSSidebar";
@@ -119,6 +119,7 @@ async function grantedMicLabels() {
   return mediaDevices.filter(d => d.label && d.kind === "audioinput").map(d => d.label);
 }
 
+const isSmallScreen = window.innerWidth < 450;
 const isMobile = AFRAME.utils.device.isMobile();
 const isMobileVR = AFRAME.utils.device.isMobileVR();
 const AUTO_EXIT_TIMER_SECONDS = 10;
@@ -585,7 +586,8 @@ class UIRoot extends Component {
 
     const hasGrantedMic = (await grantedMicLabels()).length > 0;
 
-    if (hasGrantedMic) {
+    if (hasGrantedMic || window.disableAudio) {
+      // cyzyspace
       if (!this.mediaDevicesManager.isMicShared) {
         await this.mediaDevicesManager.startMicShare({});
       }
@@ -624,7 +626,8 @@ class UIRoot extends Component {
   };
 
   beginOrSkipAudioSetup = () => {
-    const skipAudioSetup = this.props.forcedVREntryType && this.props.forcedVREntryType.endsWith("_now");
+    const skipAudioSetup =
+      (this.props.forcedVREntryType && this.props.forcedVREntryType.endsWith("_now")) || window.disableAudio; //cyzyspace
     if (skipAudioSetup) {
       console.log(`Skipping audio setup (forcedVREntryType = ${this.props.forcedVREntryType})`);
       this.onAudioReadyButton();
