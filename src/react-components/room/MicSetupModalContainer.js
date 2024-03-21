@@ -22,7 +22,7 @@ export function MicSetupModalContainer({ scene, ...rest }) {
     scene,
     sound: SOUND_SPEAKER_TONE
   });
-  const [isMicMutedOnEntry, setIsMicMutedOnEntry] = useState(APP.store.state.preferences["muteMicOnEntry"]);
+  const [isMicMutedOnEntry, setIsMicMutedOnEntry] = useState(true);
   const onChangeMicrophoneMuted = useCallback(({ target: { checked: muted } }) => {
     setIsMicMutedOnEntry(muted);
     APP.store.update({
