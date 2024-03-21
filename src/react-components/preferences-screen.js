@@ -974,7 +974,7 @@ class PreferencesScreen extends Component {
     APP.hubChannel.addEventListener("permissions_updated", this.permissionsUpdated);
 
     if (this.state.canVoiceChat && !isLockedDownDemoRoom()) {
-      this.mediaDevicesManager.startMicShare({ updatePrefs: false }).then(this.updateMediaDevices);
+      this.mediaDevicesManager.startMicShare({ updatePrefs: false, unmute: false }).then(this.updateMediaDevices);
     } else {
       this.updateMediaDevices();
     }
@@ -997,7 +997,7 @@ class PreferencesScreen extends Component {
     const { preferredMic } = this.props.store.state.preferences;
     if (preferredMic !== this.mediaDevicesManager.selectedMicDeviceId) {
       this.state.canVoiceChat &&
-        this.mediaDevicesManager.startMicShare({ updatePrefs: false }).then(this.updateMediaDevices);
+        this.mediaDevicesManager.startMicShare({ updatePrefs: false, unmute: false }).then(this.updateMediaDevices);
     }
   }
 
