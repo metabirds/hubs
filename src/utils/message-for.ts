@@ -108,6 +108,7 @@ export interface LegacyRoomObject {
 }
 
 export function messageForLegacyRoomObject(obj: LegacyRoomObject) {
+  console.log("messageForLegacyRoomObject called", JSON.stringify(obj));
   const message: Message = {
     creates: [],
     updates: [],

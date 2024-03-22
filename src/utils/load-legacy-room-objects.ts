@@ -40,6 +40,7 @@ type StoredRoomData = {
 // update because there's no matching record.)
 //
 export async function loadLegacyRoomObjects(hubId: string) {
+  console.log("loadLegacyRoomObjects called");
   const objectsUrl = getReticulumFetchUrl(`/${hubId}/objects.gltf`) as URL;
   const response = await fetch(objectsUrl);
   const roomData: StoredRoomData = await response.json();

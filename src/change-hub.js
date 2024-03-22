@@ -22,6 +22,7 @@ function unloadRoomObjects() {
 }
 
 function loadRoomObjects(hubId) {
+  console.log("loadRoomObjects called");
   const objectsScene = document.querySelector("#objects-scene");
   const objectsUrl = getReticulumFetchUrl(`/${hubId}/objects.gltf`);
   const objectsEl = document.createElement("a-entity");
