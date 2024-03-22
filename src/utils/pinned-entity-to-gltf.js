@@ -23,6 +23,7 @@ export default function pinnedEntityToGltf(el) {
 
   if (components["media-loader"]) {
     const mediaSrc = components["media-loader"].data.src;
+    console.log("pinnedEntityToGltf", mediaSrc);
     const mediaVersion = components["media-loader"].data.version;
     const mediaContentSubtype = components["media-loader"].data.contentSubtype;
 
