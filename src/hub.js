@@ -630,6 +630,7 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
         // Append objects once we are in the NAF room since ownership may be taken.
         const objectsScene = document.querySelector("#objects-scene");
         const objectsUrl = getReticulumFetchUrl(`/${hub.hub_id}/objects.gltf`);
+        console.log("didConnectToNetworkedScene called", objectsUrl);
         const objectsEl = document.createElement("a-entity");
         objectsEl.setAttribute("gltf-model-plus", { src: objectsUrl, useCache: false, inflate: true });
 

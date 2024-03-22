@@ -22,9 +22,9 @@ function unloadRoomObjects() {
 }
 
 function loadRoomObjects(hubId) {
-  console.log("loadRoomObjects called");
   const objectsScene = document.querySelector("#objects-scene");
   const objectsUrl = getReticulumFetchUrl(`/${hubId}/objects.gltf`);
+  console.log("loadRoomObjects called", objectsUrl);
   const objectsEl = document.createElement("a-entity");
   objectsEl.setAttribute("gltf-model-plus", { src: objectsUrl, useCache: false, inflate: true });
   objectsScene.appendChild(objectsEl);
