@@ -448,7 +448,9 @@ class GLTFHubsPlugin {
       parser.json = jsonPreprocessor(parser.json);
     }
 
-    console.log("GLTFHubsPlugin", parser.json);
+    if (parser.json.asset?.generator === "reticulum") {
+      console.log(JSON.stringify(parser.json));
+    }
 
     // Ideally Hubs components stuffs should be handled in MozHubsComponents plugin?
     let version = 0;
