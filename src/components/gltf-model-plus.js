@@ -953,6 +953,7 @@ export async function loadGLTF(src, contentType, onProgress, jsonPreprocessor) {
 
   return new Promise((resolve, reject) => {
     const onLoad = gltf => {
+      console.log("onLoad", gltf);
       const disposables = new Set();
 
       gltf.scenes.forEach(scene => {
