@@ -448,6 +448,8 @@ class GLTFHubsPlugin {
       parser.json = jsonPreprocessor(parser.json);
     }
 
+    console.log("GLTFHubsPlugin", parser.json);
+
     // Ideally Hubs components stuffs should be handled in MozHubsComponents plugin?
     let version = 0;
     if (
@@ -558,8 +560,6 @@ class GLTFHubsComponentsExtension {
       obj.userData.gltfExtensions = Object.assign(obj.userData.gltfExtensions || {}, {
         MOZ_hubs_components: ext
       });
-
-      console.log("GLTFHubsComponentsExtension", obj);
 
       for (const componentName in ext) {
         const props = ext[componentName];
