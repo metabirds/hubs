@@ -448,6 +448,17 @@ class GLTFHubsPlugin {
       parser.json = jsonPreprocessor(parser.json);
     }
 
+    // cyzyspace
+    if (parser.json.asset?.generator === "reticulum") {
+      parser.json.nodes?.forEach(node => {
+        const src = node?.extensions?.HUBS_components?.media?.src;
+        if (src) {
+          node.extensions.HUBS_components.media.src = src.replace(/https:\/\/[a-z-]+-assets\./, "https://");
+          console.log(`replaced: ${src}`);
+        }
+      });
+    }
+
     // Ideally Hubs components stuffs should be handled in MozHubsComponents plugin?
     let version = 0;
     if (
