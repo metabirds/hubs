@@ -659,16 +659,16 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
 
       // Disconnect in case this is a re-entry
       APP.dialog.disconnect();
-      APP.dialog.connect({
-        serverUrl: `wss://${hub.host}:${hub.port}`,
-        roomId: hub.hub_id,
-        serverParams: { host: hub.host, port: hub.port, turn: hub.turn },
-        scene,
-        clientId: data.session_id,
-        forceTcp: qs.get("force_tcp"),
-        forceTurn: qs.get("force_turn"),
-        iceTransportPolicy: qs.get("force_tcp") || qs.get("force_turn") ? "relay" : "all"
-      });
+      // APP.dialog.connect({
+      //   serverUrl: `wss://${hub.host}:${hub.port}`,
+      //   roomId: hub.hub_id,
+      //   serverParams: { host: hub.host, port: hub.port, turn: hub.turn },
+      //   scene,
+      //   clientId: data.session_id,
+      //   forceTcp: qs.get("force_tcp"),
+      //   forceTurn: qs.get("force_turn"),
+      //   iceTransportPolicy: qs.get("force_tcp") || qs.get("force_turn") ? "relay" : "all"
+      // });
       scene.addEventListener(
         "adapter-ready",
         ({ detail: adapter }) => {
