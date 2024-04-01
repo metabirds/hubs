@@ -541,11 +541,24 @@ export class CameraSystem {
         // cyzyspace
         this.viewingCameraRotator.on = false;
         if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
+          // old source
+          // translation.makeTranslation(0, 0.2, 1.2);
           tmpMat.makeTranslation(0, 1, 3);
         } else {
           tmpMat.makeTranslation(0, 2, 8);
         }
         this.avatarRig.object3D.updateMatrices();
+        // old source
+        // setMatrixWorld(this.viewingRig.object3D, this.avatarRig.object3D.matrixWorld);
+        // if (scene.is("vr-mode")) {
+        //   this.viewingCamera.updateMatrices();
+        //   setMatrixWorld(this.avatarPOV.object3D, this.viewingCamera.matrixWorld);
+        // } else {
+        //   this.avatarPOV.object3D.updateMatrices();
+        //   setMatrixWorld(this.viewingCamera, this.avatarPOV.object3D.matrixWorld.multiply(translation));
+        // }
+        // this.avatarRig.object3D.updateMatrices();
+        // this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld);
         this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld).multiply(tmpMat);
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
