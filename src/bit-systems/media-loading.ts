@@ -13,6 +13,7 @@ import { Box3, Group, Matrix4, Quaternion, Vector3 } from "three";
 import { HubsWorld } from "../app";
 import {
   GLTFModel,
+  HoverableVisuals,
   LoadedByMediaLoader,
   MediaContentBounds,
   MediaImageLoaderData,
@@ -20,10 +21,16 @@ import {
   MediaLink,
   MediaLoaded,
   MediaLoader,
+  MediaRefresh,
   MediaLoading,
   MediaVideoLoaderData,
+  MirroredMedia,
   Networked,
-  ObjectMenuTarget
+  ObjectMenuTarget,
+  Rigidbody,
+  MediaLoaderOffset,
+  MediaVideo,
+  NetworkedTransform
 } from "../bit-components";
 import { inflatePhysicsShape, Shape } from "../inflators/physics-shape";
 import { ErrorObject } from "../prefabs/error-object";
@@ -47,6 +54,8 @@ import { inflateGrabbable } from "../inflators/grabbable";
 import { findAncestorsWithComponent, findChildWithComponent } from "../utils/bit-utils";
 import { setMatrixWorld } from "../utils/three-utils";
 import { computeObjectAABB, getScaleCoefficient } from "../utils/auto-box-collider";
+import { updateHoverableVisuals } from "./hoverable-visuals-system";
+import { VIDEO_FLAGS } from "../inflators/video";
 
 export function* waitForMediaLoaded(world: HubsWorld, eid: EntityID) {
   while (hasComponent(world, MediaLoader, eid)) {
@@ -75,8 +84,8 @@ function resizeAndRecenter(world: HubsWorld, mediaLoaderEid: EntityID, box: Box3
   const moveParentNotObject = MediaLoader.flags[mediaLoaderEid] & MEDIA_LOADER_FLAGS.MOVE_PARENT_NOT_OBJECT;
 
   const mediaLoaderObj = world.eid2obj.get(mediaLoaderEid)!;
-  const mediaEid = findChildWithComponent(world, LoadedByMediaLoader, mediaLoaderEid)!;
-  const mediaObj = world.eid2obj.get(mediaEid)!;
+  const offsetEid = findChildWithComponent(world, MediaLoaderOffset, mediaLoaderEid)!;
+  const offsetObj = world.eid2obj.get(offsetEid)!;
 
   let scalar = 1;
   if (recenter) {
@@ -104,9 +113,9 @@ function resizeAndRecenter(world: HubsWorld, mediaLoaderEid: EntityID, box: Box3
     diff.multiplyScalar(scalar);
     transformPosition.addVectors(rootPosition, diff);
 
-    // Set the new media world matrix and restore the media loader original matrix
+    // Set the new offset world matrix and restore the media loader original matrix
     tmpMat.compose(transformPosition, rootRotation.identity(), rootScale);
-    setMatrixWorld(mediaObj, tmpMat);
+    setMatrixWorld(offsetObj, tmpMat);
     setMatrixWorld(mediaLoaderObj, origMat);
   } else if (moveParentNotObject) {
     mediaLoaderObj.updateMatrices();
@@ -128,7 +137,7 @@ function resizeAndRecenter(world: HubsWorld, mediaLoaderEid: EntityID, box: Box3
 
     tmpMat.compose(transformPosition, rootRotation, rootScale);
     setMatrixWorld(mediaLoaderObj, tmpMat);
-    setMatrixWorld(mediaObj, origMat);
+    setMatrixWorld(offsetObj, origMat);
   }
 
   addComponent(world, MediaContentBounds, mediaLoaderEid);
@@ -162,14 +171,19 @@ export function* animateScale(world: HubsWorld, mediaLoaderEid: EntityID) {
 }
 
 function* finish(world: HubsWorld, mediaLoaderEid: EntityID) {
+  if (entityExists(world, mediaLoaderEid) && MediaLoader.flags[mediaLoaderEid] & MEDIA_LOADER_FLAGS.ANIMATE_LOAD) {
+    yield* animateScale(world, mediaLoaderEid);
+  }
   if (entityExists(world, mediaLoaderEid)) {
-    if (MediaLoader.flags[mediaLoaderEid] & MEDIA_LOADER_FLAGS.ANIMATE_LOAD) {
-      yield* animateScale(world, mediaLoaderEid);
+    if (hasComponent(world, HoverableVisuals, mediaLoaderEid)) {
+      updateHoverableVisuals(world, mediaLoaderEid);
     }
-    inflatePhysicsShape(world, mediaLoaderEid, {
-      type: Shape.HULL,
-      minHalfExtent: 0.04
-    });
+    if (hasComponent(world, Rigidbody, mediaLoaderEid)) {
+      inflatePhysicsShape(world, mediaLoaderEid, {
+        type: Shape.HULL,
+        minHalfExtent: 0.04
+      });
+    }
   }
 }
 
@@ -214,6 +228,7 @@ function* loadByMediaType(
   //       transporting data from the inflators. This may be like
   //       special and a bit less maintainable.
   let mediaEid;
+  const isLinked = hasComponent(world, MirroredMedia, eid);
   switch (mediaType) {
     case MediaType.IMAGE:
       mediaEid = yield* loadImage(
@@ -230,20 +245,22 @@ function* loadByMediaType(
         eid,
         accessibleUrl,
         contentType,
-        MediaVideoLoaderData.has(eid) ? MediaVideoLoaderData.get(eid)! : {}
+        MediaVideoLoaderData.has(eid) ? MediaVideoLoaderData.get(eid)! : {},
+        !isLinked
       );
       break;
     case MediaType.MODEL:
       mediaEid = yield* loadModel(world, accessibleUrl, contentType, true);
       break;
     case MediaType.PDF:
-      return yield* loadPDF(world, eid, accessibleUrl);
+      return yield* loadPDF(world, eid, accessibleUrl, !isLinked);
     case MediaType.AUDIO:
       mediaEid = yield* loadAudio(
         world,
         eid,
         accessibleUrl,
-        MediaVideoLoaderData.has(eid) ? MediaVideoLoaderData.get(eid)! : {}
+        MediaVideoLoaderData.has(eid) ? MediaVideoLoaderData.get(eid)! : {},
+        !isLinked
       );
       break;
     case MediaType.HTML:
@@ -270,6 +287,7 @@ function* loadMedia(world: HubsWorld, eid: EntityID) {
     addComponent(world, MediaInfo, media);
     MediaInfo.accessibleUrl[media] = APP.getSid(urlData.accessibleUrl);
     MediaInfo.contentType[media] = APP.getSid(urlData.contentType);
+    MediaInfo.mediaType[media] = urlData.mediaType || 0;
   } catch (e) {
     console.error(e);
     media = renderAsEntity(world, ErrorObject());
@@ -295,6 +313,7 @@ function* loadAndAnimateMedia(world: HubsWorld, mediaLoaderEid: EntityID, clearR
   const mediaTransformObj = new Group();
   mediaTransformObj.name = "Media Loader Offset";
   addObject3DComponent(world, mediaTransformEid, mediaTransformObj);
+  addComponent(world, MediaLoaderOffset, mediaTransformEid);
   add(world, mediaTransformEid, mediaLoaderEid);
   add(world, mediaEid, mediaTransformEid);
 
@@ -302,6 +321,13 @@ function* loadAndAnimateMedia(world: HubsWorld, mediaLoaderEid: EntityID, clearR
 
   removeComponent(world, MediaLoading, mediaLoaderEid);
   removeComponent(world, MediaLink, mediaLoaderEid);
+}
+
+function* refreshMedia(world: HubsWorld, eid: EntityID, clearRollbacks: ClearFunction) {
+  removeComponent(world, MediaRefresh, eid);
+  const offsetEid = findChildWithComponent(world, MediaLoaderOffset, eid)!;
+  removeEntity(world, offsetEid);
+  addComponent(world, MediaLoading, eid);
 }
 
 const loadingCubes = new Map();
@@ -312,8 +338,13 @@ const mediaLoadingExitQuery = exitQuery(mediaLoadingQuery);
 const mediaLoadedQuery = defineQuery([MediaLoaded]);
 const mediaLoadedEnterQuery = enterQuery(mediaLoadedQuery);
 const mediaLoadedExitQuery = exitQuery(mediaLoadedQuery);
+const mediaRefreshQuery = defineQuery([MediaRefresh]);
+const mediaRefreshEnterQuery = enterQuery(mediaRefreshQuery);
 export function mediaLoadingSystem(world: HubsWorld) {
   mediaLoadingEnterQuery(world).forEach(function (eid) {
+    const mediaLoaderObj = world.eid2obj.get(eid)!;
+    mediaLoaderObj.visible = false;
+
     const mediaLoaderEids = findAncestorsWithComponent(world, MediaLoader, eid);
     mediaLoaderEids.forEach(mediaLoaderEid => {
       MediaLoader.count[mediaLoaderEid]++;
@@ -339,6 +370,9 @@ export function mediaLoadingSystem(world: HubsWorld) {
       MediaVideoLoaderData.delete(eid);
     }
 
+    const mediaLoaderObj = world.eid2obj.get(eid)!;
+    mediaLoaderObj.visible = true;
+
     const mediaLoaderEids = findAncestorsWithComponent(world, MediaLoader, eid);
     for (let i = 0; i < mediaLoaderEids.length; i++) {
       const mediaLoaderEid = mediaLoaderEids[i];
@@ -355,7 +389,11 @@ export function mediaLoadingSystem(world: HubsWorld) {
 
         const mediaEid = MediaLoader.mediaRef[mediaLoaderEid];
         const mediaObj = world.eid2obj.get(mediaEid)!;
-        mediaObj.visible = true;
+        if (MediaInfo.mediaType[mediaEid] === MediaType.AUDIO) {
+          mediaObj.visible = Boolean(MediaVideo.flags[mediaEid] & VIDEO_FLAGS.CONTROLS);
+        } else {
+          mediaObj.visible = true;
+        }
 
         resizeAndRecenter(world, mediaLoaderEid, box);
 
@@ -368,8 +406,22 @@ export function mediaLoadingSystem(world: HubsWorld) {
     }
   });
 
+  mediaLoadingQuery(world).forEach(eid => {
+    const mediaLoaderObj = world.eid2obj.get(eid)!;
+    transformPosition.fromArray(NetworkedTransform.position[eid]);
+    if (mediaLoaderObj.position.near(transformPosition, 0.001)) {
+      mediaLoaderObj.visible = true;
+    }
+  });
+
   mediaLoadedEnterQuery(world).forEach(() => APP.scene?.emit("listed_media_changed"));
   mediaLoadedExitQuery(world).forEach(() => APP.scene?.emit("listed_media_changed"));
+
+  mediaRefreshEnterQuery(world).forEach(eid => {
+    if (!jobs.has(eid)) {
+      jobs.add(eid, clearRollbacks => refreshMedia(world, eid, clearRollbacks));
+    }
+  });
 
   jobs.tick();
 }
