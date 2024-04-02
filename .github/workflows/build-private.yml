@@ -3,7 +3,7 @@ name: Build and Push to Private ECR
 on:
   push:
     branches:
-      - cyzyspace/ce-custom-client
+      - cyzyspace/behavior-graphs-sandbox
 
 jobs:
   build-and-push:
