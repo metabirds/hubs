@@ -11,11 +11,12 @@ import { TextInputField } from "../input/TextInputField";
 import { TextAreaInputField } from "../input/TextAreaInputField";
 import { ToggleInput } from "../input/ToggleInput";
 import { RadioInputField, RadioInputOption } from "../input/RadioInputField";
-import { NumericInputField } from "../input/NumericInputField";
+// import { NumericInputField } from "../input/NumericInputField";
 import { BackButton } from "../input/BackButton";
 import { SceneInfo } from "./RoomSidebar";
 import { Column } from "../layout/Column";
 import { InviteLinkInputField } from "./InviteLinkInputField";
+import inputStyles from "../input/InputField.scss"; // cyzyspace
 
 export function RoomSettingsSidebar({
   showBackButton,
@@ -24,7 +25,7 @@ export function RoomSettingsSidebar({
   fetchingInvite,
   inviteUrl,
   onRevokeInvite,
-  maxRoomSize,
+  // maxRoomSize,
   showPublicRoomSetting,
   onSubmit,
   onClose,
@@ -91,7 +92,7 @@ export function RoomSettingsSidebar({
           fullWidth
           {...register("description")}
         />
-        <NumericInputField
+        {/* <NumericInputField
           required
           min={0}
           max={maxRoomSize}
@@ -103,7 +104,16 @@ export function RoomSettingsSidebar({
           error={errors?.room_size?.message}
           fullWidth
           {...register("room_size")}
-        />
+        /> */}
+        <div>
+          <label className={inputStyles.label}>
+            {intl.formatMessage({
+              id: "room-settings-sidebar.room-size-placeholder",
+              defaultMessage: "Member Limit"
+            })}
+          </label>
+          <p>{room.room_size}</p>
+        </div>
         <RadioInputField
           label={<FormattedMessage id="room-settings-sidebar.room-access" defaultMessage="Room Access" />}
           fullWidth
