@@ -20,6 +20,28 @@ AFRAME.registerSystem("cyzy-extension", {
   tick() {
     if (!this.enterSceneFlg && this.scene.is("entered")) {
       console.log("entered");
+      this.createListener();
+      // //
+      // // Add a button to the HTML
+      // const button = document.createElement("button");
+      // button.innerText = "Toggle Visibility";
+      // button.style.position = "absolute";
+      // button.style.top = "10px";
+      // button.style.right = "10px";
+      // document.body.appendChild(button);
+      // let testDev = true;
+      // // Add an event listener to the button to toggle visibility
+      // button.addEventListener("click", () => {
+      //   const event = new CustomEvent("cyzy_anim_object", {
+      //     detail: {
+      //       id: "botDev",
+      //       enable: testDev
+      //     }
+      //   });
+      //   window.dispatchEvent(event);
+      //   testDev = !testDev;
+      // });
+      // //
       this.checkGltfUserData();
       this.enterSceneFlg = true;
     }
@@ -118,5 +140,26 @@ AFRAME.registerSystem("cyzy-extension", {
   },
   getAddedElements: function (arr1, arr2) {
     return (arr1 || []).filter(element => !arr2.includes(element));
+  },
+  createListener: function () {
+    window.addEventListener("cyzy_anim_object", event => {
+      const animEnable = event.detail.enable ? event.detail.enable : false;
+      if (event.detail.id) {
+        // console.log("CyzyAnim:", event.detail.id, event.detail.enable);
+        const objEl = document.getElementsByClassName(`cyzy-${event.detail.id}-obj`)[0];
+        const animEl = document.getElementsByClassName(`cyzy-${event.detail.id}-anim`)[0];
+        if (
+          objEl &&
+          animEl &&
+          objEl !== undefined &&
+          animEl !== undefined &&
+          objEl !== "undefined" &&
+          animEl !== "undefined"
+        ) {
+          objEl.object3D.visible = !animEnable;
+          animEl.object3D.visible = animEnable;
+        }
+      }
+    });
   }
 });
