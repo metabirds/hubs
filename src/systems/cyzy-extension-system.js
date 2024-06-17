@@ -3,6 +3,7 @@ import { loadModel } from "../components/gltf-model-plus";
 import { getSceneUrlForHub } from "../hub"; //
 import { addMedia } from "../utils/media-utils";
 import { ObjectContentOrigins } from "../object-types";
+console.log("CYZY_EXTENSION_SYSTEM");
 AFRAME.registerSystem("cyzy-extension", {
   init: function () {
     this.tickCount = 0;
