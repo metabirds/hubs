@@ -184,7 +184,7 @@ import "./systems/audio-gain-system";
 import "./gltf-component-mappings";
 //cyzy
 import "./systems/cyzy-extension-system";
-
+console.log("cyzy-extension-system Loaded");
 import { App, getScene } from "./app";
 import MediaDevicesManager from "./utils/media-devices-manager";
 import PinningHelper from "./utils/pinning-helper";
