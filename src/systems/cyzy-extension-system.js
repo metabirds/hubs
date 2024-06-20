@@ -15,6 +15,8 @@ AFRAME.registerSystem("cyzy-extension", {
     this.cyzy_extension_bots = {};
     this.botList = [];
     this.prevBotList = [];
+
+    this.createListener();
     // listener
     // this.el.sceneEl.addEventListener("loaded", () => {
     //   this.checkGltfUserData();
@@ -23,7 +25,6 @@ AFRAME.registerSystem("cyzy-extension", {
   tick() {
     if (!this.enterSceneFlg && this.scene.is("entered")) {
       console.log("entered");
-      this.createListener();
       // //
       // // Add a button to the HTML
       // const button = document.createElement("button");
