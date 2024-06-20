@@ -3,19 +3,16 @@ import React, { useState, useEffect } from "react";
 const Botbird = () => {
   const [enableCyzyBot, setEnableCyzyBot] = useState(false);
   const [cyzyBotId, setCyzyBotId] = useState("");
-  const [cyzyBotSrc, setCyzyBotSrc] = useState("");
 
   const handleMessage = e => {
-    const { cyzyBot, cyzyBotId, cyzyBotSrc } = e.data;
+    const { cyzyBot, cyzyBotId } = e.data;
 
     if (cyzyBot === "enable") {
       setEnableCyzyBot(true);
       setCyzyBotId(cyzyBotId);
-      setCyzyBotSrc(cyzyBotSrc);
     } else if (cyzyBot === "disable") {
       setEnableCyzyBot(false);
       setCyzyBotId("");
-      setCyzyBotSrc("");
     }
   };
   window.addEventListener("message", handleMessage);
@@ -23,7 +20,7 @@ const Botbird = () => {
   useEffect(() => {
     const scriptElement = document.createElement("script");
     scriptElement.id = "cyzyBotScript";
-    scriptElement.src = cyzyBotId && cyzyBotSrc ? cyzyBotSrc : "";
+    scriptElement.src = cyzyBotId && window.cyzyBotSrc ? window.cyzyBotSrc[cyzyBotId] : "";
 
     scriptElement.async = true;
     if (scriptElement.src && cyzyBotId) {
@@ -38,7 +35,7 @@ const Botbird = () => {
         scriptDom.remove();
       }
     };
-  }, [cyzyBotId, cyzyBotSrc]);
+  }, [cyzyBotId]);
 
   return enableCyzyBot ? <div id="pastedChatBox" style={{ position: "absolite", pointerEvents: "all" }} /> : null;
 };

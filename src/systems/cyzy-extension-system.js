@@ -87,7 +87,6 @@ AFRAME.registerSystem("cyzy-extension", {
         this.cyzy_extension_bots[botData.id] = {
           id: botData.id,
           r: botData.r,
-          src: botData.src,
           position: modelData.position
         };
         console.log("CurrentBotData:", this.cyzy_extension_bots);
@@ -125,7 +124,6 @@ AFRAME.registerSystem("cyzy-extension", {
       // Enable bots
       enableBotList.forEach(id => {
         console.log(`enable:${id}`);
-        console.log(enableBotList);
         window.postMessage({ cyzyBot: "enable", cyzyBotId: id }, "*");
       });
       // Disable bots
@@ -176,7 +174,6 @@ AFRAME.registerSystem("cyzy-extension", {
             this.cyzy_extension_bots[event.detail.id] = {
               id: event.detail.id,
               r: event.detail.radius,
-              src: event.detail.src,
               position: {
                 x: event.detail.position.x,
                 y: event.detail.position.y,
