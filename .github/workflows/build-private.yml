@@ -1,17 +1,37 @@
 name: Build and Push to Private ECR
 
 on:
+  workflow_dispatch:
+    inputs:
+      targetBranch:
+        type: string
+        default: ''
+        required: false
+        description: "このワークフローを実行したい対象のブランチ。なければこのブランチが実行されます"
   push:
     branches:
       - cyzyspace/ce-custom-client-dev
-
+      - cyzyspace/ce-custom-client
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Set MyContext
+        id: mycontext
+        env:
+          INPUT_TARGET_BRANCH: ${{ inputs.targetBranch }}
+        run: |
+          echo $SHELL
+          echo "targetBranch=${INPUT_TARGET_BRANCH:-${{ github.ref_name }}}" >> "${GITHUB_OUTPUT}"
+
+      - name: Debug log 1
+        run: |
+          echo "Checkouted branch: ${{ steps.mycontext.outputs.targetBranch }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.mycontext.outputs.targetBranch }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
