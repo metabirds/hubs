@@ -20,8 +20,8 @@ const Botbird = () => {
   useEffect(() => {
     const scriptElement = document.createElement("script");
     scriptElement.id = "cyzyBotScript";
-    scriptElement.src = cyzyBotId && window.cyzyBotSrc ? window.cyzyBotSrc[cyzyBotId] : "";
-    console.log(cyzyBotId, window.cyzyBotSrc, window.cyzyBotSrc[cyzyBotId]);
+    scriptElement.src =
+      cyzyBotId && window.cyzyBotSrc && window.cyzyBotSrc[cyzyBotId] ? window.cyzyBotSrc[cyzyBotId] : "";
 
     scriptElement.async = true;
     if (scriptElement.src && cyzyBotId) {
