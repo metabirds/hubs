@@ -21,10 +21,13 @@ function logAndPushToChannnel(event, content, channel) {
   if (!channel) return;
 
   switch (event) {
-    case "message":
-      if (content.type === "chat") {
-        cyzyPostLog("chat", content.body);
-      }
+    // case "message":
+    //   if (content.type === "chat") {
+    //     cyzyPostLog("chat", content.body);
+    //   }
+    //   break;
+    case "events:entered":
+      cyzyPostLog("events:entered", "");
       break;
   }
   return channel.push(event, content);
@@ -181,6 +184,7 @@ export default class HubChannel extends EventTarget {
   };
 
   sendEnteringEvent = async () => {
+    console.log("sendEnteringEvent");
     this.channel.push("events:entering", {});
   };
 
@@ -189,6 +193,7 @@ export default class HubChannel extends EventTarget {
   };
 
   sendEnteredEvent = async () => {
+    console.log("sendEnteredEvent");
     if (!this.channel) {
       console.warn("No phoenix channel initialized before room entry.");
       return;
@@ -221,7 +226,8 @@ export default class HubChannel extends EventTarget {
       userAgent: navigator.userAgent
     };
 
-    this.channel.push("events:entered", entryEvent);
+    // this.channel.push("events:entered", entryEvent);
+    logAndPushToChannnel("events:entered", entryEvent, this.channel);
   };
 
   beginStreaming() {

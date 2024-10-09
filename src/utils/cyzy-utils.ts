@@ -53,7 +53,7 @@ export async function cyzyPostUserParams() {
     name: profile?.displayName,
     avatarName: profile?.avatarName
   };
-  console.log("params", params);
+  console.log("params", params, "url", url);
   try {
     let res = await fetch(`${url}/users`, {
       body: JSON.stringify(params),
