@@ -129,7 +129,7 @@ export const SCHEMA = {
         audioNormalization: { type: "bool", default: 0.0 },
         // cyzyspace
         // invertTouchscreenCameraMove: { type: "bool", default: true },
-        invertTouchscreenCameraMove: { type: "bool", default: false },
+        invertTouchscreenCameraMove: { type: "bool", default: !detectMobile() },
         enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
         // cyzyspace
         // enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
