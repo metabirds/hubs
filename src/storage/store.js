@@ -127,7 +127,9 @@ export const SCHEMA = {
         muteMicOnEntry: { type: "bool", default: false },
         disableLeftRightPanning: { type: "bool", default: false },
         audioNormalization: { type: "bool", default: 0.0 },
-        invertTouchscreenCameraMove: { type: "bool", default: true },
+        // cyzyspace
+        // invertTouchscreenCameraMove: { type: "bool", default: true },
+        invertTouchscreenCameraMove: { type: "bool", default: false },
         enableOnScreenJoystickLeft: { type: "bool", default: detectMobile() },
         // cyzyspace
         // enableOnScreenJoystickRight: { type: "bool", default: detectMobile() },
