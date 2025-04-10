@@ -1,9 +1,8 @@
-// cyzyspace : for searching scripts
+// cyzyspace
 import { loadModel } from "../components/gltf-model-plus";
 import { getSceneUrlForHub } from "../hub";
 import { addMedia } from "../utils/media-utils";
 import { ObjectContentOrigins } from "../object-types";
-console.log("CYZY_EXTENSION_SYSTEM_");
 AFRAME.registerSystem("cyzy-extension", {
   init: function () {
     this.tickCount = 0;
@@ -17,52 +16,20 @@ AFRAME.registerSystem("cyzy-extension", {
     this.prevBotList = [];
 
     this.createListener();
-    // listener
-    // this.el.sceneEl.addEventListener("loaded", () => {
-    //   this.checkGltfUserData();
-    // });
   },
   tick() {
     if (!this.enterSceneFlg && this.scene.is("entered")) {
-      console.log("entered");
-      // //
-      // // Add a button to the HTML
-      // const button = document.createElement("button");
-      // button.innerText = "Toggle Visibility";
-      // button.style.position = "absolute";
-      // button.style.top = "10px";
-      // button.style.right = "10px";
-      // document.body.appendChild(button);
-      // let testDev = true;
-      // // Add an event listener to the button to toggle visibility
-      // button.addEventListener("click", () => {
-      //   const event = new CustomEvent("cyzy_anim_object", {
-      //     detail: {
-      //       id: "botDev",
-      //       enable: testDev
-      //     }
-      //   });
-      //   window.dispatchEvent(event);
-      //   testDev = !testDev;
-      // });
-      // //
       this.checkGltfUserData();
       this.enterSceneFlg = true;
     }
     if (this.playerRig) {
       this.playerRig.object3D.getWorldPosition(this.currentPos);
-      // console.log(`${this.prevPos.x} : ${this.currentPos.x} : ${this.prevPos.equals(this.currentPos)}`);
       if (!this.prevPos.equals(this.currentPos)) {
         this.prevPos.copy(this.currentPos);
-        //bot detect
-        // console.log(this.currentPos);
         if (Object.keys(this.cyzy_extension_bots).length !== 0) {
           this.botAreaChecker();
           this.cyzyChatPopover();
         }
-      } else {
-        //same position do nothing
-        // console.log("samePos");
       }
     } else {
       this.playerRig = document.getElementById("avatar-rig");
@@ -70,17 +37,11 @@ AFRAME.registerSystem("cyzy-extension", {
   },
   checkGltfUserData: async function () {
     const sceneUrl = await getSceneUrlForHub(APP.hub);
-    console.log(sceneUrl);
-    // const objectsUrl = getReticulumFetchUrl(`/${APP.hubChannel.hubId}/objects.gltf`);
     const gltfScene = await loadModel(sceneUrl, null, false, null);
-    // const gltfScene = cloneModelFromCache(sceneUrl);
-    // console.log(gltfScene);
     this.getCustomUserData(gltfScene.scene);
   },
   getCustomUserData: function (modelData) {
-    // console.log(modelData);
     if (modelData.userData && Object.keys(modelData.userData).length > 0) {
-      // console.log(modelData);
       if (modelData.userData?.cyzy_bot_area) {
         const botData = JSON.parse(modelData.userData.cyzy_bot_area);
         console.log("Parsed bot area data:", botData);
@@ -89,7 +50,6 @@ AFRAME.registerSystem("cyzy-extension", {
           r: botData.r,
           position: modelData.position
         };
-        console.log("CurrentBotData:", this.cyzy_extension_bots);
       }
     }
     //restrict search
@@ -104,12 +64,10 @@ AFRAME.registerSystem("cyzy-extension", {
       const bot = this.cyzy_extension_bots[id];
       const distance = this.currentPos.distanceTo(bot.position);
       if (distance <= bot.r) {
-        // console.log(`Player is within area ID: ${id}`);
         if (!this.botList.includes(id)) {
           this.botList.push(id);
         }
       } else {
-        // console.log(`Player is out range`);
         const index = this.botList.indexOf(id);
         if (this.botList.indexOf(id) > -1) {
           this.botList.splice(index, 1);
@@ -121,14 +79,10 @@ AFRAME.registerSystem("cyzy-extension", {
     if (!this.arraysAreEqualIgnoreOrder(this.botList, this.prevBotList)) {
       const enableBotList = this.getAddedElements(this.botList, this.prevBotList);
       const disableBotList = this.getAddedElements(this.prevBotList, this.botList);
-      // Enable bots
       enableBotList.forEach(id => {
-        console.log(`enable:${id}`);
         window.postMessage({ cyzyBot: "enable", cyzyBotId: id }, "*");
       });
-      // Disable bots
       disableBotList.forEach(id => {
-        console.log(`disable:${id}`);
         window.postMessage({ cyzyBot: "disable", cyzyBotId: id }, "*");
       });
       // update prev list
@@ -149,7 +103,6 @@ AFRAME.registerSystem("cyzy-extension", {
     window.addEventListener("cyzy_anim_object", event => {
       const animEnable = event.detail.enable ? event.detail.enable : false;
       if (event.detail.id) {
-        // console.log("CyzyAnim:", event.detail.id, event.detail.enable);
         const objEl = document.getElementsByClassName(`cyzy-${event.detail.id}-obj`)[0];
         const animEl = document.getElementsByClassName(`cyzy-${event.detail.id}-anim`)[0];
         if (
@@ -169,7 +122,6 @@ AFRAME.registerSystem("cyzy-extension", {
       const operation = event.detail.operation ? event.detail.operation : null;
       switch (operation) {
         case "add":
-          console.log("CyzyBot: ADD");
           if (event.detail.id && event.detail.radius && event.detail.position) {
             this.cyzy_extension_bots[event.detail.id] = {
               id: event.detail.id,
@@ -183,7 +135,6 @@ AFRAME.registerSystem("cyzy-extension", {
           }
           break;
         case "remove":
-          console.log("CyzyBot: REMOVE");
           delete this.cyzy_extension_bots[event.detail.id];
           break;
         default:
@@ -193,21 +144,7 @@ AFRAME.registerSystem("cyzy-extension", {
     });
   },
   spawnPrivateMedia: function (url) {
-    //InPprogress
-    // if (!this.hubChannel.can("spawn_and_move_media")) return;
-
     const offset = { x: 0, y: 0, z: -1.5 };
-    // const { entity, orientation } = addMedia(
-    //   url,
-    //   "#interactable-media",
-    //   ObjectContentOrigins.URL,
-    //   null,
-    //   true,
-    //   true,
-    //   false,
-    //   null,
-    //   null
-    // );
     const { entity, orientation } = addMedia(url, "#interactable-media", ObjectContentOrigins.URL, null, null, true);
     orientation.then(or => {
       entity.setAttribute("offset-relative-to", {
