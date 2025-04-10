@@ -1,3 +1,4 @@
+// cyzyspace
 import React, { useState, useEffect } from "react";
 
 const Botbird = () => {
@@ -38,7 +39,7 @@ const Botbird = () => {
     };
   }, [cyzyBotId]);
 
-  return enableCyzyBot ? <div id="pastedChatBox" style={{ position: "absolite", pointerEvents: "all" }} /> : null;
+  return enableCyzyBot ? <div id="pastedChatBox" style={{ position: "absolute", pointerEvents: "all" }} /> : null;
 };
 
 export default Botbird;
