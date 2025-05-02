@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import styles from "./RoomLayout.scss";
 import { Toolbar } from "./Toolbar";
+import Botbird from "../botbird";
 
 export function RoomLayout({
   className,
@@ -24,6 +25,7 @@ export function RoomLayout({
     <div className={classNames(styles.roomLayout, { [styles.objectFocused]: objectFocused }, className)} {...rest}>
       {sidebar && <div className={classNames(styles.sidebar, sidebarClassName)}>{sidebar}</div>}
       <div className={classNames(styles.modalContainer, styles.viewport)}>{modal}</div>
+      <Botbird />
       {(toolbarLeft || toolbarCenter || toolbarRight) && (
         <Toolbar
           className={classNames(styles.main, styles.toolbar, toolbarClassName)}
