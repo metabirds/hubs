@@ -1,0 +1,57 @@
+name: Build and Push to Private ECR
+
+on:
+  workflow_dispatch:
+    inputs:
+      targetBranch:
+        type: string
+        default: ""
+        required: false
+        description: "このワークフローを実行したい対象のブランチ。なければこのブランチが実行されます"
+  push:
+    branches:
+      - cyzyspace/ce-custom-client-lite
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set MyContext
+        id: mycontext
+        env:
+          INPUT_TARGET_BRANCH: ${{ inputs.targetBranch }}
+        run: |
+          echo $SHELL
+          echo "targetBranch=${INPUT_TARGET_BRANCH:-${{ github.ref_name }}}" >> "${GITHUB_OUTPUT}"
+
+      - name: Debug log 1
+        run: |
+          echo "Checkouted branch: ${{ steps.mycontext.outputs.targetBranch }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.mycontext.outputs.targetBranch }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY_NAME: metabirds/hubs
+          IMAGE_TAG: ${{ github.sha }}
+          LATEST_TAG: lite-latest
+        run: |
+          docker build -f RetPageOriginDockerfile -t $REPOSITORY_NAME .
+          docker tag $REPOSITORY_NAME:latest $ECR_REGISTRY/$REPOSITORY_NAME:$LATEST_TAG
+          docker push $ECR_REGISTRY/$REPOSITORY_NAME:$LATEST_TAG
+          docker tag $REPOSITORY_NAME:latest $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$REPOSITORY_NAME:$IMAGE_TAG
