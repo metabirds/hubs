@@ -182,6 +182,8 @@ import "./systems/linked-media";
 import "./systems/audio-debug-system";
 import "./systems/audio-gain-system";
 import "./gltf-component-mappings";
+//cyzy
+import "./systems/cyzy-extension-system";
 
 import { App, getScene } from "./app";
 import MediaDevicesManager from "./utils/media-devices-manager";
