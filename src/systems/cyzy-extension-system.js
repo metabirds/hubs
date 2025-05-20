@@ -120,7 +120,6 @@ AFRAME.registerSystem("cyzy-extension", {
     });
     window.addEventListener("cyzy_bot_data", event => {
       const operation = event.detail.operation ? event.detail.operation : null;
-      console.log("CyzyBot: Operation", operation);
       switch (operation) {
         case "add":
           if (event.detail.id && event.detail.radius && event.detail.position) {
