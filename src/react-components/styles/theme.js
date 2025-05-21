@@ -96,6 +96,7 @@ export function useThemeFromStore(store) {
 export function useCyzyCustomAppLogoURL() {
   const [url, setUrl] = useState(undefined);
   const darkMode = useDarkMode();
+  const customAppLogoPath = "custom-app-logo";
 
   useEffect(() => {
     async function fetchData() {
@@ -106,8 +107,6 @@ export function useCyzyCustomAppLogoURL() {
         setUrl("");
         return;
       }
-
-      const customAppLogoPath = darkMode ? "custom-app-logo-dark" : "custom-app-logo";
 
       // expected room url format
       // https://example.com/roomId
@@ -130,6 +129,16 @@ export function useCyzyCustomAppLogoURL() {
       }
 
       try {
+        // check if custom app logo exists
+        if (darkMode) {
+          const response = await fetch(`${baseUrl}/exists/${roomId}/${customAppLogoPath}-dark`);
+          const result = await response.json();
+          if (result.exists) {
+            setUrl(`${baseUrl}/assets/${roomId}/${customAppLogoPath}-dark`);
+            return;
+          }
+        }
+
         const response = await fetch(`${baseUrl}/exists/${roomId}/${customAppLogoPath}`);
         const result = await response.json();
         setUrl(result.exists ? `${baseUrl}/assets/${roomId}/${customAppLogoPath}` : "");
