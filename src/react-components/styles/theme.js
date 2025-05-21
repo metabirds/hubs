@@ -95,19 +95,19 @@ export function useThemeFromStore(store) {
 // cyzyspace
 export function useCyzyCustomAppLogoURL() {
   const [url, setUrl] = useState(undefined);
+  const darkMode = useDarkMode();
 
   useEffect(() => {
     async function fetchData() {
       // asset server url を取得
       const baseUrl = configs.CYZY_ASSET_SERVER_URL;
-      console.log(configs);
-      const customAppLogoPath = "custom-app-logo";
-
       if (!baseUrl) {
         console.error("baseUrl not found");
         setUrl("");
         return;
       }
+
+      const customAppLogoPath = darkMode ? "custom-app-logo-dark" : "custom-app-logo";
 
       // expected room url format
       // https://example.com/roomId
@@ -139,7 +139,7 @@ export function useCyzyCustomAppLogoURL() {
       }
     }
     fetchData();
-  }, []);
+  }, [darkMode]);
 
   return url;
 }
