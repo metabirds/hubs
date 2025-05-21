@@ -14,6 +14,7 @@ if [ -z ${turkeyCfg_postgrest_server+x} ]; then export turkeyCfg_postgrest_serve
 if [ -z ${turkeyCfg_ga_tracking_id+x} ]; then export turkeyCfg_ga_tracking_id=""; fi
 if [ -z ${turkeyCfg_cyzy_user_params_server_url+x} ]; then export turkeyCfg_cyzy_user_params_server_url=""; fi
 if [ -z ${turkeyCfg_cyzy_chat_logger_url+x} ]; then export turkeyCfg_cyzy_chat_logger_url=""; fi
+if [ -z ${turkeyCfg_cyzy_asset_server_url+x} ]; then export turkeyCfg_cyzy_asset_server_url=""; fi
 export turkeyCfg_ita_server="turkey"
 
 find /www/hubs/ -type f -name *.html -exec sed -i "s/{{rawhubs-base-assets-path}}\//${turkeyCfg_base_assets_path//\//\\\/}/g" {} \;           

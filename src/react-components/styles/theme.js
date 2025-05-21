@@ -92,6 +92,58 @@ export function useThemeFromStore(store) {
   useTheme(themeId);
 }
 
+// cyzyspace
+export function useCyzyCustomAppLogoURL() {
+  const [url, setUrl] = useState(undefined);
+
+  useEffect(() => {
+    async function fetchData() {
+      // asset server url を取得
+      const baseUrl = configs.CYZY_ASSET_SERVER_URL;
+      console.log(configs);
+      const customAppLogoPath = "custom-app-logo";
+
+      if (!baseUrl) {
+        console.error("baseUrl not found");
+        setUrl("");
+        return;
+      }
+
+      // expected room url format
+      // https://example.com/roomId
+      // https://example.com/hub.html?hub_id=roomId
+      let roomId;
+      if (window.location.pathname.includes("hub.html")) {
+        const urlParams = new URLSearchParams(window.location.search);
+        roomId = urlParams.get("hub_id");
+      } else {
+        const str = window.location.pathname.split("/").filter(Boolean).pop();
+        if (str) {
+          roomId = str;
+        }
+      }
+
+      if (!roomId) {
+        console.error("roomId not found");
+        setUrl("");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${baseUrl}/exists/${roomId}/${customAppLogoPath}`);
+        const result = await response.json();
+        setUrl(result.exists ? `${baseUrl}/assets/${roomId}/${customAppLogoPath}` : "");
+      } catch (error) {
+        console.error("Error fetching custom app logo:", error);
+        setUrl("");
+      }
+    }
+    fetchData();
+  }, []);
+
+  return url;
+}
+
 export function ThemeProvider({ store, children }) {
   useThemeFromStore(store);
   return children;

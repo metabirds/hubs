@@ -11,7 +11,7 @@ import styles from "./RoomEntryModal.scss";
 import styleUtils from "../styles/style-utils.scss";
 import { useCssBreakpoints } from "react-use-css-breakpoints";
 import { Column } from "../layout/Column";
-import { AppLogo } from "../misc/AppLogo";
+import { CyzyCustomAppLogo as AppLogo } from "../misc/CyzyCustomAppLogo"; // cyzyspace
 import { FormattedMessage } from "react-intl";
 
 export function RoomEntryModal({

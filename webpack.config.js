@@ -731,6 +731,7 @@ module.exports = async (env, argv) => {
           BASE_ASSETS_PATH: process.env.BASE_ASSETS_PATH,
           CYZY_USER_PARAMS_SERVER_URL: process.env.CYZY_USER_PARAMS_SERVER_URL,
           CYZY_CHAT_LOGGER_URL: process.env.CYZY_CHAT_LOGGER_URL,
+          CYZY_ASSET_SERVER_URL: process.env.CYZY_ASSET_SERVER_URL,
           APP_CONFIG: appConfig
         })
       })

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./LoadingScreenLayout.scss";
 import { Column } from "../layout/Column";
-import { AppLogo } from "../misc/AppLogo";
+import { CyzyCustomAppLogo as AppLogo } from "../misc/CyzyCustomAppLogo"; // cyzyspace
 
 export function LoadingScreenLayout({ center, bottom }) {
   return (

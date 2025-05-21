@@ -19,6 +19,7 @@ let isAdmin = false;
   "BASE_ASSETS_PATH",
   "CYZY_USER_PARAMS_SERVER_URL",
   "CYZY_CHAT_LOGGER_URL",
+  "CYZY_ASSET_SERVER_URL",
   "UPLOADS_HOST"
 ].forEach(x => {
   const el = document.querySelector(`meta[name='env:${x.toLowerCase()}']`);
