@@ -36,6 +36,14 @@ const Botbird = () => {
       if (scriptDom) {
         scriptDom.remove();
       }
+
+      // Remove style tags that contain CSS for #pastedChatbox
+      const styleTags = document.querySelectorAll("head style");
+      styleTags.forEach(styleTag => {
+        if (styleTag.textContent && styleTag.textContent.includes("#pastedChatBox")) {
+          styleTag.remove();
+        }
+      });
     };
   }, [cyzyBotId]);
 
