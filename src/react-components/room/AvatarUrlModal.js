@@ -7,20 +7,13 @@ import { useForm } from "react-hook-form";
 import { ApplyButton } from "../input/Button";
 import { FormattedMessage } from "react-intl";
 import { Column } from "../layout/Column";
-// cysyspace
-import { ReadyPlayerMeAvatarSelector } from "./ReadyPlayerMeAvatarSelector";
 
 export function AvatarUrlModal({ onSubmit, onClose }) {
-  const { handleSubmit, register, setValue } = useForm({
+  const { handleSubmit, register } = useForm({
     defaultValues: {
       url: ""
     }
   });
-
-  const handleReadyPlayerMeUrlSubmit = url => {
-    url += "?t=" + Math.floor(Date.now() / 1000);
-    setValue("url", url);
-  };
 
   return (
     <Modal title="Custom Avatar URL" beforeTitle={<CloseButton onClick={onClose} />}>
@@ -41,7 +34,6 @@ export function AvatarUrlModal({ onSubmit, onClose }) {
             </a>
           }
         />
-        <ReadyPlayerMeAvatarSelector onSubmit={handleReadyPlayerMeUrlSubmit} />
         <ApplyButton type="submit" />
       </Column>
     </Modal>
