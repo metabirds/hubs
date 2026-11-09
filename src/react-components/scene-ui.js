@@ -7,9 +7,10 @@ import configs from "../utils/configs";
 import { createAndRedirectToNewHub, getReticulumFetchUrl } from "../utils/phoenix-utils";
 import { ReactComponent as CodeBranch } from "./icons/CodeBranch.svg";
 import { ReactComponent as Pen } from "./icons/Pen.svg";
-import { ReactComponent as Twitter } from "./icons/Twitter.svg";
+import { ReactComponent as ShareIcon } from "./icons/Share.svg";
 import IfFeature from "./if-feature";
 import { AppLogo } from "./misc/AppLogo";
+import { share } from "../utils/share";
 
 class SceneUI extends Component {
   static propTypes = {
@@ -41,7 +42,7 @@ class SceneUI extends Component {
       return (
         <div className={styles.ui}>
           <div className={styles.unavailable}>
-            <div>
+            <div className={styles.logoTagline}>
               <FormattedMessage id="scene-page.unavailable" defaultMessage="This scene is no longer available." />
             </div>
           </div>
@@ -61,9 +62,13 @@ class SceneUI extends Component {
         shareHashtag: configs.translation("share-hashtag")
       }
     );
-    const tweetLink = `https://twitter.com/share?url=${encodeURIComponent(sceneUrl)}&text=${encodeURIComponent(
-      tweetText
-    )}`;
+    const onShareClick = async () => {
+      try {
+        await share({ url: sceneUrl, title: tweetText });
+      } catch (error) {
+        console.error(`while sharing (from scene UI):`, error);
+      }
+    };
 
     const unknown = intl.formatMessage({ id: "scene-page.unknown", defaultMessage: "unknown" });
 
@@ -82,24 +87,26 @@ class SceneUI extends Component {
       source = url && url.includes("sketchfab.com") ? "Sketchfab" : "";
 
       if (remix) {
-        <span className="remix">
-          <FormattedMessage
-            id="scene-page.remix-attribution"
-            defaultMessage="(Remixed from <a>{name} by {author}</a>)"
-            values={{
-              name: _name,
-              author: _author,
-              a: chunks =>
-                url ? (
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    {chunks}
-                  </a>
-                ) : (
-                  <>{chunks}</>
-                )
-            }}
-          />
-        </span>;
+        return (
+          <span className="remix">
+            <FormattedMessage
+              id="scene-page.remix-attribution"
+              defaultMessage="(Remixed from <a>{name} by {author}</a>)"
+              values={{
+                name: _name,
+                author: _author,
+                a: chunks =>
+                  url ? (
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                      {chunks}
+                    </a>
+                  ) : (
+                    <>{chunks}</>
+                  )
+              }}
+            />
+          </span>
+        );
       } else if (source) {
         return (
           <span key={url}>
@@ -235,12 +242,10 @@ class SceneUI extends Component {
                   )
                 )}
               </IfFeature>
-              <a href={tweetLink} rel="noopener noreferrer" target="_blank" className={styles.scenePreviewButton}>
-                <Twitter />
-                <div>
-                  <FormattedMessage id="scene-page.tweet-button" defaultMessage="Share on Twitter" />
-                </div>
-              </a>
+              <button className={styles.scenePreviewButton} onClick={onShareClick}>
+                <ShareIcon />
+                <FormattedMessage id="share-popover.title" defaultMessage="Share" />
+              </button>
             </div>
           </div>
           <div className={styles.info}>

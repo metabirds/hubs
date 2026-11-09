@@ -241,21 +241,21 @@ AFRAME.registerSystem("userinput", {
     this.activeDevices = new ArrayBackedSet([new HudDevice()]);
 
     const isMobile = AFRAME.utils.device.isMobile();
-    const isMobileVR = AFRAME.utils.device.isMobileVR();
+    const isThisMobileVR = AFRAME.utils.device.isMobileVR();
     const forceEnableTouchscreen = hackyMobileSafariTest();
 
-    if (!(isMobile || isMobileVR || forceEnableTouchscreen)) {
+    if (!(isMobile || isThisMobileVR || forceEnableTouchscreen)) {
       this.activeDevices.add(new MouseDevice());
       this.activeDevices.add(new AppAwareMouseDevice());
       this.activeDevices.add(new KeyboardDevice());
-    } else if (!isMobileVR || forceEnableTouchscreen) {
+    } else if (!isThisMobileVR || forceEnableTouchscreen) {
       this.activeDevices.add(new AppAwareTouchscreenDevice());
       this.activeDevices.add(new KeyboardDevice());
       this.activeDevices.add(new GyroDevice());
     }
 
     this.isMobile = isMobile;
-    this.isMobileVR = isMobileVR;
+    this.isThisMobileVR = isThisMobileVR;
 
     this.registeredMappings = new Set([keyboardDebuggingBindings]);
     this.registeredMappingsChanged = true;
@@ -417,16 +417,19 @@ AFRAME.registerSystem("userinput", {
         gamepadDisconnected(inputSource);
       }
       for (const inputSource of added) {
-        inputSource.gamepad.isWebXRGamepad = true;
-        inputSource.gamepad.targetRaySpace = inputSource.targetRaySpace;
-        inputSource.gamepad.primaryProfile = inputSource.profiles[0];
-        // inputSource.gamepad.hand is a read-only property and still an experimental property.
-        // We read this property elsewhere. Only Firefox supports this property now.
-        // So we set this property if it's undefined.
-        if (inputSource.gamepad.hand === undefined) {
-          inputSource.gamepad.hand = inputSource.handedness;
+        // inputSource.gamepad is null if the device isn't gamepad-like
+        if (inputSource.gamepad) {
+          inputSource.gamepad.isWebXRGamepad = true;
+          inputSource.gamepad.targetRaySpace = inputSource.targetRaySpace;
+          inputSource.gamepad.primaryProfile = inputSource.profiles[0];
+          // inputSource.gamepad.hand is a read-only property and still an experimental property.
+          // We read this property elsewhere. Only Firefox supports this property now.
+          // So we set this property if it's undefined.
+          if (inputSource.gamepad.hand === undefined) {
+            inputSource.gamepad.hand = inputSource.handedness;
+          }
+          gamepadConnected(inputSource);
         }
-        gamepadConnected(inputSource);
       }
     };
 
@@ -449,7 +452,7 @@ AFRAME.registerSystem("userinput", {
   },
 
   maybeToggleXboxMapping() {
-    if (hackyMobileSafariTest() || this.isMobile || this.isMobileVR) return;
+    if (hackyMobileSafariTest() || this.isMobile || this.isThisMobileVR) return;
 
     const vrAxesSum =
       (this.get(paths.device.vive.left.axesSum) || 0) +

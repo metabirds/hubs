@@ -10,7 +10,6 @@ import { createElementEntity, createRef } from "../utils/jsx-entity";
 import { preload } from "../utils/preload";
 import { Button3D, BUTTON_TYPES } from "./button3D";
 
-// eslint-disable-next-line react/prop-types
 export function Label({ text = {}, ...props }, ...children) {
   const value = children.join("\n");
   return <entity name="Label" text={{ value, ...text }} layers={1 << Layers.CAMERA_LAYER_UI} {...props} />;
@@ -187,6 +186,7 @@ export function CubeMediaFramePrefab() {
       physicsShape={{ fit: Fit.MANUAL, type: Shape.BOX, halfExtents: [0.5, 0.5, 0.5] }}
       object3D={new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshStandardMaterial())}
       deletable
+      hoverableVisuals
     >
       <entity mediaFrame position={[0, 1, 0]} />
     </entity>

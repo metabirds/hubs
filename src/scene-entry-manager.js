@@ -7,7 +7,7 @@ import { createNetworkedEntity } from "./utils/create-networked-entity";
 const isBotMode = qsTruthy("bot");
 const isMobile = AFRAME.utils.device.isMobile();
 const forceEnableTouchscreen = hackyMobileSafariTest();
-const isMobileVR = AFRAME.utils.device.isMobileVR();
+const isThisMobileVR = AFRAME.utils.device.isMobileVR();
 const isDebug = qsTruthy("debug");
 const qs = new URLSearchParams(location.search);
 
@@ -337,7 +337,7 @@ export default class SceneEntryManager {
           // Sometimes dataTransfer text contains a valid URL, so try for that.
           try {
             url = new URL(e.dataTransfer.getData("text")).href;
-          } catch (e) {
+          } catch {
             // Nope, not this time.
           }
         }
@@ -436,7 +436,7 @@ export default class SceneEntryManager {
       const { entry, selectAction } = e.detail;
       if (selectAction !== "spawn") return;
 
-      const delaySpawn = isIn2DInterstitial() && !isMobileVR;
+      const delaySpawn = isIn2DInterstitial() && !isThisMobileVR;
       await exit2DInterstitialAndEnterVR();
 
       // If user has HMD lifted up or gone through interstitial, delay spawning for now. eventually show a modal
@@ -541,8 +541,8 @@ export default class SceneEntryManager {
     const audioStream = audioEl.captureStream
       ? audioEl.captureStream()
       : audioEl.mozCaptureStream
-      ? audioEl.mozCaptureStream()
-      : null;
+        ? audioEl.mozCaptureStream()
+        : null;
 
     if (audioStream) {
       let audioVolume = Number(qs.get("audio_volume") || "1.0");

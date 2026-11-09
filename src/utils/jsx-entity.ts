@@ -39,7 +39,9 @@ import {
   Quack,
   MixerAnimatableInitialize,
   Inspectable,
-  ObjectMenu
+  ObjectMenu,
+  HoverableVisuals,
+  MirrorMenu
 } from "../bit-components";
 import { inflateMediaLoader } from "../inflators/media-loader";
 import { inflateMediaFrame } from "../inflators/media-frame";
@@ -102,6 +104,7 @@ import { inflateMediaLink, MediaLinkParams } from "../inflators/media-link";
 import { inflateObjectMenuTarget, ObjectMenuTargetParams } from "../inflators/object-menu-target";
 import { inflateObjectMenuTransform, ObjectMenuTransformParams } from "../inflators/object-menu-transform";
 import { inflatePlane, PlaneParams } from "../inflators/plane";
+import { FollowInFovParams, inflateFollowInFov } from "../inflators/follow-in-fov";
 
 preload(
   new Promise(resolve => {
@@ -286,6 +289,9 @@ export interface JSXComponentData extends ComponentData {
     headRef: Ref;
     playIndicatorRef: Ref;
     pauseIndicatorRef: Ref;
+    snapRef: Ref;
+    volUpRef: Ref;
+    volDownRef: Ref;
   };
   videoMenuItem?: true;
   cursorRaycastable?: true;
@@ -306,6 +312,7 @@ export interface JSXComponentData extends ComponentData {
   networked?: any;
   textButton?: any;
   hoverButton?: any;
+  hoverableVisuals?: any;
   rigidbody?: OptionalParams<RigidBodyParams>;
   physicsShape?: OptionalParams<PhysicsShapeParams>;
   floatyObject?: any;
@@ -328,6 +335,11 @@ export interface JSXComponentData extends ComponentData {
     mirrorButtonRef: Ref;
     scaleButtonRef: Ref;
   };
+  mirrorMenu?: {
+    closeRef: Ref;
+    mirrorTargetRef: Ref;
+  };
+  followInFov?: FollowInFovParams;
   linkHoverMenu?: {
     linkButtonRef: Ref;
   };
@@ -336,6 +348,7 @@ export interface JSXComponentData extends ComponentData {
     prevButtonRef: Ref;
     nextButtonRef: Ref;
     pageLabelRef: Ref;
+    snapRef: Ref;
   };
   cameraTool?: {
     snapMenuRef: Ref;
@@ -444,6 +457,7 @@ const jsxInflators: Required<{ [K in keyof JSXComponentData]: InflatorFn }> = {
   holdableButton: createDefaultInflator(HoldableButton),
   textButton: createDefaultInflator(TextButton),
   hoverButton: createDefaultInflator(HoverButton),
+  hoverableVisuals: createDefaultInflator(HoverableVisuals),
   holdable: createDefaultInflator(Holdable),
   deletable: createDefaultInflator(Deletable),
   rigidbody: inflateRigidBody,
@@ -455,6 +469,8 @@ const jsxInflators: Required<{ [K in keyof JSXComponentData]: InflatorFn }> = {
   networkedTransform: createDefaultInflator(NetworkedTransform),
   networked: createDefaultInflator(Networked),
   objectMenu: createDefaultInflator(ObjectMenu),
+  mirrorMenu: createDefaultInflator(MirrorMenu),
+  followInFov: inflateFollowInFov,
   linkHoverMenu: createDefaultInflator(LinkHoverMenu),
   linkHoverMenuItem: createDefaultInflator(LinkHoverMenuItem),
   pdfMenu: createDefaultInflator(PDFMenu),

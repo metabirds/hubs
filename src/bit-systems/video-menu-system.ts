@@ -1,17 +1,23 @@
 import { addComponent, defineQuery, entityExists, hasComponent, removeComponent } from "bitecs";
-import { Object3D, Plane, Ray, Vector3 } from "three";
+import { MathUtils, Object3D, Plane, Ray, Vector3 } from "three";
 import { clamp, mapLinear } from "three/src/math/MathUtils";
 import { Text as TroikaText } from "troika-three-text";
 import { HubsWorld } from "../app";
 import {
+  AudioEmitter,
   CursorRaycastable,
+  Deleting,
   EntityStateDirty,
   Held,
   HeldRemoteRight,
   HoveredRemoteRight,
   Interacted,
+  MediaInfo,
+  MediaLoader,
+  MediaSnapped,
   MediaVideo,
   MediaVideoData,
+  MediaVideoUpdated,
   NetworkedVideo,
   ObjectMenuTransform,
   VideoMenu
@@ -22,8 +28,12 @@ import { paths } from "../systems/userinput/paths";
 import { isFacingCamera } from "../utils/three-utils";
 import { Emitter2Audio } from "./audio-emitter-system";
 import { EntityID } from "../utils/networking-types";
-import { findAncestorWithComponent, hasAnyComponent } from "../utils/bit-utils";
+import { findAncestorWithComponent, findChildWithComponent, hasAnyComponent } from "../utils/bit-utils";
 import { ObjectMenuTransformFlags } from "../inflators/object-menu-transform";
+import { MediaType } from "../utils/media-utils";
+import { VolumeControlsMaterial } from "../prefabs/video-menu";
+import { updateAudioSettings } from "../update-audio-settings";
+import { VIDEO_FLAGS } from "../inflators/video";
 
 const videoMenuQuery = defineQuery([VideoMenu]);
 const hoveredQuery = defineQuery([HoveredRemoteRight]);
@@ -33,6 +43,9 @@ function setCursorRaycastable(world: HubsWorld, menu: number, enable: boolean) {
   let change = enable ? addComponent : removeComponent;
   change(world, CursorRaycastable, menu);
   change(world, CursorRaycastable, VideoMenu.trackRef[menu]);
+  change(world, CursorRaycastable, VideoMenu.playIndicatorRef[menu]);
+  change(world, CursorRaycastable, VideoMenu.pauseIndicatorRef[menu]);
+  change(world, CursorRaycastable, VideoMenu.snapRef[menu]);
 }
 
 const intersectInThePlaneOf = (() => {
@@ -88,7 +101,12 @@ function findVideoMenuTarget(world: HubsWorld, menu: EntityID, sceneIsFrozen: bo
 
 function flushToObject3Ds(world: HubsWorld, menu: EntityID, frozen: boolean) {
   const target = VideoMenu.videoRef[menu];
-  const visible = !!(target && !frozen);
+  let visible = !!(target && !frozen) && Boolean(MediaVideo.flags[target] & VIDEO_FLAGS.CONTROLS);
+
+  const loader = findAncestorWithComponent(world, MediaLoader, target);
+  if (loader && hasComponent(world, Deleting, loader)) {
+    visible = false;
+  }
 
   const obj = world.eid2obj.get(menu)!;
   obj.visible = visible;
@@ -100,16 +118,37 @@ function flushToObject3Ds(world: HubsWorld, menu: EntityID, frozen: boolean) {
     APP.world.scene.add(obj);
     ObjectMenuTransform.targetObjectRef[menu] = target;
     ObjectMenuTransform.flags[menu] |= ObjectMenuTransformFlags.Enabled;
+    const snapButton = world.eid2obj.get(VideoMenu.snapRef[menu])!;
+    snapButton.visible = MediaInfo.mediaType[target] === MediaType.VIDEO;
+
+    const audioEid = findChildWithComponent(world, AudioEmitter, target)!;
+    if (audioEid) {
+      const audio = APP.audios.get(audioEid)!;
+      VolumeControlsMaterial.uniforms.volume.value = audio.gain.gain.value;
+    }
   } else {
     obj.removeFromParent();
     setCursorRaycastable(world, menu, false);
-
     ObjectMenuTransform.flags[menu] &= ~ObjectMenuTransformFlags.Enabled;
   }
 }
 
 function clicked(world: HubsWorld, eid: EntityID) {
   return hasComponent(world, Interacted, eid);
+}
+
+const MAX_GAIN_MULTIPLIER = 2;
+function changeVolumeBy(audioEid: EntityID, volume: number) {
+  let gainMultiplier = 1.0;
+  if (APP.gainMultipliers.has(audioEid)) {
+    gainMultiplier = APP.gainMultipliers.get(audioEid)!;
+  }
+  gainMultiplier = MathUtils.clamp(gainMultiplier + volume, 0, MAX_GAIN_MULTIPLIER);
+  APP.gainMultipliers.set(audioEid, gainMultiplier);
+  const audio = APP.audios.get(audioEid);
+  if (audio) {
+    updateAudioSettings(audioEid, audio);
+  }
 }
 
 function handleClicks(world: HubsWorld, menu: EntityID) {
@@ -123,12 +162,27 @@ function handleClicks(world: HubsWorld, menu: EntityID) {
       takeOwnership(world, videoEid);
       addComponent(world, EntityStateDirty, videoEid);
     }
+    addComponent(world, MediaVideoUpdated, videoEid);
   } else if (clicked(world, VideoMenu.pauseIndicatorRef[menu])) {
     video.pause();
     APP.isAudioPaused.add(audioEid);
     if (hasComponent(world, NetworkedVideo, videoEid)) {
       takeOwnership(world, videoEid);
       addComponent(world, EntityStateDirty, videoEid);
+    }
+    addComponent(world, MediaVideoUpdated, videoEid);
+  } else if (clicked(world, VideoMenu.snapRef[menu])) {
+    const video = VideoMenu.videoRef[menu];
+    addComponent(world, MediaSnapped, video);
+  } else if (clicked(world, VideoMenu.volUpRef[menu])) {
+    const audioEid = findChildWithComponent(world, AudioEmitter, VideoMenu.videoRef[menu])!;
+    if (audioEid) {
+      changeVolumeBy(audioEid, 0.2);
+    }
+  } else if (clicked(world, VideoMenu.volDownRef[menu])) {
+    const audioEid = findChildWithComponent(world, AudioEmitter, VideoMenu.videoRef[menu])!;
+    if (audioEid) {
+      changeVolumeBy(audioEid, -0.2);
     }
   }
 }
@@ -177,6 +231,7 @@ export function videoMenuSystem(world: HubsWorld, userinput: any, sceneIsFrozen:
         takeOwnership(world, videoEid);
         addComponent(world, EntityStateDirty, videoEid);
       }
+      addComponent(world, MediaVideoUpdated, videoEid);
     }
     headObj.position.x = mapLinear(video.currentTime, 0, video.duration, -sliderHalfWidth, sliderHalfWidth);
     headObj.matrixNeedsUpdate = true;

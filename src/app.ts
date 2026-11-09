@@ -88,6 +88,7 @@ export class App {
   supplementaryAttenuation = new Map<ElOrEid, number>();
   clippingState = new Set<ElOrEid>();
   mutedState = new Set<ElOrEid>();
+  linkedMutedState = new Set<ElOrEid>();
   isAudioPaused = new Set<ElOrEid>();
   audioDebugPanelOverrides = new Map<SourceType, Partial<AudioSettings>>();
   sceneAudioDefaults = new Map<SourceType, Partial<AudioSettings>>();
@@ -133,7 +134,7 @@ export class App {
       AEntity
     };
 
-    // reserve entity 0 to avoid needing to check for undefined everywhere eid is checked for existance
+    // reserve entity 0 to avoid needing to check for undefined everywhere eid is checked for existence
     addEntity(this.world);
 
     this.str2sid = new Map([[null, 0]]);

@@ -1,15 +1,15 @@
 pkg_name=hubs
-pkg_origin=mozillareality
-pkg_maintainer="Mozilla Mixed Reality <mixreality@mozilla.com>"
+pkg_origin=hubsfoundation
+pkg_maintainer="Hubs Foundation <info@hubsfoundation.org>"
 
 pkg_version="1.0.0"
 pkg_license=('MPLv2')
 pkg_description="Duck-powered web-based social VR."
-pkg_upstream_url="https://hubs.mozilla.com/"
+pkg_upstream_url="https://github.com/Hubs-Foundation/hubs"
 pkg_build_deps=(
     core/coreutils/8.32/20210826054709
     core/bash/5.1/20210826055113
-    mozillareality/node16/16.16.0/20220729014143
+    core/node16/16.16.0/20220729014143
     core/git/2.31.0/20211016175551
 )
 

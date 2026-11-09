@@ -175,8 +175,8 @@ const avatarListing = {
   attributions: { creator: "" },
   description: null,
   gltfs: {
-    avatar: "https://dev.reticulum.io/api/v1/avatars/yUXsaby/avatar.gltf?v=63734422084",
-    base: "https://dev.reticulum.io/api/v1/avatars/yUXsaby/base.gltf?v=63734422084"
+    avatar: "https://dev.reticulum.io.invalid/api/v1/avatars/yUXsaby/avatar.gltf?v=63734422084",
+    base: "https://dev.reticulum.io.invalid/api/v1/avatars/yUXsaby/base.gltf?v=63734422084"
   },
   id: "123",
   images: {
@@ -195,14 +195,14 @@ const avatar = {
   attributions: null,
   description: null,
   gltfs: {
-    avatar: "https://dev.reticulum.io/api/v1/avatars/XUbGngS/avatar.gltf?v=63773070094",
-    base: "https://dev.reticulum.io/api/v1/avatars/XUbGngS/base.gltf?v=63773070094"
+    avatar: "https://dev.reticulum.io.invalid/api/v1/avatars/XUbGngS/avatar.gltf?v=63773070094",
+    base: "https://dev.reticulum.io.invalid/api/v1/avatars/XUbGngS/base.gltf?v=63773070094"
   },
   id: "123",
   images: {
     preview: {
       height: 1280,
-      url: "https://hubs-upload-cdn.com/files/deba29fc-f238-4df6-ae04-7eb460133f94.png",
+      url: backgroundUrl,
       width: 720
     }
   },

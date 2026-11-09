@@ -1,8 +1,8 @@
-import { defineQuery, exitQuery } from "bitecs";
-import { GlobalWorkerOptions, PDFPageProxy } from "pdfjs-dist";
+import { addComponent, defineQuery, enterQuery, exitQuery, hasComponent, removeComponent } from "bitecs";
+import { getDocument, GlobalWorkerOptions, PDFPageProxy } from "pdfjs-dist";
 import { Object3D } from "three";
 import { HubsWorld } from "../app";
-import { MediaPDF, NetworkedPDF } from "../bit-components";
+import { MediaPDF, MediaPDFUpdated, NetworkedPDF, Owned } from "../bit-components";
 import { PDFResources } from "../inflators/pdf";
 import { JobRunner } from "../utils/coroutine-utils";
 import { EntityID } from "../utils/networking-types";
@@ -24,7 +24,7 @@ export const PDFResourcesMap = (MediaPDF as any).map as Map<EntityID, PDFResourc
  * Then the path to the worker script
  */
 GlobalWorkerOptions.workerSrc =
-  require("!!file-loader?outputPath=assets/js&name=[name]-[hash].js!pdfjs-dist/build/pdf.worker.min.js").default;
+  require("!!file-loader?outputPath=assets/js&name=[name]-[hash].js!pdfjs-dist/build/pdf.worker.min.mjs").default;
 
 type Aspect = { width: number; height: number };
 
@@ -36,7 +36,7 @@ export function* loadPageJob(
   const viewport = page!.getViewport({ scale: 3 });
   (material.map!.image as HTMLCanvasElement).width = viewport.width;
   (material.map!.image as HTMLCanvasElement).height = viewport.height;
-  const renderTask = page!.render({ canvasContext, viewport, intent: "print" });
+  const renderTask = page!.render({ canvasContext, viewport, intent: "print", canvas: (material.map!.image as HTMLCanvasElement) });
   yield renderTask.promise;
   material.map!.needsUpdate = true;
   material.needsUpdate = true;
@@ -58,18 +58,33 @@ export function* loadPageAndSetScale(world: HubsWorld, eid: EntityID, pageNumber
   // so wait until it is finished. This is rarely necessary.
   yield* waitForMediaLoaded(world, mesh.parent!.eid!);
   fitToAspect(mesh, aspect);
+  MediaPDF.pageNumber[eid] = pageNumber;
+  removeComponent(world, MediaPDFUpdated, eid);
 }
 
 const jobs = new JobRunner();
-const pdfQuery = defineQuery([MediaPDF, NetworkedPDF]);
+const pdfQuery = defineQuery([MediaPDF]);
+const pdfEnterQuery = enterQuery(pdfQuery);
+const pdfUpdatedQuery = defineQuery([MediaPDF, MediaPDFUpdated]);
+const pdfUpdatedEnterQuery = enterQuery(pdfUpdatedQuery);
+const networkedPdfQuery = defineQuery([MediaPDF, NetworkedPDF]);
 const pdfExitQuery = exitQuery(pdfQuery);
 export function pdfSystem(world: HubsWorld) {
-  pdfQuery(world).forEach(function (eid) {
-    if (MediaPDF.pageNumber[eid] !== NetworkedPDF.pageNumber[eid]) {
-      MediaPDF.pageNumber[eid] = NetworkedPDF.pageNumber[eid];
-
-      jobs.stop(eid);
-      jobs.add(eid, () => loadPageAndSetScale(world, eid, NetworkedPDF.pageNumber[eid]));
+  pdfEnterQuery(world).forEach(eid => {
+    jobs.add(eid, () => loadPageAndSetScale(world, eid, MediaPDF.pageNumber[eid]));
+  });
+  pdfUpdatedEnterQuery(world).forEach(eid => {
+    jobs.stop(eid);
+    jobs.add(eid, () => loadPageAndSetScale(world, eid, MediaPDFUpdated.pageNumber[eid]));
+  });
+  networkedPdfQuery(world).forEach(function (eid) {
+    if (hasComponent(world, Owned, eid)) {
+      NetworkedPDF.pageNumber[eid] = MediaPDF.pageNumber[eid];
+    } else {
+      if (MediaPDF.pageNumber[eid] !== NetworkedPDF.pageNumber[eid] && !hasComponent(world, MediaPDFUpdated, eid)) {
+        addComponent(world, MediaPDFUpdated, eid);
+        MediaPDFUpdated.pageNumber[eid] = NetworkedPDF.pageNumber[eid];
+      }
     }
   });
 

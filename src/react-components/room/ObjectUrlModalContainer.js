@@ -19,7 +19,7 @@ export function ObjectUrlModalContainer({ scene, onClose }) {
     <ObjectUrlModal
       isMobile={isMobile}
       showModelCollectionLink={configs.feature("show_model_collection_link")}
-      modelCollectionUrl={configs.link("model_collection", "https://sketchfab.com/mozillareality")}
+      modelCollectionUrl={configs.link("model_collection", "https://sketchfab.com/<example-username>")}
       onSubmit={onSubmit}
       onClose={onClose}
     />

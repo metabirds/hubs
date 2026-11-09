@@ -191,7 +191,7 @@ export function fetchReticulumAuthenticatedWithToken(token, url, method = "GET",
     const result = await r.text();
     try {
       return JSON.parse(result);
-    } catch (e) {
+    } catch {
       // Some reticulum responses, particularly DELETE requests, don't return json.
       return result;
     }
@@ -434,4 +434,8 @@ export const tryGetMatchingMeta = async ({ ret_pool, ret_version }, shouldAbando
     attempt = attempt + 1;
   }
   return didMatchMeta;
+};
+
+window.$P = {
+  getReticulumFetchUrl
 };
